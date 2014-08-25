@@ -15,7 +15,9 @@ public class GoodsContainer<E> implements List<E> {
 	private int size;
 	private int initCapacity;
 	private int extraLength;
-
+	
+	private Condition<E> iteratorCondition;
+	
 	public GoodsContainer() {
 		extraLength = DEFAULT_EXTRA_LENGTH;
 		elements = new Object[DEFAULT_LENGTH];
@@ -56,7 +58,7 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public Iterator<E> iterator() {
-		return;
+		return new ParameterizedIterator<>(this, iteratorCondition);
 	}
 
 	@Override
@@ -78,11 +80,9 @@ public class GoodsContainer<E> implements List<E> {
 	}
 
 	private void extendStorage() {
-		Object[] storage = new Object[this.elements.length + extraLength];
-		System.arraycopy(elements, 0, storage, 0, size);
-		this.elements = storage;
+		extendStorage(extraLength);
 	}
-	
+
 	private void extendStorage(int extraLen) {
 		Object[] storage = new Object[this.elements.length + extraLen];
 		System.arraycopy(elements, 0, storage, 0, size);
@@ -90,8 +90,12 @@ public class GoodsContainer<E> implements List<E> {
 	}
 
 	private void narrowStorage() {
+		narrowStorage(extraLength);
+	}
+
+	private void narrowStorage(int length) {
 		Object[] storage = Arrays.copyOfRange(elements, 0, elements.length
-				- extraLength);
+				- length);
 		this.elements = storage;
 	}
 
@@ -106,28 +110,28 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public boolean remove(Object o) {
-		return remove(indexOf(o), true);
+		return remove(indexOf(o), true) != null;
 	}
-	
+
 	@Override
 	public E remove(int index) {
 		return remove(index, true);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private E remove(int index, boolean narrow) {
 		if (index < 0 || index > size - 1) {
 			return null;
 		}
-		E removedItem = (E)elements[index];
+		E removedItem = (E) elements[index];
 		if (index < size - 1) {
-			for (int i=index; i < size - 1; i++) {
+			for (int i = index; i < size - 1; i++) {
 				elements[i] = elements[i + 1];
 			}
-		} 
+		}
 		elements[--size] = null;
-		if (narrow && elements.length > size 
-				&& elements.length >= initCapacity + extraLength 
+		if (narrow && elements.length > size
+				&& elements.length >= initCapacity + extraLength
 				&& elements.length - size >= extraLength) {
 			narrowStorage();
 		}
@@ -177,7 +181,7 @@ public class GoodsContainer<E> implements List<E> {
 		}
 		System.arraycopy(ost, 0, elements, tmp_index, ost.length);
 		size += addLen;
-		
+
 		return true;
 	}
 
@@ -185,15 +189,39 @@ public class GoodsContainer<E> implements List<E> {
 	public boolean removeAll(Collection<?> c) {
 		int deleted = 0;
 		for (Object o : c) {
-			if (re)
+			if (remove(indexOf(o), false) != null) {
+				deleted++;
+			}
 		}
-		return false;
+		if (deleted == 0) {
+			return false;
+		}
+		int len = deleted / extraLength * extraLength;
+		if (len > 0) {
+			narrowStorage(len);
+		}
+		size -= deleted;
+		return true;
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		int deleted = 0;
+		for (int i=size-1; i>=0; i--){
+			if (!c.contains(elements[i])) {
+				deleted++;
+				remove(i, false);
+			}
+		}
+		if (deleted == 0) {
+			return false;
+		}
+		int len = deleted / extraLength * extraLength;
+		if (len > 0) {
+			narrowStorage(len);
+		}
+		size -= deleted;
+		return true;
 	}
 
 	@Override
@@ -202,22 +230,36 @@ public class GoodsContainer<E> implements List<E> {
 		elements = new Object[initCapacity];
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public E get(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		if (index >= size) {
+			return null;
+		}
+		return (E)elements[index];
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public E set(int index, E element) {
-		// TODO Auto-generated method stub
-		return null;
+		if (index >= size) {
+			return null;
+		}
+		Object prev = elements[index];
+		elements[index] = element;
+		return (E)prev;
 	}
 
 	@Override
 	public void add(int index, E element) {
-		// TODO Auto-generated method stub
-
+		if (size == elements.length) {
+			extendStorage();
+		}
+		for (int i = size; i > index; i++) {
+			elements[i] = elements[i - 1];
+		}
+		size++;
+		elements[index] = element;
 	}
 
 	@Override
@@ -256,6 +298,14 @@ public class GoodsContainer<E> implements List<E> {
 	public List<E> subList(int fromIndex, int toIndex) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Condition<E> getIteratorCondition() {
+		return iteratorCondition;
+	}
+
+	public void setIteratorCondition(Condition<E> iteratorCondition) {
+		this.iteratorCondition = iteratorCondition;
 	}
 
 }

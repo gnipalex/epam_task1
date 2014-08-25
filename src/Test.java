@@ -1,26 +1,32 @@
-import java.util.Arrays;
+import com.epam.hnyp.task1.subtask1.Guitar;
+import com.epam.hnyp.task1.subtask1.MusicInstrument;
+import com.epam.hnyp.task1.subtask1.Trumpet;
+import com.epam.hnyp.task1.subtask1.Violin;
+import com.epam.hnyp.task1.subtask2.Condition;
+import com.epam.hnyp.task1.subtask2.GoodsContainer;
+
 
 public class Test {
 	public static void main(String[] args) {
-		int[] mas = new int[10];
-		Arrays.fill(mas, 2);
-		System.out.println(mas);
-		for (int i : mas) {
-			System.out.print(i + " ");
+		GoodsContainer<MusicInstrument> goods = new GoodsContainer<>();
+		goods.add(new Guitar());
+		goods.add(new Violin("v1", 2005, 4));
+		goods.add(new Trumpet("v1", 1997, "bronze"));
+		goods.add(new MusicInstrument("v2", 1995));
+		goods.setIteratorCondition(new Condition<MusicInstrument>() {
+			@Override
+			public boolean satisfy(MusicInstrument item) {
+				return item.getYear() < 2000;
+			}
+		});
+		System.out.println("-------parameterized iterator--------");
+		for (MusicInstrument mi : goods) {
+			System.out.println(mi);
 		}
-		System.out.println();
-		System.out.println("-------");
-		int[] clone = mas.clone();
-		clone[1] = 9;
-		System.out.println("mas ");
-		for (int i : mas) {
-			System.out.print(i + " ");
+		System.out.println("---------NOT parameterized iterator--------");
+		goods.setIteratorCondition(null);
+		for (MusicInstrument mi : goods) {
+			System.out.println(mi);
 		}
-		System.out.println();
-		System.out.println("clone ");
-		for (int i : clone) {
-			System.out.print(i + " ");
-		}
-		System.out.println();
 	}
 }
