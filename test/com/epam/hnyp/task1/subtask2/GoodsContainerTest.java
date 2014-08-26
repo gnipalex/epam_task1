@@ -2,6 +2,8 @@ package com.epam.hnyp.task1.subtask2;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +36,14 @@ public class GoodsContainerTest {
 	public void testContains() {
 		assertTrue(container.contains(new Violin()));
 		assertFalse(container.contains(new Violin("aaa1", 2000, 4)));
+	}
+	
+	@Test
+	public void testClear(){
+		container.clear();
+		
+		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
+		assertTrue(container.size() == 0);
 	}
 
 	@Test
@@ -125,31 +135,93 @@ public class GoodsContainerTest {
 		assertTrue(container.contains(m1));
 		assertTrue(!container.contains(m2));
 		assertTrue(!container.contains(m3));
+		
+		GoodsContainer<MusicInstrument> c1 = new GoodsContainer<>();
+		c1.add(new MusicInstrument("111", 1960));
+		c1.add(new MusicInstrument("111", 1961));
+		
+		assertFalse(container.removeAll(c1));
+	}
+	
+	@Test
+	public void testContainsAll() {
+		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		MusicInstrument m1 = new Violin();
+		MusicInstrument m2 = new Trumpet("aaa", 2002, "coper");
+		MusicInstrument m3 = new Trumpet("aaa", 2005, "coper");
+		c.add(m1);
+		c.add(m2);
+		c.add(m3);
+		
+		assertTrue(container.containsAll(c));
+		
+		c.add(new Guitar("epiphone", 2009, 6, "brown", StringType.METAL));
+		
+		assertFalse(container.containsAll(c));
 	}
 
 	@Test
 	public void testRetainAll() {
-		fail("Not yet implemented");
+		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		MusicInstrument m1 = new Violin();
+		MusicInstrument m2 = new Trumpet("aaa", 2002, "coper");
+		MusicInstrument m3 = new Trumpet("aaa", 2005, "coper");
+		c.add(m1);
+		c.add(m2);
+		c.add(m3);
+		
+		container.add(new Trumpet("aaa1", 2005, "coper"));
+		container.add(new Trumpet("aaa2", 2005, "coper"));
+		container.add(new Trumpet("aaa3", 2005, "coper"));
+		container.add(new Trumpet("aaa4", 2005, "coper"));
+		container.add(new Trumpet("aaa5", 2005, "coper"));
+		
+		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH + GoodsContainer.DEFAULT_EXTRA_LENGTH);
+		
+		container.retainAll(c);
+		
+		assertTrue(container.size() == 4);
+		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
 	}
 
 	@Test
 	public void testGet() {
-		fail("Not yet implemented");
+		assertTrue(container.get(-1) == null);
+		assertTrue(container.get(9) == null);
+		assertTrue(container.get(0).equals(new MusicInstrument()));
 	}
 
 	@Test
 	public void testAddIntE() {
-		fail("Not yet implemented");
+		int sz = container.size();
+		container.add(0, new Guitar());
+		assertTrue(container.size() == sz + 1);
+		assertTrue(container.get(0).equals(new Guitar()));
 	}
 
 	@Test
 	public void testIndexOf() {
-		fail("Not yet implemented");
+		assertTrue(container.indexOf(new Violin()) == 2);
 	}
 
 	@Test
 	public void testLastIndexOf() {
-		fail("Not yet implemented");
+		assertTrue(container.lastIndexOf(new Violin()) == 5);
+	}
+	
+	@Test
+	public void testSubList() {
+		assertTrue(container.subList(1, 1).size() == 0);
+		
+		List<MusicInstrument> sub = container.subList(6, 9);
+		assertTrue(sub.size() == 3);
+		assertTrue(sub.get(0).equals(new Guitar()));
+		assertTrue(sub.get(2).equals(new Violin("aaa",2000, 4)));
+		
+		try {
+			container.subList(2, 1);
+			fail();
+		} catch (IndexOutOfBoundsException e) {	}
 	}
 
 }

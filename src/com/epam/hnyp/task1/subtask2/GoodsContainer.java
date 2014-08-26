@@ -237,9 +237,15 @@ public class GoodsContainer<E> implements List<E> {
 		}
 		int len = deleted / extraLength * extraLength;
 		if (len > 0) {
-			narrowStorage(len);
+			if (elements.length - len >= initCapacity) {
+				narrowStorage(len);
+			} else {
+				//size of array must stay not less than initCapacity
+				int x = initCapacity + len - elements.length;
+				narrowStorage(len - x);
+			}
 		}
-		size -= deleted;
+		//size -= deleted;
 		return true;
 	}
 
@@ -252,7 +258,7 @@ public class GoodsContainer<E> implements List<E> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public E get(int index) {
-		if (index >= size) {
+		if (index < 0 || index >= size) {
 			return null;
 		}
 		return (E) elements[index];
@@ -274,7 +280,7 @@ public class GoodsContainer<E> implements List<E> {
 		if (size == elements.length) {
 			extendStorage();
 		}
-		for (int i = size; i > index; i++) {
+		for (int i = size; i > index; i--) {
 			elements[i] = elements[i - 1];
 		}
 		size++;
