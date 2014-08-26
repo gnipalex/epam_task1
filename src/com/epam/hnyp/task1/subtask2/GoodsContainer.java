@@ -15,9 +15,9 @@ public class GoodsContainer<E> implements List<E> {
 	private int size;
 	private int initCapacity;
 	private int extraLength;
-	
+
 	private Condition<E> iteratorCondition;
-	
+
 	public GoodsContainer() {
 		extraLength = DEFAULT_EXTRA_LENGTH;
 		elements = new Object[DEFAULT_LENGTH];
@@ -159,7 +159,8 @@ public class GoodsContainer<E> implements List<E> {
 		if (elements.length - size < addLen) {
 			int x = addLen / extraLength;
 			int extLen = x > 0 ? x : 1 * extraLength;
-			extLen += (addLen/extraLength > 0 && addLen % extraLength > 0) ? extLen : 0;
+			extLen += (addLen / extraLength > 0 && addLen % extraLength > 0) ? extLen
+					: 0;
 			extendStorage(extLen);
 		}
 		for (E i : c) {
@@ -177,7 +178,8 @@ public class GoodsContainer<E> implements List<E> {
 		if (elements.length - size < addLen) {
 			int x = addLen / extraLength;
 			int extLen = x > 0 ? x : 1 * extraLength;
-			extLen += (addLen/extraLength > 0 && addLen % extraLength > 0) ? extLen : 0;
+			extLen += (addLen / extraLength > 0 && addLen % extraLength > 0) ? extLen
+					: 0;
 			extendStorage(extLen);
 		}
 		Object[] ost = new Object[size - index];
@@ -205,19 +207,26 @@ public class GoodsContainer<E> implements List<E> {
 		if (deleted == 0) {
 			return false;
 		}
+
 		int len = deleted / extraLength * extraLength;
-		
+
 		if (len > 0) {
-			narrowStorage(len);
+			if (elements.length - len >= initCapacity) {
+				narrowStorage(len);
+			} else {
+				//size of array must stay not less than initCapacity
+				int x = initCapacity + len - elements.length;
+				narrowStorage(len - x);
+			}
 		}
-		//size -= deleted;
+		// size -= deleted;
 		return true;
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
 		int deleted = 0;
-		for (int i=size-1; i>=0; i--){
+		for (int i = size - 1; i >= 0; i--) {
 			if (!c.contains(elements[i])) {
 				remove(i, false);
 				deleted++;
@@ -246,7 +255,7 @@ public class GoodsContainer<E> implements List<E> {
 		if (index >= size) {
 			return null;
 		}
-		return (E)elements[index];
+		return (E) elements[index];
 	}
 
 	@SuppressWarnings("unchecked")
@@ -257,7 +266,7 @@ public class GoodsContainer<E> implements List<E> {
 		}
 		Object prev = elements[index];
 		elements[index] = element;
-		return (E)prev;
+		return (E) prev;
 	}
 
 	@Override
@@ -306,8 +315,8 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
-		//simple copying to new List, not by specification
-		if (toIndex - fromIndex == 0){
+		// simple copying to new List, not by specification
+		if (toIndex - fromIndex == 0) {
 			return new GoodsContainer<>();
 		}
 		if (toIndex - fromIndex < 0) {
@@ -319,10 +328,10 @@ public class GoodsContainer<E> implements List<E> {
 		return list;
 	}
 
-	public int capacity(){
+	public int capacity() {
 		return elements.length;
 	}
-	
+
 	public Condition<E> getIteratorCondition() {
 		return iteratorCondition;
 	}
