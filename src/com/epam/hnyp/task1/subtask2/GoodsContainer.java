@@ -110,7 +110,12 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public boolean remove(Object o) {
-		return remove(indexOf(o), true) != null;
+		try {
+			remove(indexOf(o), true);
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -121,7 +126,7 @@ public class GoodsContainer<E> implements List<E> {
 	@SuppressWarnings("unchecked")
 	private E remove(int index, boolean narrow) {
 		if (index < 0 || index > size - 1) {
-			return null;
+			throw new IndexOutOfBoundsException();
 		}
 		E removedItem = (E) elements[index];
 		if (index < size - 1) {
@@ -152,8 +157,9 @@ public class GoodsContainer<E> implements List<E> {
 	public boolean addAll(Collection<? extends E> c) {
 		int addLen = c.size();
 		if (elements.length - size < addLen) {
-			int extLen = addLen / extraLength * extraLength;
-			extLen += addLen % extraLength > 0 ? extLen : 0;
+			int x = addLen / extraLength;
+			int extLen = x > 0 ? x : 1 * extraLength;
+			extLen += (addLen/extraLength > 0 && addLen % extraLength > 0) ? extLen : 0;
 			extendStorage(extLen);
 		}
 		for (E i : c) {
@@ -169,8 +175,9 @@ public class GoodsContainer<E> implements List<E> {
 		}
 		int addLen = c.size();
 		if (elements.length - size < addLen) {
-			int extLen = addLen / extraLength * extraLength;
-			extLen += addLen % extraLength > 0 ? extLen : 0;
+			int x = addLen / extraLength;
+			int extLen = x > 0 ? x : 1 * extraLength;
+			extLen += (addLen/extraLength > 0 && addLen % extraLength > 0) ? extLen : 0;
 			extendStorage(extLen);
 		}
 		Object[] ost = new Object[size - index];
@@ -189,7 +196,9 @@ public class GoodsContainer<E> implements List<E> {
 	public boolean removeAll(Collection<?> c) {
 		int deleted = 0;
 		for (Object o : c) {
-			if (remove(indexOf(o), false) != null) {
+			int i = indexOf(o);
+			if (i >= 0) {
+				remove(i, false);
 				deleted++;
 			}
 		}
@@ -197,10 +206,11 @@ public class GoodsContainer<E> implements List<E> {
 			return false;
 		}
 		int len = deleted / extraLength * extraLength;
+		
 		if (len > 0) {
 			narrowStorage(len);
 		}
-		size -= deleted;
+		//size -= deleted;
 		return true;
 	}
 
@@ -209,8 +219,8 @@ public class GoodsContainer<E> implements List<E> {
 		int deleted = 0;
 		for (int i=size-1; i>=0; i--){
 			if (!c.contains(elements[i])) {
-				deleted++;
 				remove(i, false);
+				deleted++;
 			}
 		}
 		if (deleted == 0) {
@@ -296,10 +306,23 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		//simple copying to new List, not by specification
+		if (toIndex - fromIndex == 0){
+			return new GoodsContainer<>();
+		}
+		if (toIndex - fromIndex < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		GoodsContainer<E> list = new GoodsContainer<>();
+		list.elements = Arrays.copyOfRange(elements, fromIndex, toIndex);
+		list.size = toIndex - fromIndex;
+		return list;
 	}
 
+	public int capacity(){
+		return elements.length;
+	}
+	
 	public Condition<E> getIteratorCondition() {
 		return iteratorCondition;
 	}

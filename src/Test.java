@@ -11,10 +11,11 @@ public class Test {
 		GoodsContainer<MusicInstrument> goods = new GoodsContainer<>();
 		goods.add(new Guitar());
 		goods.add(new Violin("v1", 2005, 4));
-		goods.add(new Trumpet("v1", 1997, "bronze"));
+		MusicInstrument m = new Trumpet("v1", 1997, "bronze");
+		goods.add(m);
 		goods.add(new MusicInstrument("v2", 1995));
 		goods.setIteratorCondition(new Condition<MusicInstrument>() {
-			@Override
+			@Override 
 			public boolean satisfy(MusicInstrument item) {
 				return item.getYear() < 2000;
 			}
@@ -25,6 +26,11 @@ public class Test {
 		}
 		System.out.println("---------NOT parameterized iterator--------");
 		goods.setIteratorCondition(null);
+		for (MusicInstrument mi : goods) {
+			System.out.println(mi);
+		}
+		System.out.println("-------------");
+		goods.remove(m);
 		for (MusicInstrument mi : goods) {
 			System.out.println(mi);
 		}

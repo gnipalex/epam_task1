@@ -38,6 +38,7 @@ public class ParameterizedIterator<E> implements Iterator<E> {
 
 	@Override
 	public void remove() {
+		throw new UnsupportedOperationException();
 	}
 
 }
