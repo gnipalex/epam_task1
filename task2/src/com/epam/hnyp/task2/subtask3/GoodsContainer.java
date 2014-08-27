@@ -347,9 +347,31 @@ public class GoodsContainer<E> implements List<E> {
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
+	protected Object clone() {
+		GoodsContainer<E> copy = null;
+		try {
+			copy = (GoodsContainer<E>)this.getClass().newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		copy.elements = Arrays.copyOf(elements, elements.length);
+		copy.extraLength = extraLength;
+		copy.initCapacity = initCapacity;
+		copy.iteratorCondition = iteratorCondition;
+		copy.size = size;
+		
+		return copy;
+	}
+	
+	public static void main(String[] args) {
+		GoodsContainer<Integer> g1 = new GoodsContainer<>();
+		g1.add(10);
+		g1.add(45);
+		GoodsContainer<Integer> g2 = (GoodsContainer<Integer>)g1.clone();
+		for (Integer i : g2) {
+			System.out.print(i + " ");
+		}
+		
 	}
 	
 }
