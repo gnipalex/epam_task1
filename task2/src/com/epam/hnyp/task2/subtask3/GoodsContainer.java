@@ -346,6 +346,7 @@ public class GoodsContainer<E> implements List<E> {
 		this.iteratorCondition = iteratorCondition;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object clone() {
 		GoodsContainer<E> copy = null;
@@ -367,6 +368,7 @@ public class GoodsContainer<E> implements List<E> {
 		GoodsContainer<Integer> g1 = new GoodsContainer<>();
 		g1.add(10);
 		g1.add(45);
+		@SuppressWarnings("unchecked")
 		GoodsContainer<Integer> g2 = (GoodsContainer<Integer>)g1.clone();
 		for (Integer i : g2) {
 			System.out.print(i + " ");

@@ -56,4 +56,8 @@ public class ParameterizedIteratorSI<E> implements Iterator<E> {
 		throw new UnsupportedOperationException();
 	}
 
+	ListIteratorBridge<E> getBridge() {
+		return bridge;
+	}
+	
 }
