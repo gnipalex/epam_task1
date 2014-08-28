@@ -76,7 +76,6 @@ public class GoodsContainer<E> implements List<E> {
 		// if (a.length > size)
 		// a[size] = null;
 		return a;
-
 	}
 
 	private void extendStorage() {
@@ -171,8 +170,11 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
-		if (index > size) {
+		if (index < 0 || index > size) {
 			return false;
+		}
+		if (index == size) {
+			return addAll(c);
 		}
 		int addLen = c.size();
 		if (elements.length - size < addLen) {
@@ -345,5 +347,4 @@ public class GoodsContainer<E> implements List<E> {
 	public void setIteratorCondition(Condition<E> iteratorCondition) {
 		this.iteratorCondition = iteratorCondition;
 	}
-
 }

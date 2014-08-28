@@ -52,6 +52,21 @@ public class GoodsContainerTest {
 		assertTrue(arr.length == 9);
 		assertTrue(((MusicInstrument)arr[8]).getVendor().equals("aaa"));
 	}
+	
+	@Test
+	public void testToArrayT() {
+		MusicInstrument[] mas = new MusicInstrument[0];
+		MusicInstrument[] mas_ret = container.toArray(mas);
+		
+		assertTrue(mas_ret.length == container.size());
+		assertTrue(mas != mas_ret);
+		
+		mas = new MusicInstrument[container.size()];
+		mas_ret = container.toArray(mas);
+		
+		assertTrue(mas_ret.length == container.size());
+		assertTrue(mas == mas_ret);
+	}
 
 	@Test
 	public void testAddE() {
@@ -103,19 +118,37 @@ public class GoodsContainerTest {
 		c.add(g1);
 		c.add(g2);
 		c.add(g3);
+		
 		int sz = container.size();
 		container.addAll(c);
 		assertTrue(container.size() == sz + 3);
 		assertTrue(container.get(sz).equals(g1));
 		assertTrue(container.get(container.size() - 1).equals(g3));
+	}
+	
+	@Test
+	public void testAddAllAtIndex() {
+		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		Guitar g1 = new Guitar("esp", 2003, 7, "black", StringType.METAL);
+		Guitar g2 = new Guitar("ltd", 2000, 7, "black", StringType.METAL);
+		Violin g3 = new Violin("123", 2009, 4);
+		c.add(g1);
+		c.add(g2);
+		c.add(g3);
 		
-		//to reset container
-		before();
-		
-		container.addAll(0, c);
-		assertTrue(container.size() == sz + 3);
+		int sz = container.size();
+		assertTrue(container.addAll(0, c));
+		assertTrue(container.size() == sz + c.size());
 		assertTrue(container.get(0).equals(g1));
 		assertTrue(container.get(2).equals(g3));
+		
+		sz = container.size();
+		assertTrue(container.addAll(container.size(), c));
+		assertTrue(container.size() == sz + c.size());
+		assertTrue(container.get(sz).equals(g1));
+		
+		assertFalse(container.addAll(container.size() + 1, c));
+		assertFalse(container.addAll(-1, c));
 	}
 
 	@Test
@@ -189,6 +222,15 @@ public class GoodsContainerTest {
 		assertTrue(container.get(-1) == null);
 		assertTrue(container.get(9) == null);
 		assertTrue(container.get(0).equals(new MusicInstrument()));
+	}
+	
+	@Test
+	public void testSet() {
+		MusicInstrument m = new Guitar();
+		MusicInstrument m_prev = container.set(0, m);
+		
+		assertTrue(m_prev.equals(new MusicInstrument()));
+		assertEquals(m, container.get(0));
 	}
 
 	@Test
