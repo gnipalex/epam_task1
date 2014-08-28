@@ -171,8 +171,11 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
-		if (index > size) {
+		if (index < 0 || index > size) {
 			return false;
+		}
+		if (index == size) {
+			return addAll(c);
 		}
 		int addLen = c.size();
 		if (elements.length - size < addLen) {
