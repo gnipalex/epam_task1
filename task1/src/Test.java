@@ -1,3 +1,5 @@
+import java.util.List;
+
 import com.epam.hnyp.task1.subtask1.Guitar;
 import com.epam.hnyp.task1.subtask1.MusicInstrument;
 import com.epam.hnyp.task1.subtask1.Trumpet;
@@ -10,7 +12,7 @@ public class Test {
 	public static void main(String[] args) {
 		GoodsContainer<MusicInstrument> goods = new GoodsContainer<>();
 		goods.add(new Guitar());
-		goods.add(new Violin("v1", 2005, 4));
+		goods.add(new Violin("v1", 2005, 4)); 
 		MusicInstrument m = new Trumpet("v1", 1997, "bronze");
 		goods.add(m);
 		goods.add(new MusicInstrument("v2", 1995));
@@ -20,6 +22,7 @@ public class Test {
 				return item.getYear() < 2000;
 			}
 		});
+
 		System.out.println("-------parameterized iterator--------");
 		for (MusicInstrument mi : goods) {
 			System.out.println(mi);

@@ -76,7 +76,6 @@ public class GoodsContainer<E> implements List<E> {
 		// if (a.length > size)
 		// a[size] = null;
 		return a;
-
 	}
 
 	private void extendStorage() {
@@ -201,11 +200,15 @@ public class GoodsContainer<E> implements List<E> {
 	public boolean removeAll(Collection<?> c) {
 		int deleted = 0;
 		for (Object o : c) {
-			int i = indexOf(o);
-			if (i >= 0) {
-				remove(i, false);
-				deleted++;
-			}
+			int i = -1;
+			//to remove all occurences of o
+			do {
+				i = indexOf(o);
+				if (i >= 0) {
+					remove(i, false);
+					deleted++;
+				}
+			} while (i >= 0);
 		}
 		if (deleted == 0) {
 			return false;
@@ -217,7 +220,7 @@ public class GoodsContainer<E> implements List<E> {
 			if (elements.length - len >= initCapacity) {
 				narrowStorage(len);
 			} else {
-				//size of array must stay not less than initCapacity
+				// size of array must stay not less than initCapacity
 				int x = initCapacity + len - elements.length;
 				narrowStorage(len - x);
 			}
@@ -243,12 +246,12 @@ public class GoodsContainer<E> implements List<E> {
 			if (elements.length - len >= initCapacity) {
 				narrowStorage(len);
 			} else {
-				//size of array must stay not less than initCapacity
+				// size of array must stay not less than initCapacity
 				int x = initCapacity + len - elements.length;
 				narrowStorage(len - x);
 			}
 		}
-		//size -= deleted;
+		// size -= deleted;
 		return true;
 	}
 
@@ -312,13 +315,11 @@ public class GoodsContainer<E> implements List<E> {
 
 	@Override
 	public ListIterator<E> listIterator() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ListIterator<E> listIterator(int index) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -328,7 +329,7 @@ public class GoodsContainer<E> implements List<E> {
 		if (toIndex - fromIndex == 0) {
 			return new GoodsContainer<>();
 		}
-		if (toIndex - fromIndex < 0) {
+		if (toIndex - fromIndex < 0 || toIndex > size() || fromIndex < 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		GoodsContainer<E> list = new GoodsContainer<>();
@@ -348,7 +349,7 @@ public class GoodsContainer<E> implements List<E> {
 	public void setIteratorCondition(Condition<E> iteratorCondition) {
 		this.iteratorCondition = iteratorCondition;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object clone() {
@@ -366,17 +367,4 @@ public class GoodsContainer<E> implements List<E> {
 		
 		return copy;
 	}
-	
-	public static void main(String[] args) {
-		GoodsContainer<Integer> g1 = new GoodsContainer<>();
-		g1.add(10);
-		g1.add(45);
-		@SuppressWarnings("unchecked")
-		GoodsContainer<Integer> g2 = (GoodsContainer<Integer>)g1.clone();
-		for (Integer i : g2) {
-			System.out.print(i + " ");
-		}
-		
-	}
-	
 }

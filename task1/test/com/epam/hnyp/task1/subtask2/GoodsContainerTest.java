@@ -164,8 +164,10 @@ public class GoodsContainerTest {
 		int sz = container.size();
 		assertTrue(container.removeAll(c));
 		
-		assertTrue(sz - container.size() == 3);
-		assertTrue(container.contains(m1));
+		final int deleted_count = 4;
+		
+		assertTrue(sz - container.size() == deleted_count);
+		assertTrue(!container.contains(m1));
 		assertTrue(!container.contains(m2));
 		assertTrue(!container.contains(m3));
 		
