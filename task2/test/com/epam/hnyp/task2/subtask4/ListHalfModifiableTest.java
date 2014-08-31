@@ -90,33 +90,68 @@ public class ListHalfModifiableTest {
 		res = halfList.toArray(mas);
 		
 		assertFalse(mas == res);
-		assertTrue(mas[0].equals(halfList.get(0)));
-		assertTrue(mas[mas.length - 1].equals(halfList.get(mas.length - 1)));
+		assertTrue(res[0].equals(halfList.get(0)));
+		assertTrue(res[res.length - 1].equals(halfList.get(res.length - 1)));
 	}
 
 	@Test
+	public void testModifyingStartAtIndex() {
+		assertTrue(halfList.modifyingStartAtIndex() == list1.size());
+	}
+	
+	@Test
 	public void testAddE() {
-		fail("Not yet implemented");
+		int sz = halfList.size();
+		assertTrue(halfList.add(10));
+		assertTrue(halfList.size() == sz + 1);
+		assertTrue(halfList.modifyingStartAtIndex() == list1.size());
 	}
 
 	@Test
 	public void testRemoveObject() {
-		fail("Not yet implemented");
+		int sz = halfList.size();
+		assertTrue(halfList.remove(new Integer(4)));
+		assertTrue(halfList.size() == sz - 1);
+		assertTrue(halfList.modifyingStartAtIndex() == list1.size());
 	}
 
 	@Test
 	public void testContainsAll() {
-		fail("Not yet implemented");
+		assertTrue(halfList.containsAll(list1));
+		assertTrue(halfList.containsAll(list2));
+		List<Integer> c = new ArrayList<>();
+		c.add(10);
+		c.add(4);
+		c.add(3);
+		assertFalse(halfList.containsAll(c));
 	}
 
 	@Test
 	public void testAddAllCollectionOfQextendsE() {
-		fail("Not yet implemented");
+		List<Integer> c = new ArrayList<>();
+		c.add(10);
+		c.add(11);
+		c.add(12);
+		int sz = halfList.size(); 
+		int im = halfList.modifyingStartAtIndex();
+		assertTrue( halfList.addAll(c) );
+		assertTrue(halfList.size() == sz + c.size());
+		assertTrue(im == halfList.modifyingStartAtIndex());
+		//
 	}
 
 	@Test
 	public void testAddAllIntCollectionOfQextendsE() {
-		fail("Not yet implemented");
+		List<Integer> c = new ArrayList<>();
+		c.add(10);
+		c.add(11);
+		c.add(12);
+		int sz = halfList.size(); 
+		int im = halfList.modifyingStartAtIndex();
+		assertTrue( halfList.addAll(halfList.modifyingStartAtIndex(), c) );
+		assertTrue(halfList.size() == sz + c.size());
+		assertTrue(im == halfList.modifyingStartAtIndex());
+		
 	}
 
 	@Test
@@ -171,11 +206,6 @@ public class ListHalfModifiableTest {
 
 	@Test
 	public void testSubList() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testModifyingStartAtIndex() {
 		fail("Not yet implemented");
 	}
 

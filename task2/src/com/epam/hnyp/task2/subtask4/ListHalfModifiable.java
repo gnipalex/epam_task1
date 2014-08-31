@@ -66,6 +66,7 @@ public class ListHalfModifiable<E> implements List<E> {
 		return arr;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T[] toArray(T[] a) {
 		Class<?> elem_type = a.getClass().getComponentType();//!!!!
@@ -77,7 +78,7 @@ public class ListHalfModifiable<E> implements List<E> {
 
 		int need_sz = part1.length + part2.length;
 		T[] result = a;
-		if (a.length <= need_sz) {
+		if (a.length < need_sz) {
 			result = (T[]) Array.newInstance(elem_type, need_sz);
 		}
 		
