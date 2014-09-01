@@ -1,9 +1,20 @@
 package com.epam.hnyp.task1.subtask1;
 
+/**
+ * Represents abstract string instrument
+ * @author Oleksandr_Hnyp
+ *
+ */
 public abstract class StringInstrument extends MusicInstrument {
 	public static final int MAX_STRINGS_COUNT = 300;
 	private int stringCount;
 	
+	/**
+	 * Creates string instrument with params
+	 * @param vendor
+	 * @param year
+	 * @param stringCount
+	 */
 	public StringInstrument(String vendor, int year, int stringCount) {
 		super(vendor, year);
 		if (stringCount < 1 || stringCount > MAX_STRINGS_COUNT) {
@@ -20,10 +31,18 @@ public abstract class StringInstrument extends MusicInstrument {
 		this.stringCount = stringCount;
 	}
 
+	/**
+	 * Gets string count for this instrument
+	 * @return string count
+	 */
 	public int getStringCount() {
 		return stringCount;
 	}
 
+	/**
+	 * Sets string count
+	 * @param stringCount count of strings must be > 0 & < MAX_STRINGS_COUNT
+	 */
 	public void setStringCount(int stringCount) {
 		if (stringCount > 0 && stringCount < MAX_STRINGS_COUNT) {
 			this.stringCount = stringCount;

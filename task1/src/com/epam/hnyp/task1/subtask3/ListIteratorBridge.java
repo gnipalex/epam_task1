@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask3;
+package com.epam.hnyp.task1.subtask3;
 
 import java.util.List;
 

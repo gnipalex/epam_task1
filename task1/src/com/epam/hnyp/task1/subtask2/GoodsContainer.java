@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class GoodsContainer<E> implements List<E> {
+public class GoodsContainer<E> implements List<E>, Cloneable {
 
 	public static final int DEFAULT_EXTRA_LENGTH = 10;
 	public static final int DEFAULT_LENGTH = 10;
@@ -348,5 +348,23 @@ public class GoodsContainer<E> implements List<E> {
 
 	public void setIteratorCondition(Condition<E> iteratorCondition) {
 		this.iteratorCondition = iteratorCondition;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected Object clone() {
+		GoodsContainer<E> copy = null;
+		try {
+			copy = (GoodsContainer<E>)this.getClass().newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		copy.elements = Arrays.copyOf(elements, elements.length);
+		copy.extraLength = extraLength;
+		copy.initCapacity = initCapacity;
+		copy.iteratorCondition = iteratorCondition;
+		copy.size = size;
+		
+		return copy;
 	}
 }

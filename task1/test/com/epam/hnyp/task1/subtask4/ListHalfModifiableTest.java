@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask4;
+package com.epam.hnyp.task1.subtask4;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.epam.hnyp.task1.subtask4.ListHalfModifiable;
+import com.epam.hnyp.task1.subtask4.ListHalfModifiable.UnmodifiedCollectionException;
 
 public class ListHalfModifiableTest {
 
@@ -17,17 +20,17 @@ public class ListHalfModifiableTest {
 	@Before
 	public void createList(){
 		list1 = new ArrayList<>();
-		list1.add(1);
+		list1.add(1);//0
 		list1.add(2);
 		list1.add(3);
-		list1.add(4);
+		list1.add(4);//3
 		
 		list2 = new ArrayList<>();
-		list2.add(5);
+		list2.add(5);//4
 		list2.add(6);
 		list2.add(3);
 		list2.add(3);
-		list2.add(4);
+		list2.add(4);//8
 		
 		halfList = new ListHalfModifiable<>(list1, list2);
 	}
@@ -57,7 +60,8 @@ public class ListHalfModifiableTest {
 	@Test
 	public void testGet() {
 		assertTrue(halfList.get(0).equals(1));
-		assertTrue(halfList.get(4).equals(4));
+		assertTrue(halfList.get(3).equals(4));
+		assertTrue(halfList.get(4).equals(5));
 		assertTrue(halfList.get(8).equals(4));
 		try {
 			halfList.get(-1);
@@ -113,6 +117,12 @@ public class ListHalfModifiableTest {
 		assertTrue(halfList.remove(new Integer(4)));
 		assertTrue(halfList.size() == sz - 1);
 		assertTrue(halfList.modifyingStartAtIndex() == list1.size());
+		try {
+			halfList.remove(new Integer(1));
+			fail();
+		} catch (UnmodifiedCollectionException e) {}
+		
+		assertFalse(halfList.remove(new Integer(0)));
 	}
 
 	@Test
@@ -137,7 +147,6 @@ public class ListHalfModifiableTest {
 		assertTrue( halfList.addAll(c) );
 		assertTrue(halfList.size() == sz + c.size());
 		assertTrue(im == halfList.modifyingStartAtIndex());
-		//
 	}
 
 	@Test
@@ -152,61 +161,142 @@ public class ListHalfModifiableTest {
 		assertTrue(halfList.size() == sz + c.size());
 		assertTrue(im == halfList.modifyingStartAtIndex());
 		
+		try {
+			halfList.addAll(-1, c);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			halfList.addAll(halfList.size() + 1, c);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			halfList.addAll(halfList.modifyingStartAtIndex() - 1, c);
+			fail();
+		} catch (UnmodifiedCollectionException e) {}
 	}
 
 	@Test
 	public void testRemoveAll() {
-		fail("Not yet implemented");
+		List<Integer> c = new ArrayList<>();
+		c.add(5);
+		c.add(6);
+		c.add(3);
+		c.add(4);
+		
+		int sz = halfList.size();
+		assertTrue(halfList.removeAll(c));
+		assertTrue(halfList.size() == sz - 5);
+		assertTrue(halfList.modifyingStartAtIndex() == 4);
 	}
 
 	@Test
 	public void testRetainAll() {
-		fail("Not yet implemented");
+		List<Integer> c = new ArrayList<>();
+		c.add(5);
+		c.add(6);
+		
+		int sz = halfList.size();
+		int m_index = halfList.modifyingStartAtIndex();
+		assertTrue(halfList.retainAll(c));
+		assertTrue(halfList.size() == sz - 3);
+		assertTrue(halfList.modifyingStartAtIndex() == m_index);
 	}
 
 	@Test
 	public void testClear() {
-		fail("Not yet implemented");
+		halfList.clear();
+		assertTrue(halfList.size() == list1.size());
 	}
 
 	@Test
 	public void testSet() {
-		fail("Not yet implemented");
+		int i = halfList.modifyingStartAtIndex();
+		assertTrue(halfList.set(i, 55).equals(5));
+		try {
+			halfList.set(i - 1, 55);
+			fail();
+		} catch (UnmodifiedCollectionException e){}
+		try {
+			halfList.set(0, 55);
+			fail();
+		} catch (UnmodifiedCollectionException e){}
+		try {
+			halfList.set(-1, 55);
+			fail();
+		} catch (IndexOutOfBoundsException e){}
+		try {
+			halfList.set(halfList.size(), 55);
+			fail();
+		} catch (IndexOutOfBoundsException e){}
 	}
 
 	@Test
 	public void testAddIntE() {
-		fail("Not yet implemented");
+		int sz = halfList.size();
+		halfList.add(halfList.modifyingStartAtIndex(), 66);
+		assertTrue(halfList.size() == ++sz);
+		assertTrue(halfList.get(halfList.modifyingStartAtIndex()).equals(66));
+		///
+		try {
+			halfList.add(halfList.modifyingStartAtIndex() - 1, 66);
+			fail();
+		} catch (UnmodifiedCollectionException e) {}
+		try {
+			halfList.add(0, 66);
+			fail();
+		} catch (UnmodifiedCollectionException e) {}
+		try {
+			halfList.add(-1, 66);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			halfList.add(halfList.size() + 1, 66);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
 	}
 
 	@Test
 	public void testRemoveInt() {
-		fail("Not yet implemented");
+		int sz = halfList.size();
+		assertTrue(halfList.remove(halfList.modifyingStartAtIndex()).equals(5));
+		assertTrue(halfList.size() == --sz);
+		try {
+			halfList.remove(0);
+			fail();
+		} catch (UnmodifiedCollectionException e) {}
+		try {
+			halfList.remove(halfList.modifyingStartAtIndex() - 1);
+			fail();
+		} catch (UnmodifiedCollectionException e) {}
+		try {
+			halfList.remove(- 1);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			halfList.remove(halfList.size());
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
 	}
 
 	@Test
 	public void testIndexOf() {
-		fail("Not yet implemented");
+		assertTrue(halfList.indexOf(new Integer(3)) == 2);
+		assertTrue(halfList.indexOf(new Integer(6)) == 5);
+		assertTrue(halfList.indexOf(new Integer(0)) == -1);
 	}
 
 	@Test
 	public void testLastIndexOf() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testListIterator() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testListIteratorInt() {
-		fail("Not yet implemented");
+		assertTrue(halfList.lastIndexOf(new Integer(3)) == 7);
+		assertTrue(halfList.lastIndexOf(new Integer(2)) == 1);
+		assertTrue(halfList.lastIndexOf(new Integer(11)) == -1);
 	}
 
 	@Test
 	public void testSubList() {
-		fail("Not yet implemented");
+		List<Integer> sub = halfList.subList(1, 5);
+		assertTrue(sub.size() == 4);
+		assertTrue(halfList.containsAll(sub));
 	}
 
 }

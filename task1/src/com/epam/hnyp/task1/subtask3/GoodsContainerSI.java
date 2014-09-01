@@ -1,7 +1,9 @@
-package com.epam.hnyp.task2.subtask3;
+package com.epam.hnyp.task1.subtask3;
 
 import java.util.Collection;
 import java.util.Iterator;
+
+import com.epam.hnyp.task1.subtask2.GoodsContainer;
 
 public class GoodsContainerSI<E> extends GoodsContainer<E> {
 	private ListIteratorBridge<E> bridge;

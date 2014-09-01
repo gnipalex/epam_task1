@@ -94,11 +94,11 @@ public class GoodsContainerTest {
 		MusicInstrument m = new Sax();
 		container.add(m);
 		container.add(m);
-		assertTrue(container.capacity() == container.DEFAULT_LENGTH + container.DEFAULT_EXTRA_LENGTH);
+		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH + GoodsContainer.DEFAULT_EXTRA_LENGTH);
 		container.remove(0);
-		assertTrue(container.capacity() == container.DEFAULT_LENGTH);
+		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
 		container.remove(0);
-		assertTrue(container.capacity() == container.DEFAULT_LENGTH);
+		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
 		try {
 			container.remove(9);
 			fail();

@@ -1,5 +1,10 @@
 package com.epam.hnyp.task1.subtask1;
 
+/**
+ * Represents string instrument - guitar
+ * @author Oleksandr_Hnyp
+ *
+ */
 public class Guitar extends StringInstrument {
 	public static final int MIN_GUITAR_STRINGS = 4;
 	public static final int MAX_GUITAR_STRINGS = 12;
@@ -9,12 +14,23 @@ public class Guitar extends StringInstrument {
 	private String color;
 	private StringType stringType;
 
+	/**
+	 * Creates classic guitar with CLASSIC_GUITAR_STRINGS and StringType.NEULON strings
+	 */
 	public Guitar() {
 		super(CLASSIC_GUITAR_STRINGS);
 		color = DEFAULT_COLOR;
 		stringType = StringType.NEULON;
 	}
 
+	/**
+	 * Creates guitar with params
+	 * @param vendor
+	 * @param year
+	 * @param stringCount
+	 * @param color
+	 * @param stringType
+	 */
 	public Guitar(String vendor, int year, int stringCount, String color,
 			StringType stringType) {
 		super(vendor, year, stringCount);
@@ -26,6 +42,11 @@ public class Guitar extends StringInstrument {
 		this.stringType = stringType;
 	}
 
+	/**
+	 * Represents types of guitar strings
+	 * @author Oleksandr_Hnyp
+	 *
+	 */
 	public static enum StringType {
 		NEULON, METAL
 	}

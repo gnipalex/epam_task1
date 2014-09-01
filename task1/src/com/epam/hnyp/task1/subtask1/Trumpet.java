@@ -1,5 +1,10 @@
 package com.epam.hnyp.task1.subtask1;
 
+/**
+ * Represents wind instrument - trumpet
+ * @author Oleksandr_Hnyp
+ *
+ */
 public class Trumpet extends WindInstrument {
 	public Trumpet() {
 	}

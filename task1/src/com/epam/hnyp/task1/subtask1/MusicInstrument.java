@@ -30,6 +30,9 @@ public class MusicInstrument {
 		this.year = year;
 	}
 	
+	/**
+	 * Plays melody using this instrument
+	 */
 	public void play() {
 		System.out.println("music instrument : a e a e a ab ab");
 	}

@@ -1,5 +1,10 @@
 package com.epam.hnyp.task1.subtask1;
 
+/**
+ * Represents Sax - wind music instrument
+ * @author Oleksandr_Hnyp
+ *
+ */
 public class Sax extends WindInstrument {
 	public Sax() {
 	}

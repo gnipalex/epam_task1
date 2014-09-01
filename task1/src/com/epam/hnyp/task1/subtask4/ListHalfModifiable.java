@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask4;
+package com.epam.hnyp.task1.subtask4;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.epam.hnyp.task2.subtask3.ParameterizedIterator;
+import com.epam.hnyp.task1.subtask2.ParameterizedIterator;
 
 /**
  * Class represents implementation of List interface, consist of two parts :
@@ -23,6 +23,11 @@ public class ListHalfModifiable<E> implements List<E> {
 	private List<E> unmodPart;
 	private List<E> modPart;
 
+	/**
+	 * Creates List with two parts : unmodifiable and modifiable
+	 * @param unmodifiablePart
+	 * @param modifiablePart
+	 */
 	public ListHalfModifiable(List<E> unmodifiablePart, List<E> modifiablePart) {
 		this.unmodPart = unmodifiablePart;
 		this.modPart = modifiablePart;
@@ -114,7 +119,7 @@ public class ListHalfModifiable<E> implements List<E> {
 		return false;
 	}
 
-	private static class UnmodifiedCollectionException extends RuntimeException {
+	public static class UnmodifiedCollectionException extends RuntimeException {
 	}
 
 	@Override
@@ -216,14 +221,22 @@ public class ListHalfModifiable<E> implements List<E> {
 
 	@Override
 	public int indexOf(Object o) {
-		int index = unmodPart.indexOf(o);
-		return index >= 0 ? index : modPart.indexOf(o);
+		int index1 = unmodPart.indexOf(o);
+		int index2 = modPart.indexOf(o);
+		if (index1 >= 0) {
+			return index1;
+		}
+		return index2 < 0 ? -1 : index2 + unmodPart.size();
 	}
 
 	@Override
 	public int lastIndexOf(Object o) {
-		int index = modPart.lastIndexOf(o);
-		return index >= 0 ? index : unmodPart.lastIndexOf(o);
+		int index1 = unmodPart.lastIndexOf(o);
+		int index2 = modPart.lastIndexOf(o);
+		if (index2 >= 0) {
+			return index2 + unmodPart.size();
+		}
+		return index1 < 0 ? -1 : index1;
 	}
 
 	@Override

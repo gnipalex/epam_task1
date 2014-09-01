@@ -1,14 +1,28 @@
 package com.epam.hnyp.task1.subtask1;
 
+/**
+ * Represents abstract wind instrument
+ * @author Oleksandr_Hnyp
+ *
+ */
 public abstract class WindInstrument extends MusicInstrument {
 	private static final String DEFAULT_MATERIAL = "bronze";
 	
 	private String material;
 	
+	/**
+	 * Creates default wind instrument
+	 */
 	public WindInstrument() {
 		this.material = DEFAULT_MATERIAL;
 	}
 	
+	/**
+	 * Creates wind instrument with params
+	 * @param vendor
+	 * @param year
+	 * @param material
+	 */
 	public WindInstrument(String vendor, int year, String material) {
 		super(vendor, year);
 		this.material = material;

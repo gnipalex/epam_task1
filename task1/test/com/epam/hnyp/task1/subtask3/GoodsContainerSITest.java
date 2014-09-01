@@ -1,8 +1,12 @@
-package com.epam.hnyp.task2.subtask3;
+package com.epam.hnyp.task1.subtask3;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.epam.hnyp.task1.subtask3.GoodsContainerSI;
+import com.epam.hnyp.task1.subtask3.ListIteratorBridge;
+import com.epam.hnyp.task1.subtask3.ParameterizedIteratorSI;
 
 public class GoodsContainerSITest {
 

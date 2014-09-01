@@ -1,5 +1,10 @@
 package com.epam.hnyp.task1.subtask1;
 
+/**
+ * Represents string instrument - violin
+ * @author Oleksandr_Hnyp
+ *
+ */
 public class Violin extends StringInstrument {
 	public static final int MIN_STRINGS = 4;
 	public static final int MAX_STRINGS = 10;
@@ -13,7 +18,7 @@ public class Violin extends StringInstrument {
 	}
 
 	/**
-	 * 
+	 * Creates violin with params
 	 * @param vendor
 	 * @param year
 	 * @param stringCount

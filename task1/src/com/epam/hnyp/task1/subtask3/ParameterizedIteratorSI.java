@@ -1,7 +1,9 @@
-package com.epam.hnyp.task2.subtask3;
+package com.epam.hnyp.task1.subtask3;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import com.epam.hnyp.task1.subtask2.Condition;
 
 public class ParameterizedIteratorSI<E> implements Iterator<E> {
 	private ListIteratorBridge<E> bridge;
