@@ -83,9 +83,6 @@ public class Guitar extends StringInstrument {
 	public boolean equals(Object obj) {
 		if (super.equals(obj)) {
 			if (obj instanceof Guitar) {
-//				if (obj.hashCode() != this.hashCode()) {
-//					return false;
-//				}
 				Guitar gu = (Guitar)obj;
 				if (gu.color.equals(color) && gu.stringType == stringType) {
 					return true;

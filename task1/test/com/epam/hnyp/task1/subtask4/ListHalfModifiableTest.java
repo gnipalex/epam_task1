@@ -16,22 +16,22 @@ public class ListHalfModifiableTest {
 	private ListHalfModifiable<Integer> halfList;
 	private List<Integer> list1;
 	private List<Integer> list2;
-	
+
 	@Before
-	public void createList(){
+	public void before() {
 		list1 = new ArrayList<>();
-		list1.add(1);//0
+		list1.add(1);// 0
 		list1.add(2);
 		list1.add(3);
-		list1.add(4);//3
-		
+		list1.add(4);// 3
+
 		list2 = new ArrayList<>();
-		list2.add(5);//4
+		list2.add(5);// 4
 		list2.add(6);
 		list2.add(3);
 		list2.add(3);
-		list2.add(4);//8
-		
+		list2.add(4);// 8
+
 		halfList = new ListHalfModifiable<>(list1, list2);
 	}
 
@@ -43,7 +43,8 @@ public class ListHalfModifiableTest {
 	@Test
 	public void testIsEmpty() {
 		assertFalse(halfList.isEmpty());
-		ListHalfModifiable<Integer> list = new ListHalfModifiable<>(new ArrayList<Integer>(), new ArrayList<Integer>());
+		ListHalfModifiable<Integer> list = new ListHalfModifiable<>(
+				new ArrayList<Integer>(), new ArrayList<Integer>());
 		assertTrue(list.isEmpty());
 		list.add(2);
 		assertFalse(list.isEmpty());
@@ -66,33 +67,35 @@ public class ListHalfModifiableTest {
 		try {
 			halfList.get(-1);
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 		try {
 			halfList.get(halfList.size());
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
-	
+
 	@Test
 	public void testToArray() {
 		Object[] mas = halfList.toArray();
 		assertTrue(mas.length == halfList.size());
-		assertTrue( ((Integer)mas[0]).equals(1) );
-		assertTrue( ((Integer)mas[mas.length - 1]).equals(4) );
+		assertTrue(((Integer) mas[0]).equals(1));
+		assertTrue(((Integer) mas[mas.length - 1]).equals(4));
 	}
 
 	@Test
 	public void testToArrayTArray() {
 		Integer[] mas = new Integer[halfList.size()];
 		Integer[] res = halfList.toArray(mas);
-		
+
 		assertTrue(mas == res);
 		assertTrue(mas[0].equals(halfList.get(0)));
 		assertTrue(mas[mas.length - 1].equals(halfList.get(mas.length - 1)));
-		
+
 		mas = new Integer[halfList.size() - 1];
 		res = halfList.toArray(mas);
-		
+
 		assertFalse(mas == res);
 		assertTrue(res[0].equals(halfList.get(0)));
 		assertTrue(res[res.length - 1].equals(halfList.get(res.length - 1)));
@@ -102,7 +105,7 @@ public class ListHalfModifiableTest {
 	public void testModifyingStartAtIndex() {
 		assertTrue(halfList.modifyingStartAtIndex() == list1.size());
 	}
-	
+
 	@Test
 	public void testAddE() {
 		int sz = halfList.size();
@@ -120,8 +123,9 @@ public class ListHalfModifiableTest {
 		try {
 			halfList.remove(new Integer(1));
 			fail();
-		} catch (UnmodifiedCollectionException e) {}
-		
+		} catch (UnmodifiedCollectionException e) {
+		}
+
 		assertFalse(halfList.remove(new Integer(0)));
 	}
 
@@ -142,9 +146,9 @@ public class ListHalfModifiableTest {
 		c.add(10);
 		c.add(11);
 		c.add(12);
-		int sz = halfList.size(); 
+		int sz = halfList.size();
 		int im = halfList.modifyingStartAtIndex();
-		assertTrue( halfList.addAll(c) );
+		assertTrue(halfList.addAll(c));
 		assertTrue(halfList.size() == sz + c.size());
 		assertTrue(im == halfList.modifyingStartAtIndex());
 	}
@@ -155,24 +159,27 @@ public class ListHalfModifiableTest {
 		c.add(10);
 		c.add(11);
 		c.add(12);
-		int sz = halfList.size(); 
+		int sz = halfList.size();
 		int im = halfList.modifyingStartAtIndex();
-		assertTrue( halfList.addAll(halfList.modifyingStartAtIndex(), c) );
+		assertTrue(halfList.addAll(halfList.modifyingStartAtIndex(), c));
 		assertTrue(halfList.size() == sz + c.size());
 		assertTrue(im == halfList.modifyingStartAtIndex());
-		
+
 		try {
 			halfList.addAll(-1, c);
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 		try {
 			halfList.addAll(halfList.size() + 1, c);
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 		try {
 			halfList.addAll(halfList.modifyingStartAtIndex() - 1, c);
 			fail();
-		} catch (UnmodifiedCollectionException e) {}
+		} catch (UnmodifiedCollectionException e) {
+		}
 	}
 
 	@Test
@@ -180,32 +187,59 @@ public class ListHalfModifiableTest {
 		List<Integer> c = new ArrayList<>();
 		c.add(5);
 		c.add(6);
-		c.add(3);
-		c.add(4);
-		
+
 		int sz = halfList.size();
 		assertTrue(halfList.removeAll(c));
-		assertTrue(halfList.size() == sz - 5);
+		assertTrue(halfList.size() == sz - 2);
 		assertTrue(halfList.modifyingStartAtIndex() == 4);
+
+		before();
+
+		c.add(4);
+
+		try {
+			halfList.removeAll(c);
+			fail();
+		} catch (UnmodifiedCollectionException e) {
+		}
+
 	}
 
 	@Test
 	public void testRetainAll() {
 		List<Integer> c = new ArrayList<>();
-		c.add(5);
-		c.add(6);
-		
+		c.add(1);
+		c.add(2);
+		c.add(3);
+		c.add(4);
+
 		int sz = halfList.size();
 		int m_index = halfList.modifyingStartAtIndex();
 		assertTrue(halfList.retainAll(c));
-		assertTrue(halfList.size() == sz - 3);
+		assertTrue(halfList.size() == sz - 2);
 		assertTrue(halfList.modifyingStartAtIndex() == m_index);
+
+		c.clear();
+		c.add(3);
+		c.add(1);
+
+		try {
+			halfList.retainAll(c);
+			fail();
+		} catch (UnmodifiedCollectionException e) {
+		}
 	}
 
 	@Test
 	public void testClear() {
+		try {
+			halfList.clear();
+			fail();
+		} catch (UnmodifiedCollectionException e) {
+		}
+		list1.clear();
 		halfList.clear();
-		assertTrue(halfList.size() == list1.size());
+		assertTrue(halfList.isEmpty());
 	}
 
 	@Test
@@ -215,19 +249,23 @@ public class ListHalfModifiableTest {
 		try {
 			halfList.set(i - 1, 55);
 			fail();
-		} catch (UnmodifiedCollectionException e){}
+		} catch (UnmodifiedCollectionException e) {
+		}
 		try {
 			halfList.set(0, 55);
 			fail();
-		} catch (UnmodifiedCollectionException e){}
+		} catch (UnmodifiedCollectionException e) {
+		}
 		try {
 			halfList.set(-1, 55);
 			fail();
-		} catch (IndexOutOfBoundsException e){}
+		} catch (IndexOutOfBoundsException e) {
+		}
 		try {
 			halfList.set(halfList.size(), 55);
 			fail();
-		} catch (IndexOutOfBoundsException e){}
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 
 	@Test
@@ -236,23 +274,27 @@ public class ListHalfModifiableTest {
 		halfList.add(halfList.modifyingStartAtIndex(), 66);
 		assertTrue(halfList.size() == ++sz);
 		assertTrue(halfList.get(halfList.modifyingStartAtIndex()).equals(66));
-		///
+		// /
 		try {
 			halfList.add(halfList.modifyingStartAtIndex() - 1, 66);
 			fail();
-		} catch (UnmodifiedCollectionException e) {}
+		} catch (UnmodifiedCollectionException e) {
+		}
 		try {
 			halfList.add(0, 66);
 			fail();
-		} catch (UnmodifiedCollectionException e) {}
+		} catch (UnmodifiedCollectionException e) {
+		}
 		try {
 			halfList.add(-1, 66);
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 		try {
 			halfList.add(halfList.size() + 1, 66);
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 
 	@Test
@@ -263,19 +305,23 @@ public class ListHalfModifiableTest {
 		try {
 			halfList.remove(0);
 			fail();
-		} catch (UnmodifiedCollectionException e) {}
+		} catch (UnmodifiedCollectionException e) {
+		}
 		try {
 			halfList.remove(halfList.modifyingStartAtIndex() - 1);
 			fail();
-		} catch (UnmodifiedCollectionException e) {}
+		} catch (UnmodifiedCollectionException e) {
+		}
 		try {
-			halfList.remove(- 1);
+			halfList.remove(-1);
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 		try {
 			halfList.remove(halfList.size());
 			fail();
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 
 	@Test

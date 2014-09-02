@@ -53,9 +53,6 @@ public abstract class StringInstrument extends MusicInstrument {
 	public boolean equals(Object obj) {
 		if (super.equals(obj)) {
 			if (obj instanceof StringInstrument) {
-//				if (obj.hashCode() != this.hashCode()) {
-//					return false;
-//				}
 				StringInstrument si = (StringInstrument)obj;
 				if (si.stringCount == this.stringCount) {
 					return true;

@@ -40,9 +40,6 @@ public abstract class WindInstrument extends MusicInstrument {
 	public boolean equals(Object obj) {
 		if (super.equals(obj)) {
 			if (obj instanceof WindInstrument) {
-//				if (obj.hashCode() != this.hashCode()) {
-//					return false;
-//				}
 				WindInstrument wi = (WindInstrument)obj;
 				if (wi.material.equals(this.material)) {
 					return true;

@@ -65,9 +65,11 @@ public class MusicInstrument {
 			return true;
 		}
 		if (obj instanceof MusicInstrument) {
-			if (obj.hashCode() != this.hashCode()) {
-				return false;
-			}
+			//to prevent parent and children equality
+//			if (hashCode() != obj.hashCode()) {
+//				return false;
+//			}
+			if (this.getClass() != obj.getClass()) return false;
 			MusicInstrument instr = (MusicInstrument)obj;
 			if (instr.vendor.equals(vendor) && instr.year == year) {
 				return true;

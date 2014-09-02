@@ -25,6 +25,7 @@ public class ListHalfModifiable<E> implements List<E> {
 
 	/**
 	 * Creates List with two parts : unmodifiable and modifiable
+	 * 
 	 * @param unmodifiablePart
 	 * @param modifiablePart
 	 */
@@ -74,8 +75,8 @@ public class ListHalfModifiable<E> implements List<E> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T[] toArray(T[] a) {
-		Class<?> elem_type = a.getClass().getComponentType();//!!!!
-		
+		Class<?> elem_type = a.getClass().getComponentType();// !!!!
+
 		T[] part1 = (T[]) Array.newInstance(elem_type, unmodPart.size());
 		part1 = unmodPart.toArray(part1);
 		T[] part2 = (T[]) Array.newInstance(elem_type, modPart.size());
@@ -86,7 +87,7 @@ public class ListHalfModifiable<E> implements List<E> {
 		if (a.length < need_sz) {
 			result = (T[]) Array.newInstance(elem_type, need_sz);
 		}
-		
+
 		if (part1.length > 0) {
 			System.arraycopy(part1, 0, result, 0, part1.length);
 		}
@@ -119,7 +120,8 @@ public class ListHalfModifiable<E> implements List<E> {
 		return false;
 	}
 
-	public static class UnmodifiedCollectionException extends RuntimeException {
+	public static class UnmodifiedCollectionException extends
+			IllegalArgumentException {
 	}
 
 	@Override
@@ -154,16 +156,27 @@ public class ListHalfModifiable<E> implements List<E> {
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
+		for (Object o : c) {
+			if (unmodPart.contains(o)) {
+				throw new UnmodifiedCollectionException();
+			}
+		}
 		return modPart.removeAll(c);
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
+		if (!unmodPart.containsAll(c) || c.size() < unmodPart.size()) {
+			throw new UnmodifiedCollectionException();
+		}
 		return modPart.retainAll(c);
 	}
 
 	@Override
 	public void clear() {
+		if (!unmodPart.isEmpty()) {
+			throw new UnmodifiedCollectionException();
+		}
 		modPart.clear();
 	}
 

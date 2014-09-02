@@ -43,6 +43,7 @@ public class DemoSubtask1 {
 		System.out.println("equals test");
 		System.out.println("1 eq 1 --> " + m1.equals(m1));
 		System.out.println("1 eq 2 --> " + m1.equals(m2));
+		System.out.println("1 eq 3 --> " + m1.equals(m3));
 		System.out.println("1 eq 7 --> " + m1.equals(m7));
 		System.out.println("4 eq 9 --> " + m4.equals(m9));
 		System.out.println("9 eq 4 --> " + m9.equals(m4));
