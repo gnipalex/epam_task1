@@ -1,9 +1,9 @@
-package com.epam.hnyp.task2.subtask3.goods;
+package com.epam.hnyp.task2.subtask3;
 
 public class Good {
 	private String name;
 	private int price;
-	
+	private long id;
 	
 	public Good(String name, int price) {
 		this.name = name;
@@ -18,7 +18,7 @@ public class Good {
 		return price;
 	}
 	
-	public String uid() {
-		
+	public long getId() {
+		return id;
 	}
 }
