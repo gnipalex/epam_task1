@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class GoodsContainer<E> implements List<E>, Cloneable {
+public class GoodsList<E> implements List<E>, Cloneable {
 
 	public static final int DEFAULT_EXTRA_LENGTH = 10;
 	public static final int DEFAULT_LENGTH = 10;
@@ -18,19 +18,19 @@ public class GoodsContainer<E> implements List<E>, Cloneable {
 
 	private Condition<E> iteratorCondition;
 
-	public GoodsContainer() {
+	public GoodsList() {
 		extraLength = DEFAULT_EXTRA_LENGTH;
 		elements = new Object[DEFAULT_LENGTH];
 		initCapacity = DEFAULT_LENGTH;
 	}
 
-	public GoodsContainer(int capacity) {
+	public GoodsList(int capacity) {
 		extraLength = DEFAULT_EXTRA_LENGTH;
 		elements = new Object[capacity];
 		this.initCapacity = capacity;
 	}
 
-	public GoodsContainer(int capacity, int extraLen) {
+	public GoodsList(int capacity, int extraLen) {
 		extraLength = extraLen;
 		elements = new Object[capacity];
 		this.initCapacity = capacity;
@@ -73,8 +73,6 @@ public class GoodsContainer<E> implements List<E>, Cloneable {
 			return (T[]) Arrays.copyOf(elements, size, a.getClass());
 		}
 		System.arraycopy(elements, 0, a, 0, size);
-		// if (a.length > size)
-		// a[size] = null;
 		return a;
 	}
 
@@ -225,7 +223,6 @@ public class GoodsContainer<E> implements List<E>, Cloneable {
 				narrowStorage(len - x);
 			}
 		}
-		// size -= deleted;
 		return true;
 	}
 
@@ -327,12 +324,12 @@ public class GoodsContainer<E> implements List<E>, Cloneable {
 	public List<E> subList(int fromIndex, int toIndex) {
 		// simple copying to new List, not by specification
 		if (toIndex - fromIndex == 0) {
-			return new GoodsContainer<>();
+			return new GoodsList<>();
 		}
 		if (toIndex - fromIndex < 0 || toIndex > size() || fromIndex < 0) {
 			throw new IndexOutOfBoundsException();
 		}
-		GoodsContainer<E> list = new GoodsContainer<>();
+		GoodsList<E> list = new GoodsList<>();
 		list.elements = Arrays.copyOfRange(elements, fromIndex, toIndex);
 		list.size = toIndex - fromIndex;
 		return list;
@@ -353,9 +350,9 @@ public class GoodsContainer<E> implements List<E>, Cloneable {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object clone() {
-		GoodsContainer<E> copy = null;
+		GoodsList<E> copy = null;
 		try {
-			copy = (GoodsContainer<E>)this.getClass().newInstance();
+			copy = (GoodsList<E>)this.getClass().newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}

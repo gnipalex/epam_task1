@@ -4,14 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.epam.hnyp.task1.subtask3.GoodsContainerSI;
-import com.epam.hnyp.task1.subtask3.ParameterizedIteratorSI;
+import com.epam.hnyp.task1.subtask3.GoodsStableIteratorList;
+import com.epam.hnyp.task1.subtask3.ParameterizedStableIterator;
 
-public class ParameterizedIteratorSITest {
+public class ParameterizedStableIteratorTest {
 
 	@Test
 	public void testIteratorDataUnmodifiedOnListModify() {
-		GoodsContainerSI<Integer> items = new GoodsContainerSI<>();
+		GoodsStableIteratorList<Integer> items = new GoodsStableIteratorList<>();
 		items.add(5);
 		items.add(7);//
 		items.add(6);
@@ -20,8 +20,8 @@ public class ParameterizedIteratorSITest {
 		
 		int sz = items.size();
 		
-		ParameterizedIteratorSI<Integer> it1 = (ParameterizedIteratorSI<Integer>)items.iterator();
-		ParameterizedIteratorSI<Integer> it2 = (ParameterizedIteratorSI<Integer>)items.iterator();
+		ParameterizedStableIterator<Integer> it1 = (ParameterizedStableIterator<Integer>)items.iterator();
+		ParameterizedStableIterator<Integer> it2 = (ParameterizedStableIterator<Integer>)items.iterator();
 		
 		assertTrue(it1.getBridge().getList() == items);
 		assertTrue(it2.getBridge().getList() == items);

@@ -5,36 +5,31 @@ import java.util.NoSuchElementException;
 
 import com.epam.hnyp.task1.subtask2.Condition;
 
-public class ParameterizedIteratorSI<E> implements Iterator<E> {
+public class ParameterizedStableIterator<E> implements Iterator<E> {
 	private ListIteratorBridge<E> bridge;
 	private Condition<E> condition;
 
 	private int curentIndex;
-	//private E curentElement;
 
-	public ParameterizedIteratorSI(ListIteratorBridge<E> bridge, Condition<E> condition) {
+	public ParameterizedStableIterator(ListIteratorBridge<E> bridge, Condition<E> condition) {
 		this.bridge = bridge;
 		this.condition = condition;
 	}
 
 	@Override
 	public boolean hasNext() {
-		int ci = curentIndex;
-		while (ci < bridge.getList().size()) {
+		int i = curentIndex;
+		while (i < bridge.getList().size()) {
 			// if condition is not specified just take next element
-			E e = bridge.getList().get(ci);
+			E e = bridge.getList().get(i);
 			if (condition != null) {
 				if (!condition.satisfy(e)) {
-					ci++;
+					i++;
 					continue;
 				}
 			}
-			//curentElement = e;
-			//we found element and now saving its index
-			curentIndex = ci++;
 			return true;
 		}
-		//curentElement = null;
 		curentIndex = -1;
 		return false;
 	}

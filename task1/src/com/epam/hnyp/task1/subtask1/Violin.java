@@ -2,8 +2,9 @@ package com.epam.hnyp.task1.subtask1;
 
 /**
  * Represents string instrument - violin
+ * 
  * @author Oleksandr_Hnyp
- *
+ * 
  */
 public class Violin extends StringInstrument {
 	public static final int MIN_STRINGS = 4;
@@ -19,6 +20,7 @@ public class Violin extends StringInstrument {
 
 	/**
 	 * Creates violin with params
+	 * 
 	 * @param vendor
 	 * @param year
 	 * @param stringCount
@@ -27,32 +29,31 @@ public class Violin extends StringInstrument {
 	 */
 	public Violin(String vendor, int year, int stringCount) {
 		super(vendor, year, stringCount);
-		if (stringCount < 4 || stringCount > 10) {
+	}
+
+	@Override
+	protected void checkStringCount(int stringCount) {
+		if (stringCount < MIN_STRINGS || stringCount > MAX_STRINGS) {
 			throw new IllegalArgumentException("violin with " + stringCount
 					+ " does not exist");
 		}
 	}
 
+	/**
+	 * @throws IllegalArgumentException
+	 *             if stringCount < MIN_STRINGS OR stringCount > MAX_STRINGS
+	 */
 	@Override
 	public void setStringCount(int stringCount) {
-		if (!(stringCount < MIN_STRINGS || stringCount > MAX_STRINGS)) {
-			super.setStringCount(stringCount);
+		if (stringCount < MIN_STRINGS || stringCount > MAX_STRINGS) {
+			throw new IllegalArgumentException();
 		}
-	}
-	
-	@Override
-	public void play() {
-		System.out.println("violin : Antonio Vivaldi - Summer");
+		super.setStringCount(stringCount);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (super.equals(obj)) {
-			if (obj instanceof Violin) {
-				return true;
-			}
-		}
-		return false;
+	public void play() {
+		System.out.println("violin : Antonio Vivaldi - Summer");
 	}
 
 	@Override

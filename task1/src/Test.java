@@ -5,12 +5,12 @@ import com.epam.hnyp.task1.subtask1.MusicInstrument;
 import com.epam.hnyp.task1.subtask1.Trumpet;
 import com.epam.hnyp.task1.subtask1.Violin;
 import com.epam.hnyp.task1.subtask2.Condition;
-import com.epam.hnyp.task1.subtask2.GoodsContainer;
+import com.epam.hnyp.task1.subtask2.GoodsList;
 
 
 public class Test {
 	public static void main(String[] args) {
-		GoodsContainer<MusicInstrument> goods = new GoodsContainer<>();
+		GoodsList<MusicInstrument> goods = new GoodsList<>();
 		goods.add(new Guitar());
 		goods.add(new Violin("v1", 2005, 4)); 
 		MusicInstrument m = new Trumpet("v1", 1997, "bronze");

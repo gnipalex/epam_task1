@@ -16,11 +16,11 @@ import com.epam.hnyp.task1.subtask1.Violin;
 
 public class GoodsContainerTest {
 
-	private GoodsContainer<MusicInstrument> container;
+	private GoodsList<MusicInstrument> container;
 	
 	@Before
 	public void before(){
-		container = new GoodsContainer<>();
+		container = new GoodsList<>();
 		container.add(new MusicInstrument());
 		container.add(new Guitar("gibson", 1999, 6, "burst", StringType.METAL));
 		container.add(new Violin());
@@ -42,7 +42,7 @@ public class GoodsContainerTest {
 	public void testClear(){
 		container.clear();
 		
-		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
 		assertTrue(container.size() == 0);
 	}
 
@@ -50,7 +50,7 @@ public class GoodsContainerTest {
 	public void testToArray() {
 		Object[] arr = container.toArray();
 		assertTrue(arr.length == 9);
-		assertTrue(((MusicInstrument)arr[8]).getVendor().equals("aaa"));
+		assertTrue(((MusicInstrument)arr[8]).equals(new Violin("aaa",2000, 4)));
 	}
 	
 	@Test
@@ -71,16 +71,16 @@ public class GoodsContainerTest {
 	@Test
 	public void testAddE() {
 		MusicInstrument m = new Sax();
-		assertTrue(container.size() == 9 && container.capacity() == GoodsContainer.DEFAULT_LENGTH);
+		assertTrue(container.size() == 9 && container.capacity() == GoodsList.DEFAULT_LENGTH);
 		container.add(m);
-		assertTrue(container.size() == 10 && container.capacity() == GoodsContainer.DEFAULT_LENGTH);
+		assertTrue(container.size() == 10 && container.capacity() == GoodsList.DEFAULT_LENGTH);
 		assertTrue(container.get(9).equals(m));
 		container.add(m);
 		assertTrue(container.size() == 11 && 
-				container.capacity() == GoodsContainer.DEFAULT_LENGTH + GoodsContainer.DEFAULT_EXTRA_LENGTH);
+				container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
 		container.add(m);
 		assertTrue(container.size() == 12 && 
-				container.capacity() == GoodsContainer.DEFAULT_LENGTH + GoodsContainer.DEFAULT_EXTRA_LENGTH);
+				container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
 	}
 
 	@Test
@@ -94,11 +94,11 @@ public class GoodsContainerTest {
 		MusicInstrument m = new Sax();
 		container.add(m);
 		container.add(m);
-		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH + GoodsContainer.DEFAULT_EXTRA_LENGTH);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
 		container.remove(0);
-		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
 		container.remove(0);
-		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
 		try {
 			container.remove(9);
 			fail();
@@ -111,7 +111,7 @@ public class GoodsContainerTest {
 
 	@Test
 	public void testAddAllCollectionOfQextendsE() {
-		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		GoodsList<MusicInstrument> c = new GoodsList<>();
 		Guitar g1 = new Guitar("esp", 2003, 7, "black", StringType.METAL);
 		Guitar g2 = new Guitar("ltd", 2000, 7, "black", StringType.METAL);
 		Violin g3 = new Violin("123", 2009, 4);
@@ -128,7 +128,7 @@ public class GoodsContainerTest {
 	
 	@Test
 	public void testAddAllAtIndex() {
-		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		GoodsList<MusicInstrument> c = new GoodsList<>();
 		Guitar g1 = new Guitar("esp", 2003, 7, "black", StringType.METAL);
 		Guitar g2 = new Guitar("ltd", 2000, 7, "black", StringType.METAL);
 		Violin g3 = new Violin("123", 2009, 4);
@@ -153,7 +153,7 @@ public class GoodsContainerTest {
 
 	@Test
 	public void testRemoveAll() {
-		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		GoodsList<MusicInstrument> c = new GoodsList<>();
 		MusicInstrument m1 = new Violin();
 		MusicInstrument m2 = new Trumpet("aaa", 2002, "coper");
 		MusicInstrument m3 = new Trumpet("aaa", 2005, "coper");
@@ -171,7 +171,7 @@ public class GoodsContainerTest {
 		assertTrue(!container.contains(m2));
 		assertTrue(!container.contains(m3));
 		
-		GoodsContainer<MusicInstrument> c1 = new GoodsContainer<>();
+		GoodsList<MusicInstrument> c1 = new GoodsList<>();
 		c1.add(new MusicInstrument("111", 1960));
 		c1.add(new MusicInstrument("111", 1961));
 		
@@ -180,7 +180,7 @@ public class GoodsContainerTest {
 	
 	@Test
 	public void testContainsAll() {
-		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		GoodsList<MusicInstrument> c = new GoodsList<>();
 		MusicInstrument m1 = new Violin();
 		MusicInstrument m2 = new Trumpet("aaa", 2002, "coper");
 		MusicInstrument m3 = new Trumpet("aaa", 2005, "coper");
@@ -197,7 +197,7 @@ public class GoodsContainerTest {
 
 	@Test
 	public void testRetainAll() {
-		GoodsContainer<MusicInstrument> c = new GoodsContainer<>();
+		GoodsList<MusicInstrument> c = new GoodsList<>();
 		MusicInstrument m1 = new Violin();
 		MusicInstrument m2 = new Trumpet("aaa", 2002, "coper");
 		MusicInstrument m3 = new Trumpet("aaa", 2005, "coper");
@@ -211,12 +211,12 @@ public class GoodsContainerTest {
 		container.add(new Trumpet("aaa4", 2005, "coper"));
 		container.add(new Trumpet("aaa5", 2005, "coper"));
 		
-		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH + GoodsContainer.DEFAULT_EXTRA_LENGTH);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
 		
 		container.retainAll(c);
 		
 		assertTrue(container.size() == 4);
-		assertTrue(container.capacity() == GoodsContainer.DEFAULT_LENGTH);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
 	}
 
 	@Test

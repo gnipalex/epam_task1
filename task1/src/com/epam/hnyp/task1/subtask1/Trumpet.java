@@ -19,16 +19,6 @@ public class Trumpet extends WindInstrument {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if (super.equals(obj)) {
-			if (obj instanceof Trumpet) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	@Override
 	public String toString() {
 		return super.toString() + ", trumpet";
 	}

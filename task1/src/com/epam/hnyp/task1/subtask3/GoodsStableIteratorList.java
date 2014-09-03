@@ -3,22 +3,22 @@ package com.epam.hnyp.task1.subtask3;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.epam.hnyp.task1.subtask2.GoodsContainer;
+import com.epam.hnyp.task1.subtask2.GoodsList;
 
-public class GoodsContainerSI<E> extends GoodsContainer<E> {
+public class GoodsStableIteratorList<E> extends GoodsList<E> {
 	private ListIteratorBridge<E> bridge;
 	private boolean hasIteratorsToCurBridge;
 
-	public GoodsContainerSI() {
+	public GoodsStableIteratorList() {
 		initBridge();
 	}
 
-	public GoodsContainerSI(int capacity) {
+	public GoodsStableIteratorList(int capacity) {
 		super(capacity);
 		initBridge();
 	}
 
-	public GoodsContainerSI(int capacity, int extraLen) {
+	public GoodsStableIteratorList(int capacity, int extraLen) {
 		super(capacity, extraLen);
 		initBridge();
 	}
@@ -31,7 +31,7 @@ public class GoodsContainerSI<E> extends GoodsContainer<E> {
 	private void leaveBridge() {
 		if (hasIteratorsToCurBridge) {
 			// all past iterators now will work with copy of this list
-			bridge.setList((GoodsContainer<E>) this.clone());
+			bridge.setList((GoodsList<E>) this.clone());
 			// new iterators must work with modified list, so we creating new
 			// bridge
 			// and 'forgeting' about old bridge
@@ -44,7 +44,7 @@ public class GoodsContainerSI<E> extends GoodsContainer<E> {
 	public Iterator<E> iterator() {
 		// iterator works through bridge
 		hasIteratorsToCurBridge = true;
-		return new ParameterizedIteratorSI<>(bridge,
+		return new ParameterizedStableIterator<>(bridge,
 				this.getIteratorCondition());
 	}
 
