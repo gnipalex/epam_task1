@@ -53,15 +53,24 @@ public class Cart {
 	 * Removes good from cart. If amount of good in cart is greater than 1, it
 	 * decreases the amount by one, else - removes good from cart.
 	 * 
-	 * @param g
+	 * @param g 
 	 */
 	public void remove(Good g) {
-		if (!cart.containsKey(g.getId())) {
+		remove(g.getId());
+	}
+	
+	/**
+	 * Removes good from cart by id. If amount of good in cart is greater than 1, it
+	 * decreases the amount by one, else - removes good from cart.
+	 * @param id
+	 */
+	public void remove(Long id){
+		if (!cart.containsKey(id)) {
 			return;
 		}
-		int val = cart.get(g.getId());
+		int val = cart.get(id);
 		if (val > 1) {
-			cart.put(g.getId(), --val);
+			cart.put(id, --val);
 		}
 	}
 	

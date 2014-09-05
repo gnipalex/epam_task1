@@ -4,12 +4,7 @@ import com.epam.hnyp.task2.subtask3.util.Cart;
 import com.epam.hnyp.task2.subtask3.util.InMemoryStore;
 import com.epam.hnyp.task2.subtask3.util.Store;
 
-public class Test {
-	public static void main(String[] args) {
-		Store store = InMemoryStore.getInstance();
-		Cart myCart = new Cart();
-		myCart.add(store.get(1));
-	}
-	
-	
+public class ConfigGrocery {
+	public static final Store STORE = InMemoryStore.getInstance();
+	public static Cart CART = new Cart();
 }
