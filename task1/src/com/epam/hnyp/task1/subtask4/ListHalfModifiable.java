@@ -108,6 +108,9 @@ public class ListHalfModifiable<E> implements List<E> {
 		return modPart.add(e);
 	}
 
+	/**
+	 * @throws UnmodifiedCollectionException if element is contained in unmodifiable part
+	 */
 	@Override
 	public boolean remove(Object o) {
 		boolean b1 = unmodPart.contains(o);
@@ -126,6 +129,9 @@ public class ListHalfModifiable<E> implements List<E> {
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
+		if (c.isEmpty()) {
+			return false;
+		}
 		for (Object o : c) {
 			if (!(unmodPart.contains(o) || modPart.contains(o))) {
 				return false;
@@ -144,9 +150,6 @@ public class ListHalfModifiable<E> implements List<E> {
 		if (index < 0 || index > size()) {
 			throw new IndexOutOfBoundsException();
 		}
-		// if (unmodPart.isEmpty()) {
-		// return modPart.addAll(index, c);
-		// }
 		int ind_n = index - unmodPart.size();
 		if (ind_n < 0) {
 			throw new UnmodifiedCollectionException();
@@ -264,11 +267,11 @@ public class ListHalfModifiable<E> implements List<E> {
 
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
-		if (toIndex - fromIndex == 0) {
-			return new ArrayList<>();
-		}
 		if (toIndex - fromIndex < 0 || toIndex > size() || fromIndex < 0) {
 			throw new IndexOutOfBoundsException();
+		}		
+		if (toIndex - fromIndex == 0) {
+			return new ArrayList<>();
 		}
 		List<E> sublist = new ArrayList<>();
 		for (int i = fromIndex; i < toIndex; i++) {

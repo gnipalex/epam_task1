@@ -2,6 +2,7 @@ package com.epam.hnyp.task1.subtask2;
 
 import static org.junit.Assert.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -76,10 +77,10 @@ public class GoodsListTest {
 	@Test
 	public void testAddE() {
 		MusicInstrument m = new Sax();
-		assertTrue(container.size() == 9);
+		int sz = container.size();
 		container.add(m);
-		assertTrue(container.size() == 10);
-		assertTrue(container.get(9).equals(m));
+		assertTrue(container.size() == sz + 1);
+		assertTrue(container.get(sz).equals(m));
 	}
 	
 	@Test
@@ -88,7 +89,6 @@ public class GoodsListTest {
 		assertTrue(container.size() == 9 && container.capacity() == GoodsList.DEFAULT_LENGTH);
 		container.add(m);
 		assertTrue(container.size() == 10 && container.capacity() == GoodsList.DEFAULT_LENGTH);
-		assertTrue(container.get(9).equals(m));
 		container.add(m);
 		assertTrue(container.size() == 11 && 
 				container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
@@ -96,20 +96,17 @@ public class GoodsListTest {
 
 	@Test
 	public void testRemoveObject() {
-		assertFalse(container.remove(new Sax("qwerty", 2002, "bronze")));
 		assertTrue(container.remove(new Violin()));
+	}
+	
+	@Test
+	public void testRemoveObjectNotExist() {
+		assertFalse(container.remove(new Sax("qwerty", 2002, "bronze")));
 	}
 
 	@Test
-	public void testRemoveInt() {
+	public void testRemoveIntIndexOutOfBounds() {
 		MusicInstrument m = new Sax();
-		container.add(m);
-		container.add(m);
-		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
-		container.remove(0);
-		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
-		container.remove(0);
-		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
 		try {
 			container.remove(9);
 			fail();
@@ -118,6 +115,16 @@ public class GoodsListTest {
 			container.remove(-1);
 			fail();
 		} catch (IndexOutOfBoundsException e){ }
+	}
+	
+	@Test
+	public void testRemoveIntCapacityNarrow() {
+		MusicInstrument m = new Sax();
+		container.add(m);
+		container.add(m);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
+		container.remove(0);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
 	}
 
 	@Test
@@ -138,6 +145,20 @@ public class GoodsListTest {
 	}
 	
 	@Test
+	public void testAddAllCollectionOfQextendsEExtendStorage() {
+		GoodsList<MusicInstrument> c = new GoodsList<>();
+		Guitar g1 = new Guitar("esp", 2003, 7, "black", StringType.METAL);
+		Guitar g2 = new Guitar("ltd", 2000, 7, "black", StringType.METAL);
+		Violin g3 = new Violin("123", 2009, 4);
+		c.add(g1);
+		c.add(g2);
+		c.add(g3);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
+		container.addAll(c);
+		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
+	}
+	
+	@Test
 	public void testAddAllAtIndex() {
 		GoodsList<MusicInstrument> c = new GoodsList<>();
 		Guitar g1 = new Guitar("esp", 2003, 7, "black", StringType.METAL);
@@ -152,14 +173,23 @@ public class GoodsListTest {
 		assertTrue(container.size() == sz + c.size());
 		assertTrue(container.get(0).equals(g1));
 		assertTrue(container.get(2).equals(g3));
-		
-		sz = container.size();
-		assertTrue(container.addAll(container.size(), c));
-		assertTrue(container.size() == sz + c.size());
-		assertTrue(container.get(sz).equals(g1));
-		
-		assertFalse(container.addAll(container.size() + 1, c));
-		assertFalse(container.addAll(-1, c));
+	}
+	
+	@Test
+	public void testAddAllAtIndexIndexOutOfBounds() {
+		try {
+			container.addAll(container.size() + 1, Collections.EMPTY_LIST);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			container.addAll(-1, Collections.EMPTY_LIST);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
+	}
+	
+	@Test
+	public void testAddAllAtIndexEmpty() {
+		assertFalse(container.addAll(0, Collections.EMPTY_LIST));
 	}
 
 	@Test
@@ -172,21 +202,25 @@ public class GoodsListTest {
 		c.add(m2);
 		c.add(m3);
 		
-		int sz = container.size();
 		assertTrue(container.removeAll(c));
-		
-		final int deleted_count = 4;
-		
-		assertTrue(sz - container.size() == deleted_count);
+
 		assertTrue(!container.contains(m1));
 		assertTrue(!container.contains(m2));
 		assertTrue(!container.contains(m3));
-		
+	}
+	
+	@Test
+	public void testRemoveAllNotContains() {
 		GoodsList<MusicInstrument> c1 = new GoodsList<>();
 		c1.add(new MusicInstrument("111", 1960));
 		c1.add(new MusicInstrument("111", 1961));
 		
 		assertFalse(container.removeAll(c1));
+	}
+	
+	@Test
+	public void testRemoveAllEmpty() {
+		assertFalse(container.removeAll(Collections.EMPTY_LIST));
 	}
 	
 	@Test
@@ -200,10 +234,20 @@ public class GoodsListTest {
 		c.add(m3);
 		
 		assertTrue(container.containsAll(c));
-		
+	}
+	
+	@Test
+	public void testContainsAllFalse() {
+		GoodsList<MusicInstrument> c = new GoodsList<>();
+		c.add(new Trumpet("aaa", 2002, "coper"));
 		c.add(new Guitar("epiphone", 2009, 6, "brown", StringType.METAL));
 		
 		assertFalse(container.containsAll(c));
+	}
+	
+	@Test
+	public void testContainsAllEmpty() {
+		assertFalse(container.containsAll(Collections.EMPTY_LIST));
 	}
 
 	@Test
@@ -222,19 +266,65 @@ public class GoodsListTest {
 		container.add(new Trumpet("aaa4", 2005, "coper"));
 		container.add(new Trumpet("aaa5", 2005, "coper"));
 		
-		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH + GoodsList.DEFAULT_EXTRA_LENGTH);
-		
-		container.retainAll(c);
+		assertTrue(container.retainAll(c));
 		
 		assertTrue(container.size() == 4);
+	}
+	
+	@Test
+	public void testRetainAllNarrowStorage() {
+		GoodsList<MusicInstrument> c = new GoodsList<>();
+		MusicInstrument m1 = new Violin();
+		MusicInstrument m2 = new Trumpet("aaa", 2002, "coper");
+		MusicInstrument m3 = new Trumpet("aaa", 2005, "coper");
+		c.add(m1);
+		c.add(m2);
+		c.add(m3);
+		
+		container.add(new Trumpet("aaa1", 2005, "coper"));
+		container.add(new Trumpet("aaa2", 2005, "coper"));
+		container.add(new Trumpet("aaa3", 2005, "coper"));
+		container.add(new Trumpet("aaa4", 2005, "coper"));
+		container.add(new Trumpet("aaa5", 2005, "coper"));
+		
+		assertTrue(container.retainAll(c));
+		
 		assertTrue(container.capacity() == GoodsList.DEFAULT_LENGTH);
 	}
+	
+	@Test
+	public void testRetainAllEmpty() {
+		assertFalse(container.retainAll(Collections.EMPTY_LIST));
+	}
+	
+	@Test
+	public void testRetainAllNotContainsAll() {
+		GoodsList<MusicInstrument> c = new GoodsList<>();
+		c.add(new Trumpet("aaa1", 2005, "coper"));
+		c.add(new Trumpet("aaa2", 2005, "coper"));
+		c.add(new Trumpet("aaa3", 2005, "coper"));
+		
+		assertTrue(container.retainAll(c));
+		
+		assertTrue(container.isEmpty());
+	}
+	
 
 	@Test
 	public void testGet() {
-		assertTrue(container.get(-1) == null);
-		assertTrue(container.get(9) == null);
 		assertTrue(container.get(0).equals(new MusicInstrument()));
+	}
+	
+	@Test
+	public void testGetIndexOutOfBounds() {
+		try {
+			container.get(-1);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			container.get(9);
+			fail();
+		} catch (IndexOutOfBoundsException e) {}
 	}
 	
 	@Test
@@ -245,6 +335,16 @@ public class GoodsListTest {
 		assertTrue(m_prev.equals(new MusicInstrument()));
 		assertEquals(m, container.get(0));
 	}
+	
+	@Test
+	public void testSetIndexOutOfBounds() {
+		try {
+			container.set(-1, new MusicInstrument());
+		} catch (IndexOutOfBoundsException e) {	}
+		try {
+			container.set(container.size(), new MusicInstrument());
+		} catch (IndexOutOfBoundsException e) {	}
+	}
 
 	@Test
 	public void testAddIntE() {
@@ -252,6 +352,16 @@ public class GoodsListTest {
 		container.add(0, new Guitar());
 		assertTrue(container.size() == sz + 1);
 		assertTrue(container.get(0).equals(new Guitar()));
+	}
+	
+	@Test
+	public void testAddIntEIndexOutOfBounds() {
+		try {
+			container.add(-1 ,new MusicInstrument());
+		} catch (IndexOutOfBoundsException e) {}
+		try {
+			container.add(container.size() + 1 ,new MusicInstrument());
+		} catch (IndexOutOfBoundsException e) {}
 	}
 
 	@Test
@@ -272,11 +382,20 @@ public class GoodsListTest {
 		assertTrue(sub.size() == 3);
 		assertTrue(sub.get(0).equals(new Guitar()));
 		assertTrue(sub.get(2).equals(new Violin("aaa",2000, 4)));
-		
+	}
+	
+	@Test
+	public void testSubListIndexOutOfBounds() {
 		try {
 			container.subList(2, 1);
 			fail();
 		} catch (IndexOutOfBoundsException e) {	}
+	}
+	
+	@Test
+	public void testSubListEmptyResult() {
+		List<MusicInstrument> res = container.subList(0, 0);
+		assertTrue(res.isEmpty());
 	}
 
 }

@@ -142,6 +142,9 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
+		if (c.isEmpty()) {
+			return false;
+		}
 		for (Object o : c) {
 			if (indexOf(o) < 0) {
 				return false;
@@ -152,6 +155,9 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
+		if (c.isEmpty()) {
+			return false;
+		}
 		int addLen = c.size();
 		if (elements.length - size < addLen) {
 			int x = addLen / extraLength;
@@ -169,6 +175,9 @@ public class GoodsList<E> implements List<E>, Cloneable {
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
 		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (c.isEmpty()) {
 			return false;
 		}
 		if (index == size) {
@@ -196,6 +205,9 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
+		if (c.isEmpty()) {
+			return false;
+		}
 		int deleted = 0;
 		for (Object o : c) {
 			int i = -1;
@@ -228,6 +240,9 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
+		if (c.isEmpty()) {
+			return false;
+		}
 		int deleted = 0;
 		for (int i = size - 1; i >= 0; i--) {
 			if (!c.contains(elements[i])) {
@@ -262,7 +277,7 @@ public class GoodsList<E> implements List<E>, Cloneable {
 	@Override
 	public E get(int index) {
 		if (index < 0 || index >= size) {
-			return null;
+			throw new IndexOutOfBoundsException();
 		}
 		return (E) elements[index];
 	}
@@ -270,8 +285,8 @@ public class GoodsList<E> implements List<E>, Cloneable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public E set(int index, E element) {
-		if (index >= size) {
-			return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
 		}
 		Object prev = elements[index];
 		elements[index] = element;
@@ -280,6 +295,13 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public void add(int index, E element) {
+		if (index < 0 || index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (index == size()) {
+			add(element);
+			return;
+		}
 		if (size == elements.length) {
 			extendStorage();
 		}
@@ -323,13 +345,13 @@ public class GoodsList<E> implements List<E>, Cloneable {
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 		// simple copying to new List, not by specification
+		GoodsList<E> list = new GoodsList<>();
 		if (toIndex - fromIndex == 0) {
-			return new GoodsList<>();
+			return list;
 		}
 		if (toIndex - fromIndex < 0 || toIndex > size() || fromIndex < 0) {
 			throw new IndexOutOfBoundsException();
 		}
-		GoodsList<E> list = new GoodsList<>();
 		list.elements = Arrays.copyOfRange(elements, fromIndex, toIndex);
 		list.size = toIndex - fromIndex;
 		return list;

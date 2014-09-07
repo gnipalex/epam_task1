@@ -2,6 +2,7 @@ package com.epam.hnyp.task1.subtask3;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.epam.hnyp.task1.subtask3.GoodsStableIteratorList;
@@ -10,16 +11,22 @@ import com.epam.hnyp.task1.subtask3.ParameterizedStableIterator;
 
 public class GoodsStableIteratorListTest {
 
-	@Test
-	public void testBridgeCreating() {
-		GoodsStableIteratorList<Integer> items = new GoodsStableIteratorList<>();
-		ListIteratorBridge<Integer> b1 = items.getBridge();
+	private GoodsStableIteratorList<Integer> items;
+	
+	@Before
+	public void before() {
+		items = new GoodsStableIteratorList<>();
 		items.add(5);
 		items.add(7);
 		items.add(6);
+	}
+	
+	@Test
+	public void testBridgeConstantNoIterators() {
+		ListIteratorBridge<Integer> b1 = items.getBridge();
 		items.add(8);
 		items.add(9);
-		int sz = items.size();
+		//int sz = items.size();
 		ListIteratorBridge<Integer> b2 = items.getBridge();
 		
 		assertTrue(b1.getList() == b2.getList());
@@ -27,15 +34,19 @@ public class GoodsStableIteratorListTest {
 		ParameterizedStableIterator<Integer> it1 = (ParameterizedStableIterator<Integer>)items.iterator();
 		
 		assertTrue(it1.getBridge().getList() == items);
-		
-		items.add(10);
-		
-		ParameterizedStableIterator<Integer> it2 = (ParameterizedStableIterator<Integer>)items.iterator();
-		
-		assertTrue(it1.getBridge().getList() != items);
-		assertTrue(it1.getBridge().getList().size() == sz);
-		assertTrue(it2.getBridge().getList() == items);
-		assertTrue(it2.getBridge().getList() != it1.getBridge().getList());
 	}
+	
+	@Test
+	public void testBridgeChangedHasIterators() {
+		ListIteratorBridge<Integer> b1 = items.getBridge();
+		ParameterizedStableIterator<Integer> it1 = (ParameterizedStableIterator<Integer>)items.iterator();
+		items.add(8);
+		ListIteratorBridge<Integer> b2 = items.getBridge();
+		assertFalse(b1 == b2);
+		assertFalse(b1.getList() == items);
+	}
+	
+	
+	
 
 }
