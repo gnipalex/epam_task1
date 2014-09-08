@@ -1,9 +1,11 @@
 package com.epam.hnyp.task2.subtask3.util;
 
-import java.sql.Date;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+
+import com.epam.hnyp.task2.subtask3.model.Good;
 
 public interface Store {
 	/**
@@ -28,12 +30,28 @@ public interface Store {
 	 * Saves new order
 	 * @param date
 	 * @param order
+	 * @return true if order saved
 	 */
-	void saveOrder(Date date, Order order);
+	boolean saveOrder(Order order);
 	
 	/**
 	 * Gets map of all orders.
 	 * @return unmodifiable map of orders
 	 */
-	Map<Date, Order> getAllOrders();
+	Collection<Order> getAllOrders();
+	
+	/**
+	 * Gets all orders of specified period
+	 * @param from date start of period
+	 * @param to date end of period
+	 * @return orders List of specified period
+	 */
+	Collection<Order> getOrdersOfPeriod(Date from, Date to);
+	
+	/**
+	 * Gets the nearest Order by date
+	 * @param date
+	 * @return order
+	 */
+	Order getNearest(Date date);
 }

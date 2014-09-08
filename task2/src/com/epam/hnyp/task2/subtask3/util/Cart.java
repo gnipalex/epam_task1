@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.epam.hnyp.task2.subtask3.model.Good;
+
 public class Cart {
 	public static int LAST_MAX_COUNT = 5;
 	// key - id of good, val - count

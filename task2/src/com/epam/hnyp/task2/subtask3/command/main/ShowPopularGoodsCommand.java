@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 
 import com.epam.hnyp.task2.subtask3.ConfigGrocery;
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.util.Good;
+import com.epam.hnyp.task2.subtask3.model.Good;
 
 public class ShowPopularGoodsCommand extends AbstractCommand {
 

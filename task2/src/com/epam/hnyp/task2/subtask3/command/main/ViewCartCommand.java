@@ -12,7 +12,7 @@ import com.epam.hnyp.task2.subtask3.command.cart.CartPriceCommand;
 import com.epam.hnyp.task2.subtask3.command.cart.EmptyCartCommand;
 import com.epam.hnyp.task2.subtask3.command.cart.MakeOrderCommand;
 import com.epam.hnyp.task2.subtask3.command.cart.RemoveElementFromCartCommand;
-import com.epam.hnyp.task2.subtask3.util.Good;
+import com.epam.hnyp.task2.subtask3.model.Good;
 
 public class ViewCartCommand extends AbstractCommand {
 
