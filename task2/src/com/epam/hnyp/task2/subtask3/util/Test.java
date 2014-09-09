@@ -1,11 +1,17 @@
 package com.epam.hnyp.task2.subtask3.util;
 
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.Formatter;
+
 
 public class Test {
 	public static void main(String[] args) {
-		NavigableMap<Integer, Integer> map = new TreeMap<>();
+		Formatter fmt = new Formatter();
+		fmt.format("%1$10s%2$10s\n", "aaa", "bbbbb");
+		fmt.format("%1$10s%2$10s\n", "aaa", "bbbbb");
+		fmt.format("%1$10s%2$10s\n", "aaa", "bbbbb");
+		System.out.println(fmt.toString());
+		fmt = new Formatter();
+		System.out.println(fmt.toString());
 		
 	}
 }

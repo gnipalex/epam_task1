@@ -1,5 +1,7 @@
 package com.epam.hnyp.task2.subtask3.model;
 
+import java.util.Formatter;
+
 public class Good {
 	private String name;
 	private int price;
@@ -40,5 +42,24 @@ public class Good {
 		StringBuilder str = new StringBuilder();
 		str.append(id).append("\t").append(name).append("\tprice = ").append(price);
 		return str.toString();
+	}
+	/**
+	 * Prints to string this object as table row :
+	 * id(10s) - name(20s) - price(10s) - other(20s)
+	 * @return
+	 */
+	public String printTableRow() {
+		Formatter fmt = new Formatter();
+		fmt.format("%1$10d%2$20s%3$10d%4$s", id, name, price, printOtherColumn());
+		return fmt.toString();
+	}
+	
+	/**
+	 * Prints column other for good.
+	 * Distance to this column 40 symbols. First element is appended to the end of row, others prints at new line.
+	 * @return
+	 */
+	protected String printOtherColumn() {
+		return "";
 	}
 }

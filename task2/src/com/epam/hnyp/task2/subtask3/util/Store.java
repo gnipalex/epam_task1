@@ -51,7 +51,7 @@ public interface Store {
 	/**
 	 * Gets the nearest Order by date
 	 * @param date
-	 * @return order
+	 * @return order or null if no orders
 	 */
 	Order getNearest(Date date);
 }

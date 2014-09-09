@@ -94,6 +94,9 @@ public class InMemoryStore implements Store {
 	public Order getNearest(Date date) {
 		Date up_key = orders.ceilingKey(date);
 		Date down_key = orders.floorKey(date);
+		if (up_key == null && down_key == null) {
+			return null;
+		}
 		if (up_key == null) {
 			return orders.get(down_key);
 		}
@@ -105,7 +108,7 @@ public class InMemoryStore implements Store {
 		Long date_time = date.getTime();
 		Order order = null;
 		
-		if (up_time - date_time <= down_time - date_time) {
+		if (up_time - date_time <= date_time - down_time) {
 			order = orders.get(up_key);
 		} else {
 			order = orders.get(down_key);

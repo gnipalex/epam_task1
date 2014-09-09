@@ -3,6 +3,7 @@ package com.epam.hnyp.task2.subtask3.command.main;
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Map.Entry;
 
 import com.epam.hnyp.task2.subtask3.ConfigGrocery;
@@ -23,22 +24,41 @@ public class OrdersCommand extends AbstractCommand {
 	
 	@Override
 	public void execute(String... args) {
-		while(true) {
+		main: while(true) {
 			print();
-			aa
+			AbstractCommand cmd = null;
+			while (true) {
+				System.out.print("Choice -> ");
+				char key = 0;
+				Scanner sc = new Scanner(System.in);
+				String line = sc.nextLine();
+				if (line.isEmpty()) {
+					continue;
+				}
+				key = line.charAt(0);
+				if (key == QUIT_SYMBOL) {
+					break main;
+				}
+				cmd = commands.get(String.valueOf(key));
+				if (cmd == null) {
+					System.out.println("oups, command not found :(");
+					continue;
+				}
+				break;
+			}
+			cmd.execute(new String[0]);
+			System.out.println();
 		}
-		
 	}
-
 
 	public void print() {
 		SimpleDateFormat sdf_full = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		System.out.println(">> Main Menu >> Orders");
 		System.out.println("All orders:");
-		System.out.printf("%1$10s\t%2$10s\t%3$s", "date", "customer", "goods cnt");
+		System.out.printf("%1$20s%2$20s%3$10s\n", "date", "customer", "goods cnt");
 		System.out.println("------------------------------------");
 		for (Order o : ConfigGrocery.STORE.getAllOrders()) {
-			System.out.printf("%1$10s\t%2$10s\t%3$d", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
+			System.out.printf("%1$20s%2$20s%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
 		}
 		System.out.println("------------------------------------");
 		

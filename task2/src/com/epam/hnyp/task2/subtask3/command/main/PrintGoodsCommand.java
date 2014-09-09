@@ -11,14 +11,12 @@ public class PrintGoodsCommand extends AbstractCommand {
 	public void execute(String... args) {
 		 Store store = ConfigGrocery.STORE;
 		 System.out.println("All goods from grocery");
-		 //System.out.println("id\tname\t\tprice");
-//		 System.out.printf("%1$s\t%2$20s\t%3$s\n", "id", "name", "price");
-		 System.out.println("-----------------------------------");
+		 System.out.printf("%1$10s%2$20s%3$10s%4$20s\n", "id", "name", "price", "other");
+		 System.out.printf("%1$s%1$s%1$s%1$s%1$s%1$s\n","----------");
 		 for (Good g : store.getAll()) {
-//			 System.out.printf("%1$d\t%2$20s\t%3$d\n", g.getId(), g.getName(), g.getPrice());
-			 System.out.println(g);
+			 System.out.println(g.printTableRow());
 		 }
-		 System.out.println("-----------------------------------");
+		 System.out.printf("%1$s%1$s%1$s%1$s%1$s%1$s\n","----------");
 	}
 
 	@Override

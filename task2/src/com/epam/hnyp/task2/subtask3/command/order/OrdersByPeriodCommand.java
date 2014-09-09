@@ -49,10 +49,10 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 		}
 		SimpleDateFormat sdf_full = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		System.out.println("Orders for period " + sdf.format(date_left) + " -- " + sdf.format(date_right));
-		System.out.printf("%1$10s\t%2$10s\t%3$s", "date", "customer", "goods cnt");
+		System.out.printf("%1$20s\t%2$20s\t%3$10s\n", "date", "customer", "goods cnt");
 		System.out.println("------------------------------------");
 		for (Order o : ConfigGrocery.STORE.getOrdersOfPeriod(date_left, date_right)) {
-			System.out.printf("%1$10s\t%2$10s\t%3$d", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
+			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
 		}
 		System.out.println("------------------------------------");
 	}

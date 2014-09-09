@@ -73,6 +73,8 @@ public class Cart {
 		int val = cart.get(id);
 		if (val > 1) {
 			cart.put(id, --val);
+		} else {
+			cart.remove(id);
 		}
 	}
 	

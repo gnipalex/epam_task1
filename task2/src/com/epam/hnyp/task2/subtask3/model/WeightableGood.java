@@ -1,5 +1,7 @@
 package com.epam.hnyp.task2.subtask3.model;
 
+import java.util.Formatter;
+
 public class WeightableGood extends Good {
 	private double weight;
 	
@@ -19,5 +21,12 @@ public class WeightableGood extends Good {
 	@Override
 	public String toString() {
 		return super.toString() + "\tweight = " + weight;
+	}
+	
+	@Override
+	protected String printOtherColumn() {
+		Formatter fmt = new Formatter();
+		fmt.format("%1$20s", "weight=" + weight);
+		return fmt.toString();
 	}
 }
