@@ -31,7 +31,6 @@ public class ExtensionFileCondition extends BaseFileCondition {
 			String ext = file.getName().substring(dotIndex + 1);
 			return ext.equalsIgnoreCase(extension);
 		}
-
 		return false;
 	}
 
