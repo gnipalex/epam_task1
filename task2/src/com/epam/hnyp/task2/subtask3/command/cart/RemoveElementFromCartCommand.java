@@ -2,7 +2,6 @@ package com.epam.hnyp.task2.subtask3.command.cart;
 
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.ConfigGrocery;
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
 
 public class RemoveElementFromCartCommand extends AbstractCommand {
@@ -22,7 +21,8 @@ public class RemoveElementFromCartCommand extends AbstractCommand {
 			System.out.println("##wrong format of id##");
 			return;
 		}
-		ConfigGrocery.CART.remove(id);
+//		ConfigGrocery.CART.remove(id);
+		getShopService().getCurrentCart().remove(id);
 	}
 
 	@Override

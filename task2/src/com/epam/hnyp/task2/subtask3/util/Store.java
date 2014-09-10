@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.Order;
 
 public interface Store {
 	/**
@@ -35,7 +36,7 @@ public interface Store {
 	boolean saveOrder(Order order);
 	
 	/**
-	 * Gets map of all orders.
+	 * Gets collection of all orders.
 	 * @return unmodifiable map of orders
 	 */
 	Collection<Order> getAllOrders();

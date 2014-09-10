@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import com.epam.hnyp.task2.subtask3.model.CerealGood;
 import com.epam.hnyp.task2.subtask3.model.DrinkGood;
 import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.Order;
 import com.epam.hnyp.task2.subtask3.model.SweetGood;
 import com.epam.hnyp.task2.subtask3.model.VegetableGood;
 import com.epam.hnyp.task2.subtask3.model.WeightableGood;

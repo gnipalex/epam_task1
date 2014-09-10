@@ -6,10 +6,9 @@ import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.ConfigGrocery;
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
 import com.epam.hnyp.task2.subtask3.model.Good;
-import com.epam.hnyp.task2.subtask3.util.Order;
+import com.epam.hnyp.task2.subtask3.model.Order;
 
 public class FindOrderCommand extends AbstractCommand {
 
@@ -34,7 +33,8 @@ public class FindOrderCommand extends AbstractCommand {
 			break;
 		}
 		
-		Order order = ConfigGrocery.STORE.getNearest(date);
+//		Order order = ConfigGrocery.STORE.getNearest(date);
+		Order order = getOrderService().getNearest(date);
 		
 		if (order == null) {
 			System.out.println("---order not found---");
@@ -47,8 +47,10 @@ public class FindOrderCommand extends AbstractCommand {
 		System.out.println("Customer: " + order.getCustomer());
 		StringBuilder str = new StringBuilder();
 		System.out.print("Goods in cart (name[count]): ");
-		for (Entry<Long, Integer> e : order.getCart().getAllItems().entrySet()) {
-			Good g = ConfigGrocery.STORE.get(e.getKey());
+//		for (Entry<Long, Integer> e : order.getCart().getAllItems().entrySet()) {
+//			Good g = ConfigGrocery.STORE.get(e.getKey());
+		for (Entry<Long, Integer> e : order.getItems().entrySet()) {
+			Good g = getGoodsService().get(e.getKey());
 			if (g == null) {
 				System.out.print("not found, ");
 				continue;
@@ -56,7 +58,8 @@ public class FindOrderCommand extends AbstractCommand {
 			System.out.print(g.getName() + "[" + e.getValue() + "], ");
 		}
 		System.out.println();
-		int totalPrice = ConfigGrocery.STORE.getPriceForAll(order.getCart().getAllItems());
+//		int totalPrice = ConfigGrocery.STORE.getPriceForAll(order.getCart().getAllItems());
+		int totalPrice = getGoodsService().getPriceForAll(order.getItems());
 		System.out.println("Total price: " + totalPrice);
 	}
 

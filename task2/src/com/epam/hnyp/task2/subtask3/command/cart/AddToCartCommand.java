@@ -2,9 +2,7 @@ package com.epam.hnyp.task2.subtask3.command.cart;
 
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.ConfigGrocery;
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.model.Good;
 
 public class AddToCartCommand extends AbstractCommand{
 
@@ -23,13 +21,19 @@ public class AddToCartCommand extends AbstractCommand{
 			System.out.println("##wrong format of id##");
 			return;
 		}
-		Good good = ConfigGrocery.STORE.get(id);
-		if (good == null) {
+		//Good good = ConfigGrocery.STORE.get(id);
+//		Good good = AbstractCommand.services.getGoodsService().get(id);
+//		if (good == null) {
+//			System.out.println("good with id=[" + id + "] not found");
+//			return;
+//		}
+		//ConfigGrocery.CART.add(good);
+		if (!getShopService().addToCart(id)) {
 			System.out.println("good with id=[" + id + "] not found");
 			return;
 		}
-		ConfigGrocery.CART.add(good);
-		System.out.println("good id=[" + id + "] added, now you have " + ConfigGrocery.CART.size() + " items in your cart");
+		//System.out.println("good id=[" + id + "] added, now you have " + ConfigGrocery.CART.size() + " items in your cart");
+		System.out.println("good id=[" + id + "] added, now you have " + getShopService().getCurrentCart().size() + " items in your cart");
 	}
 
 	@Override

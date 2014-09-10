@@ -5,9 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.ConfigGrocery;
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.util.Order;
+import com.epam.hnyp.task2.subtask3.model.Order;
 
 public class OrdersByPeriodCommand extends AbstractCommand {
 
@@ -51,8 +50,10 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 		System.out.println("Orders for period " + sdf.format(date_left) + " -- " + sdf.format(date_right));
 		System.out.printf("%1$20s\t%2$20s\t%3$10s\n", "date", "customer", "goods cnt");
 		System.out.println("------------------------------------");
-		for (Order o : ConfigGrocery.STORE.getOrdersOfPeriod(date_left, date_right)) {
-			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
+//		for (Order o : ConfigGrocery.STORE.getOrdersOfPeriod(date_left, date_right)) {
+//			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
+		for (Order o : getOrderService().getOrdersOfPeriod(date_left, date_right)) {
+			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfGoods());
 		}
 		System.out.println("------------------------------------");
 	}
