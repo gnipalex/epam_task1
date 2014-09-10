@@ -27,7 +27,7 @@ public class ExtensionFileCondition extends BaseFileCondition {
 	@Override
 	protected boolean internalCondition(File file) {
 		int dotIndex = file.getName().lastIndexOf('.');
-		if (dotIndex >= 0 && dotIndex < file.getName().length() - 1) {
+		if (dotIndex >= 0) {
 			String ext = file.getName().substring(dotIndex + 1);
 			return ext.equalsIgnoreCase(extension);
 		}
