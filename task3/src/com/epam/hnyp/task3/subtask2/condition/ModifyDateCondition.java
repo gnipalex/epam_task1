@@ -1,7 +1,8 @@
-package com.epam.hnyp.task3.subtask2;
+package com.epam.hnyp.task3.subtask2.condition;
 
 import java.io.File;
 import java.util.Date;
+
 
 /**
  * Condition that checks file's modification date
@@ -32,7 +33,7 @@ public class ModifyDateCondition extends BaseFileCondition {
 	@Override
 	protected boolean internalCondition(File file) {
 		Date modDate = new Date(file.lastModified());
-		return modDate.compareTo(to) ;
+		return modDate.compareTo(from) >= 0 && modDate.compareTo(to) <= 0 ;
 	}
 
 }

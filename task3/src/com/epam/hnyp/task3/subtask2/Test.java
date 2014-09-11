@@ -12,5 +12,9 @@ public class Test {
 		System.out.println("Parent --> " + f.getParent());
 		System.out.println("TotalSpace --> " + f.getTotalSpace());
 		System.out.println("FreeSpace --> " + f.getFreeSpace());
+		
+//		Thread.currentThread().join();
+//		
+//		System.out.println("ahahaha");
 	} 
 }

@@ -1,4 +1,4 @@
-package com.epam.hnyp.task3.subtask2;
+package com.epam.hnyp.task3.subtask2.condition;
 
 import java.io.File;
 
