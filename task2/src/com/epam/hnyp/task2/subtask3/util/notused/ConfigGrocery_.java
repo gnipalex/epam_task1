@@ -1,7 +1,5 @@
-package com.epam.hnyp.task2.subtask3;
+package com.epam.hnyp.task2.subtask3.util.notused;
 
-import com.epam.hnyp.task2.subtask3.util.InMemoryStore;
-import com.epam.hnyp.task2.subtask3.util.Store;
 import com.epam.hnyp.task2.subtask3.util.impl.CartImpl;
 
 public class ConfigGrocery_ {

@@ -11,6 +11,7 @@ public class ConsoleGrocery {
 	public static void main(String[] args) {
 		ServicesFactory factory = new ServicesFactoryInMemory();
 		ServicesContainer servicesContainer = factory.buildServicesContainer(5);
+		
 		GoodsInitializer.fillGoods(servicesContainer.getGoodsService());
 		
 		AbstractCommand.services = servicesContainer;
