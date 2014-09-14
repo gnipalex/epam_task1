@@ -1,8 +1,12 @@
 package com.epam.hnyp.task2.subtask3.model;
 
+import java.io.Serializable;
 import java.util.Formatter;
 
-public class WeightableGood extends Good {
+public class WeightableGood extends Good implements Serializable {
+	
+	private static final long serialVersionUID = 2262341991941044041L;
+	
 	private double weight;
 	
 	public WeightableGood(long id, String name, int price, double weight) {

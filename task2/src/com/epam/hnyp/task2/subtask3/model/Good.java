@@ -1,8 +1,12 @@
 package com.epam.hnyp.task2.subtask3.model;
 
+import java.io.Serializable;
 import java.util.Formatter;
 
-public class Good {
+public class Good implements Serializable {
+
+	private static final long serialVersionUID = 6101697799798820856L;
+	
 	private String name;
 	private int price;
 	private long id;

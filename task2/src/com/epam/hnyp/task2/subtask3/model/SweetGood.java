@@ -1,8 +1,11 @@
 package com.epam.hnyp.task2.subtask3.model;
 
+import java.io.Serializable;
 import java.util.Formatter;
 
-public class SweetGood extends WeightableGood {
+public class SweetGood extends WeightableGood implements Serializable {
+	private static final long serialVersionUID = 5307430294973106832L;
+	
 	private String fill;
 	
 	public SweetGood(long id, String name, int price, double weight, String fill) {

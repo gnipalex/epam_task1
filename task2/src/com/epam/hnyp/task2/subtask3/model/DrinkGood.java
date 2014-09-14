@@ -1,8 +1,11 @@
 package com.epam.hnyp.task2.subtask3.model;
 
+import java.io.Serializable;
 import java.util.Formatter;
 
-public class DrinkGood extends Good {
+public class DrinkGood extends Good implements Serializable {
+	private static final long serialVersionUID = -7896820585762605712L;
+	
 	private double volume; 
 	
 	public DrinkGood(long id, String name, int price, double volume) {
