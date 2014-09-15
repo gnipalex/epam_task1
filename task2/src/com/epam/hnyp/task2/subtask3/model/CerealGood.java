@@ -8,5 +8,4 @@ public class CerealGood extends WeightableGood implements Serializable {
 	public CerealGood(long id, String name, int price, double weight) {
 		super(id, name, price, weight);
 	}
-	
 }
