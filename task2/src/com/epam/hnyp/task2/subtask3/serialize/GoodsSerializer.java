@@ -30,8 +30,12 @@ public class GoodsSerializer {
 	protected void serialize(GoodsService goodServ, OutputStream stream) throws IOException {
 		ObjectOutputStream objectStream = new ObjectOutputStream(stream);
 		Collection<Good> goods = goodServ.getAll();
+		serializeObjects(goods, objectStream);
+	}
+	
+	protected void serializeObjects(Collection<Good> goods, ObjectOutputStream oos) throws IOException {
 		for (Good g : goods) {
-			objectStream.writeObject(g);
+			oos.writeObject(g);
 		}
 	}
 	

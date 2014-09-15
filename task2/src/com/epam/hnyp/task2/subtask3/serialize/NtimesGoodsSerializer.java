@@ -1,8 +1,11 @@
 package com.epam.hnyp.task2.subtask3.serialize;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 
+import com.epam.hnyp.task2.subtask3.model.Good;
 import com.epam.hnyp.task2.subtask3.service.GoodsService;
 
 public class NtimesGoodsSerializer extends GoodsSerializer {
@@ -17,10 +20,10 @@ public class NtimesGoodsSerializer extends GoodsSerializer {
 	}
 
 	@Override
-	protected void serialize(GoodsService goodServ, OutputStream stream)
-			throws IOException {
+	protected void serializeObjects(Collection<Good> goods,
+			ObjectOutputStream oos) throws IOException {
 		for (int i = 0; i < count; i++) {
-			super.serialize(goodServ, stream);
+			super.serializeObjects(goods, oos);
 		}
 	}
 }
