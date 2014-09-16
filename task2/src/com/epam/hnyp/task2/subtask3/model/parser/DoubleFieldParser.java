@@ -1,11 +1,6 @@
 package com.epam.hnyp.task2.subtask3.model.parser;
 
 public class DoubleFieldParser implements FieldParser {
-	private String fieldName; 
-	
-	public DoubleFieldParser(String fieldName) {
-		this.fieldName = fieldName;
-	}
 	
 	@Override
 	public String parse(String input) throws IllegalFieldFormatException {
@@ -15,6 +10,6 @@ public class DoubleFieldParser implements FieldParser {
 		} catch (NumberFormatException e) {
 			throw new IllegalFieldFormatException();
 		}
-		return fieldName + ":" + v;
+		return String.valueOf(v);
 	}
 }

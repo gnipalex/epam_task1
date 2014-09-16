@@ -17,7 +17,7 @@ public interface GoodRepo {
 	 */
 	Collection<Good> getAll();
 	/**
-	 * Adds new good to the store
+	 * Adds new good to the store. If id == 0 generates id
 	 * @param g
 	 * @return true if good was added
 	 */

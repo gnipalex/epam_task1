@@ -10,7 +10,7 @@ public interface FieldParser {
 	/**
 	 * Reads from line value of the field
 	 * @param input input string to parse
-	 * @return string in format : 'fieldName:value'
+	 * @return parsed value
 	 * @throws IllegalFieldFormatException field in wrong format
 	 */
 	String parse(String input) throws IllegalFieldFormatException;

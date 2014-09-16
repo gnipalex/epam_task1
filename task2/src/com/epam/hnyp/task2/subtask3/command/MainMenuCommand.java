@@ -48,7 +48,7 @@ public class MainMenuCommand extends AbstractCommand {
 				}
 				break;
 			}
-			cmd.execute(new String[0]);
+			cmd.execute(args);
 			System.out.println();
 		}
 	}

@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.Formatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
 import com.epam.hnyp.task2.subtask3.model.parser.DoubleFieldParser;
 import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.ParsableGoodNoReflection.IllegalDataFormatException;
 
 public class DrinkGood extends Good implements Serializable {
 	private static final long serialVersionUID = -7896820585762605712L;
@@ -17,10 +18,10 @@ public class DrinkGood extends Good implements Serializable {
 	private double volume; 
 	private static final String fieldVolume = "volume";
 	
-	private static Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
-	static {
-		PARSERS.put("Input volume : ", new DoubleFieldParser(fieldVolume));
-	}
+//	private static Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
+//	static {
+//		PARSERS.put(fieldVolume, new DoubleFieldParser(fieldVolume));
+//	}
 	
 	public DrinkGood(long id, String name, int price, double volume) {
 		super(id, name, price);
@@ -62,10 +63,24 @@ public class DrinkGood extends Good implements Serializable {
 		}
 	}
 	
+//	@Override
+//	public Map<String, FieldParser> getParsers() {
+//		Map<String, FieldParser> map = super.getParsers();
+//		map.putAll(PARSERS);
+//		return map;
+//	}
+	
+//	@Override
+//	public void makeRandom() {
+//		super.makeRandom();
+//		Random rand = new Random(System.currentTimeMillis());
+// 		this.volume = 0.5 * rand.nextInt(20) + 0.5;
+//	}
+	
 	@Override
-	public Map<String, FieldParser> getParsers() {
-		Map<String, FieldParser> map = super.getParsers();
-		map.putAll(PARSERS);
+	public Map<String, Class<?>> getFields() {
+		Map<String, Class<?>> map = super.getFields();
+		map.put(fieldVolume, Double.class);
 		return map;
 	}
 }

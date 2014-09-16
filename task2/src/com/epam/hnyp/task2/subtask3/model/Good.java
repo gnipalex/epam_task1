@@ -2,15 +2,16 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.io.Serializable;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
 import com.epam.hnyp.task2.subtask3.model.parser.IntFieldParser;
 import com.epam.hnyp.task2.subtask3.model.parser.LongFieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.ParsableGoodNoReflection;
 import com.epam.hnyp.task2.subtask3.model.parser.StringFieldParser;
 
 public class Good implements Serializable, ParsableGoodNoReflection {
@@ -26,12 +27,12 @@ public class Good implements Serializable, ParsableGoodNoReflection {
 	private long id;
 	private static final String fieldId = "id";
 
-	private static final Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
-	static {
-		PARSERS.put("Input 'id' : ", new LongFieldParser(fieldId));
-		PARSERS.put("Input 'name' : ", new StringFieldParser(fieldName));
-		PARSERS.put("Input 'price' : ", new IntFieldParser(fieldPrice));
-	}
+//	private static final Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
+//	static {
+//		PARSERS.put("Input 'id' : ", new LongFieldParser(fieldId));
+//		PARSERS.put("Input 'name' : ", new StringFieldParser(fieldName));
+//		PARSERS.put("Input 'price' : ", new IntFieldParser(fieldPrice));
+//	}
 
 	public Good(long id, String name, int price) {
 		this.id = id;
@@ -129,12 +130,27 @@ public class Good implements Serializable, ParsableGoodNoReflection {
 		}
 	}
 
-	public String makeReqularExpression(String fieldName) {
+	protected String makeReqularExpression(String fieldName) {
 		return fieldName + ":(.+?)(?=;)|" + fieldName + ":(.+)";
 	}
 
+//	@Override
+//	public Map<String, FieldParser> getParsers() {
+//		return new LinkedHashMap<>(PARSERS);
+//	}
+//
+//	@Override
+//	public void makeRandom() {
+//		Random rand = new Random(System.currentTimeMillis());
+//		this.name = "Good " + rand.nextInt(99999);
+//		this.price = rand.nextInt(99);
+//	}
+
 	@Override
-	public Map<String, FieldParser> getParsers() {
-		return new LinkedHashMap<>(PARSERS);
+	public Map<String, Class<?>> getFields() {
+		Map<String, Class<?>> map = new LinkedHashMap<String, Class<?>>();
+		map.put(fieldName, String.class);
+		map.put(fieldPrice, Integer.class);
+		return map;
 	}
 }
