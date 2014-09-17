@@ -32,7 +32,6 @@ public class ParameterizedIteratorTest {
 		int count = 0;
 		for (Integer i : list) {
 			count++;
-			System.out.println(i);
 		}
 		assertTrue(count == 2);
 	}
@@ -50,6 +49,12 @@ public class ParameterizedIteratorTest {
 	public void testHasNext() {
 		Iterator<Integer> iter = list.iterator();
 		assertTrue(iter.hasNext());
+	}
+	
+	@Test
+	public void testHasNextDoesNotShiftCursor() {
+		Iterator<Integer> iter = list.iterator();
+		assertTrue(iter.hasNext());
 		assertTrue(iter.hasNext());
 		assertTrue(iter.next().equals(1));
 	}
@@ -60,6 +65,14 @@ public class ParameterizedIteratorTest {
 		assertTrue(iter.next().equals(1));
 		assertTrue(iter.next().equals(2));
 		assertTrue(iter.next().equals(3));
+	}
+	
+	@Test
+	public void testNextNoSuchElementException(){
+		Iterator<Integer> iter = list.iterator();
+		iter.next();
+		iter.next();
+		iter.next();
 		try {
 			iter.next();
 			fail();

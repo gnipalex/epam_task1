@@ -80,7 +80,13 @@ public class GoodsListTest {
 		int sz = container.size();
 		container.add(m);
 		assertTrue(container.size() == sz + 1);
-		assertTrue(container.get(sz).equals(m));
+	}
+	
+	@Test
+	public void testAddEAddedToEnd() {
+		MusicInstrument m = new Sax();
+		container.add(m);
+		assertTrue(container.get(container.size() - 1).equals(m));
 	}
 	
 	@Test
@@ -100,13 +106,41 @@ public class GoodsListTest {
 	}
 	
 	@Test
+	public void testRemoveObjectFirstOccurence() {
+		MusicInstrument m1 = new Violin();
+		container.remove(m1);
+		assertTrue(container.indexOf(m1) > 0);
+	}
+	
+	@Test
 	public void testRemoveObjectNotExist() {
 		assertFalse(container.remove(new Sax("qwerty", 2002, "bronze")));
 	}
-
+	
+	@Test
+	public void testRemoveInt() {
+		int sz = container.size();
+		container.remove(0);
+		assertTrue(container.size() == sz - 1);
+	}
+	
+	@Test
+	public void testRemoveIntShiftElements() {
+		MusicInstrument m1 = container.get(1);
+		MusicInstrument m2 = container.get(container.size() - 1);
+		container.remove(0);
+		assertTrue(container.get(0).equals(m1));
+		assertTrue(container.get(container.size() - 1).equals(m2));
+	}
+	
+	@Test
+	public void testRemoveIntReturn() {
+		MusicInstrument m1 = container.get(0);
+		assertEquals(m1, container.remove(0));
+	}
+	
 	@Test
 	public void testRemoveIntIndexOutOfBounds() {
-		MusicInstrument m = new Sax();
 		try {
 			container.remove(9);
 			fail();
@@ -355,12 +389,26 @@ public class GoodsListTest {
 	}
 	
 	@Test
+	public void testAddIntEElementsShifted() {
+		int sz = container.size();
+		
+		MusicInstrument m1 = container.get(0);
+		MusicInstrument m2 = container.get(sz - 1);
+		
+		container.add(0, new Guitar());
+		assertTrue(container.get(1).equals(m1));
+		assertTrue(container.get(sz).equals(m2));
+	}
+	
+	@Test
 	public void testAddIntEIndexOutOfBounds() {
 		try {
 			container.add(-1 ,new MusicInstrument());
+			fail();
 		} catch (IndexOutOfBoundsException e) {}
 		try {
 			container.add(container.size() + 1 ,new MusicInstrument());
+			fail();
 		} catch (IndexOutOfBoundsException e) {}
 	}
 

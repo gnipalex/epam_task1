@@ -120,11 +120,19 @@ public class GoodsList<E> implements List<E>, Cloneable {
 		return remove(index, true);
 	}
 
-	@SuppressWarnings("unchecked")
-	private E remove(int index, boolean narrow) {
-		if (index < 0 || index > size - 1) {
+	private void indexRangeCheck(int index, boolean includeSize) {
+		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException();
 		}
+		if (!includeSize && index == size) {
+			throw new IndexOutOfBoundsException();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private E remove(int index, boolean narrow) {
+		indexRangeCheck(index, false);
+		
 		E removedItem = (E) elements[index];
 		if (index < size - 1) {
 			for (int i = index; i < size - 1; i++) {
@@ -153,12 +161,7 @@ public class GoodsList<E> implements List<E>, Cloneable {
 		return true;
 	}
 
-	@Override
-	public boolean addAll(Collection<? extends E> c) {
-		if (c.isEmpty()) {
-			return false;
-		}
-		int addLen = c.size();
+	private void extendsStorageAddAll(int addLen) {
 		if (elements.length - size < addLen) {
 			int x = addLen / extraLength;
 			int extLen = x > 0 ? x : 1 * extraLength;
@@ -166,6 +169,16 @@ public class GoodsList<E> implements List<E>, Cloneable {
 					: 0;
 			extendStorage(extLen);
 		}
+	}
+	
+	@Override
+	public boolean addAll(Collection<? extends E> c) {
+		if (c.isEmpty()) {
+			return false;
+		}
+		
+		extendsStorageAddAll(c.size());
+		
 		for (E i : c) {
 			elements[size++] = i;
 		}
@@ -174,9 +187,7 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
-		if (index < 0 || index > size) {
-			throw new IndexOutOfBoundsException();
-		}
+		indexRangeCheck(index, true);
 		if (c.isEmpty()) {
 			return false;
 		}
@@ -184,13 +195,9 @@ public class GoodsList<E> implements List<E>, Cloneable {
 			return addAll(c);
 		}
 		int addLen = c.size();
-		if (elements.length - size < addLen) {
-			int x = addLen / extraLength;
-			int extLen = x > 0 ? x : 1 * extraLength;
-			extLen += (addLen / extraLength > 0 && addLen % extraLength > 0) ? extLen
-					: 0;
-			extendStorage(extLen);
-		}
+
+		extendsStorageAddAll(addLen);
+		
 		Object[] ost = new Object[size - index];
 		System.arraycopy(elements, index, ost, 0, size - index);
 		int tmp_index = index;
@@ -202,6 +209,19 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 		return true;
 	}
+	
+	private void narrowRemoveAll(int deletedCount) {
+		int len = deletedCount / extraLength * extraLength;
+		if (len > 0) {
+			if (elements.length - len >= initCapacity) {
+				narrowStorage(len);
+			} else {
+				// size of array must stay not less than initCapacity
+				int x = initCapacity + len - elements.length;
+				narrowStorage(len - x);
+			}
+		}
+	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
@@ -211,7 +231,6 @@ public class GoodsList<E> implements List<E>, Cloneable {
 		int deleted = 0;
 		for (Object o : c) {
 			int i = -1;
-			//to remove all occurences of o
 			do {
 				i = indexOf(o);
 				if (i >= 0) {
@@ -224,17 +243,8 @@ public class GoodsList<E> implements List<E>, Cloneable {
 			return false;
 		}
 
-		int len = deleted / extraLength * extraLength;
-
-		if (len > 0) {
-			if (elements.length - len >= initCapacity) {
-				narrowStorage(len);
-			} else {
-				// size of array must stay not less than initCapacity
-				int x = initCapacity + len - elements.length;
-				narrowStorage(len - x);
-			}
-		}
+		narrowRemoveAll(deleted);
+		
 		return true;
 	}
 
@@ -253,17 +263,9 @@ public class GoodsList<E> implements List<E>, Cloneable {
 		if (deleted == 0) {
 			return false;
 		}
-		int len = deleted / extraLength * extraLength;
-		if (len > 0) {
-			if (elements.length - len >= initCapacity) {
-				narrowStorage(len);
-			} else {
-				// size of array must stay not less than initCapacity
-				int x = initCapacity + len - elements.length;
-				narrowStorage(len - x);
-			}
-		}
-		// size -= deleted;
+		
+		narrowRemoveAll(deleted);
+
 		return true;
 	}
 
@@ -276,18 +278,14 @@ public class GoodsList<E> implements List<E>, Cloneable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public E get(int index) {
-		if (index < 0 || index >= size) {
-			throw new IndexOutOfBoundsException();
-		}
+		indexRangeCheck(index, false);
 		return (E) elements[index];
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public E set(int index, E element) {
-		if (index < 0 || index >= size) {
-			throw new IndexOutOfBoundsException();
-		}
+		indexRangeCheck(index, false);
 		Object prev = elements[index];
 		elements[index] = element;
 		return (E) prev;
@@ -295,9 +293,7 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public void add(int index, E element) {
-		if (index < 0 || index > size()) {
-			throw new IndexOutOfBoundsException();
-		}
+		indexRangeCheck(index, true);
 		if (index == size()) {
 			add(element);
 			return;
@@ -344,7 +340,6 @@ public class GoodsList<E> implements List<E>, Cloneable {
 
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
-		// simple copying to new List, not by specification
 		GoodsList<E> list = new GoodsList<>();
 		if (toIndex - fromIndex == 0) {
 			return list;
