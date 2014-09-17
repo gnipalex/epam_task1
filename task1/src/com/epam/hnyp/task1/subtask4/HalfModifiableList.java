@@ -19,7 +19,7 @@ import com.epam.hnyp.task1.subtask2.ParameterizedIterator;
  * @param <E>
  *            type of containing elements
  */
-public class ListHalfModifiable<E> implements List<E> {
+public class HalfModifiableList<E> implements List<E> {
 	private List<E> unmodPart;
 	private List<E> modPart;
 
@@ -29,7 +29,7 @@ public class ListHalfModifiable<E> implements List<E> {
 	 * @param unmodifiablePart
 	 * @param modifiablePart
 	 */
-	public ListHalfModifiable(List<E> unmodifiablePart, List<E> modifiablePart) {
+	public HalfModifiableList(List<E> unmodifiablePart, List<E> modifiablePart) {
 		this.unmodPart = unmodifiablePart;
 		this.modPart = modifiablePart;
 	}

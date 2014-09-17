@@ -19,7 +19,6 @@ public class ParameterizedIterator<E> implements Iterator<E> {
 	public boolean hasNext() {
 		int i = curentIndex;
 		while (i < list.size()) {
-			// if condition is not specified just take next element
 			E e = list.get(i);
 			if (condition != null) {
 				if (!condition.satisfy(e)) {

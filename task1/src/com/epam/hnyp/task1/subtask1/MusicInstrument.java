@@ -82,7 +82,6 @@ public class MusicInstrument {
 		if (obj == null) {
 			return false;
 		}
-		// to prevent parent and children equality
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}

@@ -5,17 +5,17 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epam.hnyp.task1.subtask3.GoodsStableIteratorList;
+import com.epam.hnyp.task1.subtask3.GoodsCopyOnWriteList;
 import com.epam.hnyp.task1.subtask3.ListIteratorBridge;
-import com.epam.hnyp.task1.subtask3.ParameterizedStableIterator;
+import com.epam.hnyp.task1.subtask3.ParameterizedCopyOnWriteIterator;
 
-public class GoodsStableIteratorListTest {
+public class GoodsCopyOnWriteListTest {
 
-	private GoodsStableIteratorList<Integer> items;
+	private GoodsCopyOnWriteList<Integer> items;
 	
 	@Before
 	public void before() {
-		items = new GoodsStableIteratorList<>();
+		items = new GoodsCopyOnWriteList<>();
 		items.add(5);
 		items.add(7);
 		items.add(6);
@@ -31,7 +31,7 @@ public class GoodsStableIteratorListTest {
 		
 		assertTrue(b1.getList() == b2.getList());
 		
-		ParameterizedStableIterator<Integer> it1 = (ParameterizedStableIterator<Integer>)items.iterator();
+		ParameterizedCopyOnWriteIterator<Integer> it1 = (ParameterizedCopyOnWriteIterator<Integer>)items.iterator();
 		
 		assertTrue(it1.getBridge().getList() == items);
 	}
@@ -39,7 +39,7 @@ public class GoodsStableIteratorListTest {
 	@Test
 	public void testBridgeChangedHasIterators() {
 		ListIteratorBridge<Integer> b1 = items.getBridge();
-		ParameterizedStableIterator<Integer> it1 = (ParameterizedStableIterator<Integer>)items.iterator();
+		ParameterizedCopyOnWriteIterator<Integer> it1 = (ParameterizedCopyOnWriteIterator<Integer>)items.iterator();
 		items.add(8);
 		ListIteratorBridge<Integer> b2 = items.getBridge();
 		assertFalse(b1 == b2);

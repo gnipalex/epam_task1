@@ -8,12 +8,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epam.hnyp.task1.subtask4.ListHalfModifiable;
-import com.epam.hnyp.task1.subtask4.ListHalfModifiable.UnmodifiedCollectionException;
+import com.epam.hnyp.task1.subtask4.HalfModifiableList;
+import com.epam.hnyp.task1.subtask4.HalfModifiableList.UnmodifiedCollectionException;
 
-public class ListHalfModifiableTest {
+public class HalfModifiableListTest {
 
-	private ListHalfModifiable<Integer> halfList;
+	private HalfModifiableList<Integer> halfList;
 	private List<Integer> list1;
 	private List<Integer> list2;
 
@@ -32,7 +32,7 @@ public class ListHalfModifiableTest {
 		list2.add(3);
 		list2.add(4);// 8
 
-		halfList = new ListHalfModifiable<>(list1, list2);
+		halfList = new HalfModifiableList<>(list1, list2);
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class ListHalfModifiableTest {
 
 	@Test
 	public void testIsEmpty() {
-		ListHalfModifiable<Integer> list = new ListHalfModifiable<>(
+		HalfModifiableList<Integer> list = new HalfModifiableList<>(
 				new ArrayList<Integer>(), new ArrayList<Integer>());
 		assertTrue(list.isEmpty());
 	}
