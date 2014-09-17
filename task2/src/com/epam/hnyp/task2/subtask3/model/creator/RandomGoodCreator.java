@@ -21,8 +21,8 @@ public class RandomGoodCreator implements GoodCreator {
 				stringData.append(makeParam(e.getKey(), String.valueOf(rand.nextInt(99))));
 			} else if (e.getValue() == Double.class) {
 				stringData.append(makeParam(e.getKey(), String.valueOf(rand.nextDouble() * 20 + 0.1)));
-//			} else if (e.getValue() == Long.class) {
-//				stringData.append(makeParam(e.getKey(), val)
+			} else if (e.getValue() == Long.class) {
+				stringData.append(makeParam(e.getKey(), String.valueOf(rand.nextLong())));
 			} else {
 				throw new GoodCreateException("cannot fill field '" + e.getKey() + "' type of " + e.getValue().getName());
 			}
