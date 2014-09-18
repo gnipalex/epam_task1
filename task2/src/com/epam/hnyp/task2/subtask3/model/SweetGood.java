@@ -19,11 +19,9 @@ public class SweetGood extends WeightableGood implements Serializable {
 	private String fill;
 	private static final String fieldFill = "fill";
 
-//	private static Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
-//	static {
-//		PARSERS.put(fieldFill, new StringFieldParser(fieldFill));
-//	}
-
+	public SweetGood() {
+	}
+	
 	public SweetGood(long id, String name, int price, double weight, String fill) {
 		super(id, name, price, weight);
 		this.fill = fill;
@@ -62,20 +60,6 @@ public class SweetGood extends WeightableGood implements Serializable {
 		}
 		this.fill = matcher.group(1);
 	}
-
-//	@Override
-//	public Map<String, FieldParser> getParsers() {
-//		Map<String, FieldParser> map = super.getParsers();
-//		map.putAll(PARSERS);
-//		return map;
-//	}
-	
-//	@Override
-//	public void makeRandom() {
-//		super.makeRandom();
-//		Random rand = new Random(System.currentTimeMillis()); 
-//		fill = "fill " + rand.nextInt(99999);
-//	}
 	
 	@Override
 	public Map<String, Class<?>> getFields() {

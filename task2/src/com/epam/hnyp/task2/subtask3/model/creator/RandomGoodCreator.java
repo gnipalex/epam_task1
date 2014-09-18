@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection;
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
 
 public class RandomGoodCreator implements GoodCreator {
 
 	@Override
-	public void createGood(Good g) throws GoodCreateException {
+	public void createGood(ParsableGoodNoReflection g) throws GoodCreateException {
 		StringBuilder stringData = new StringBuilder();
 		Map<String, Class<?>> fields = g.getFields();
 		Random rand = new Random(System.currentTimeMillis());

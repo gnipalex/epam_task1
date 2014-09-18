@@ -25,15 +25,11 @@ public class Good implements Serializable, ParsableGoodNoReflection {
 	private static final String fieldPrice = "price";
 
 	private long id;
-	private static final String fieldId = "id";
+	//private static final String fieldId = "id";
 
-//	private static final Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
-//	static {
-//		PARSERS.put("Input 'id' : ", new LongFieldParser(fieldId));
-//		PARSERS.put("Input 'name' : ", new StringFieldParser(fieldName));
-//		PARSERS.put("Input 'price' : ", new IntFieldParser(fieldPrice));
-//	}
-
+	public Good() {
+	}
+	
 	public Good(long id, String name, int price) {
 		this.id = id;
 		this.name = name;
@@ -117,34 +113,22 @@ public class Good implements Serializable, ParsableGoodNoReflection {
 			throw new IllegalDataFormatException();
 		}
 
-		// parsing price
-		matcher = Pattern.compile(makeReqularExpression(fieldId)).matcher(
-				data);
-		if (!matcher.find()) {
-			throw new IllegalDataFormatException();
-		}
-		try {
-			this.id = Long.parseLong(matcher.group(1));
-		} catch (NumberFormatException e) {
-			throw new IllegalDataFormatException();
-		}
+		// parsing id
+//		matcher = Pattern.compile(makeReqularExpression(fieldId)).matcher(
+//				data);
+//		if (!matcher.find()) {
+//			throw new IllegalDataFormatException();
+//		}
+//		try {
+//			this.id = Long.parseLong(matcher.group(1));
+//		} catch (NumberFormatException e) {
+//			throw new IllegalDataFormatException();
+//		}
 	}
 
 	protected String makeReqularExpression(String fieldName) {
 		return fieldName + ":(.+?)(?=;)|" + fieldName + ":(.+)";
 	}
-
-//	@Override
-//	public Map<String, FieldParser> getParsers() {
-//		return new LinkedHashMap<>(PARSERS);
-//	}
-//
-//	@Override
-//	public void makeRandom() {
-//		Random rand = new Random(System.currentTimeMillis());
-//		this.name = "Good " + rand.nextInt(99999);
-//		this.price = rand.nextInt(99);
-//	}
 
 	@Override
 	public Map<String, Class<?>> getFields() {

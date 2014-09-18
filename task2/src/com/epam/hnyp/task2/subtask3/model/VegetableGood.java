@@ -5,6 +5,9 @@ import java.io.Serializable;
 public class VegetableGood extends WeightableGood implements Serializable {
 	private static final long serialVersionUID = -5108849535745255520L;
 
+	public VegetableGood() {
+	}
+	
 	public VegetableGood(long id, String name, int price, double weight) {
 		super(id, name, price, weight);
 	}

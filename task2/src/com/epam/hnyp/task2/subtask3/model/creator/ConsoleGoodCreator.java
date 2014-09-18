@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection;
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
 import com.epam.hnyp.task2.subtask3.model.parser.DoubleFieldParser;
 import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
@@ -25,7 +25,7 @@ public class ConsoleGoodCreator implements GoodCreator {
 	}
 	
 	@Override
-	public void createGood(Good g) throws GoodCreateException {
+	public void createGood(ParsableGoodNoReflection g) throws GoodCreateException {
 		Scanner sc = new Scanner(System.in);
 		Map<String, Class<?>> fields = g.getFields();
 		StringBuilder stringData = new StringBuilder();

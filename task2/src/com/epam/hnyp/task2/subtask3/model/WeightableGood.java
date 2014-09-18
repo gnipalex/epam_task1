@@ -19,10 +19,8 @@ public class WeightableGood extends Good implements Serializable {
 	private double weight;
 	private static final String fieldWeight = "weight";
 	
-//	private static Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
-//	static {
-//		PARSERS.put("Input weight : ", new DoubleFieldParser(fieldWeight));
-//	}
+	public WeightableGood() {
+	}
 	
 	public WeightableGood(long id, String name, int price, double weight) {
 		super(id, name, price);
@@ -45,7 +43,8 @@ public class WeightableGood extends Good implements Serializable {
 	@Override
 	protected String printOtherColumn() {
 		Formatter fmt = new Formatter();
-		fmt.format("%1$20s", "weight=" + weight);
+		String s = String.format("weight=%1$.2f", weight);
+		fmt.format("%1$20s", s);
 		return fmt.toString();
 	}
 	
@@ -63,20 +62,6 @@ public class WeightableGood extends Good implements Serializable {
 			throw new IllegalDataFormatException();
 		}
 	}
-	
-//	@Override
-//	public Map<String, FieldParser> getParsers() {
-//		Map<String, FieldParser> map = super.getParsers();
-//		map.putAll(PARSERS);
-//		return map;
-//	}
-	
-//	@Override
-//	public void makeRandom() {
-//		super.makeRandom();
-//		Random rand = new Random(System.currentTimeMillis());
-//		this.weight = rand.nextDouble() * 20 + 0.1;
-//	}
 	
 	@Override
 	public Map<String, Class<?>> getFields() {

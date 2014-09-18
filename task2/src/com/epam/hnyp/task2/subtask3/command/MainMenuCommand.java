@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.Map.Entry;
 
 import com.epam.hnyp.task2.subtask3.command.cart.AddToCartCommand;
+import com.epam.hnyp.task2.subtask3.command.main.AddGoodCommand;
 import com.epam.hnyp.task2.subtask3.command.main.OrdersCommand;
 import com.epam.hnyp.task2.subtask3.command.main.PrintGoodsCommand;
 import com.epam.hnyp.task2.subtask3.command.main.ShowPopularGoodsCommand;
@@ -22,6 +23,7 @@ public class MainMenuCommand extends AbstractCommand {
 		commands.put("3", new AddToCartCommand());
 		commands.put("4", new ViewCartCommand());
 		commands.put("5", new OrdersCommand());
+		commands.put("6", new AddGoodCommand());
 	}
 
 	@Override

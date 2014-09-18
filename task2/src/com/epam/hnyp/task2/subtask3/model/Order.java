@@ -8,6 +8,9 @@ public class Order {
 	private String customer;
 	private Map<Long, Integer> items;
 	
+	public Order() {
+	}
+	
 	public Order(Date date, String customer, Map<Long, Integer> goods) {
 		this.date = date;
 		this.customer = customer;

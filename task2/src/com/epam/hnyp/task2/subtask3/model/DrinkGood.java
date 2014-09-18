@@ -18,10 +18,8 @@ public class DrinkGood extends Good implements Serializable {
 	private double volume; 
 	private static final String fieldVolume = "volume";
 	
-//	private static Map<String, FieldParser> PARSERS = new LinkedHashMap<>();
-//	static {
-//		PARSERS.put(fieldVolume, new DoubleFieldParser(fieldVolume));
-//	}
+	public DrinkGood() {
+	}
 	
 	public DrinkGood(long id, String name, int price, double volume) {
 		super(id, name, price);
@@ -44,7 +42,8 @@ public class DrinkGood extends Good implements Serializable {
 	@Override
 	protected String printOtherColumn() {
 		Formatter fmt = new Formatter();
-		fmt.format("%1$20s", "volume=" + volume);
+		String s = String.format("volume=%1$.2f", volume);
+		fmt.format("%1$20s", s);
 		return fmt.toString();
 	}
 	
@@ -62,20 +61,6 @@ public class DrinkGood extends Good implements Serializable {
 			throw new IllegalDataFormatException();
 		}
 	}
-	
-//	@Override
-//	public Map<String, FieldParser> getParsers() {
-//		Map<String, FieldParser> map = super.getParsers();
-//		map.putAll(PARSERS);
-//		return map;
-//	}
-	
-//	@Override
-//	public void makeRandom() {
-//		super.makeRandom();
-//		Random rand = new Random(System.currentTimeMillis());
-// 		this.volume = 0.5 * rand.nextInt(20) + 0.5;
-//	}
 	
 	@Override
 	public Map<String, Class<?>> getFields() {
