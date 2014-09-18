@@ -14,6 +14,7 @@ import com.epam.hnyp.task3.subtask2.condition.ModifyDateCondition;
 import com.epam.hnyp.task3.subtask2.condition.NameFileCondition;
 
 public class ConsoleUI {
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		System.out

@@ -33,6 +33,9 @@ public class FileSearch {
 		List<File> files = new LinkedList<>();
 		if (rootDir.isDirectory() && rootDir.canRead()) {
 			File[] filesInDir = rootDir.listFiles();
+			if (filesInDir == null) {
+				return files;
+			}
 			for (File f : filesInDir) {
 				if (f.getName().equals(".") || f.getName().equals("..")) {
 					continue;
