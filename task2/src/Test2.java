@@ -7,6 +7,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
+import com.epam.hnyp.task2.subtask3.model.parser.StringFieldParser;
+
 public class Test2 {
 	public static void main(String[] args) {
 		MyClassB b = new MyClassB();
@@ -48,9 +51,9 @@ public class Test2 {
 }
 
 class MyClassA {
-	@MyAnn(message = "field a")
+	//@MyAnn(message = "field a")
 	private int a;
-	@MyAnn(message = "field name")
+	@MyAnn(message = "field name", parser=StringFieldParser.class)
 	private String name;
 
 	public int getA() {
@@ -71,7 +74,7 @@ class MyClassA {
 }
 
 class MyClassB extends MyClassA {
-	@MyAnn(message = "field b")
+	@MyAnn(message = "field b", parser=StringFieldParser.class)
 	private int b;
 
 	public int getB() {
@@ -87,4 +90,5 @@ class MyClassB extends MyClassA {
 @Target(ElementType.FIELD)
 @interface MyAnn {
 	String message();
+	Class<? extends FieldParser> parser();
 }

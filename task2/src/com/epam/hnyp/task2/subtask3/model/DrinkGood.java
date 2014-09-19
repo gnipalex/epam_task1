@@ -15,6 +15,7 @@ import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
 public class DrinkGood extends Good implements Serializable {
 	private static final long serialVersionUID = -7896820585762605712L;
 	
+	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_DRINK_VOLUME", parser = DoubleFieldParser.class)
 	private double volume; 
 	private static final String fieldVolume = "volume";
 	

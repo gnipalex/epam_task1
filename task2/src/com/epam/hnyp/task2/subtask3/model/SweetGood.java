@@ -16,6 +16,7 @@ import com.epam.hnyp.task2.subtask3.model.parser.StringFieldParser;
 public class SweetGood extends WeightableGood implements Serializable {
 	private static final long serialVersionUID = 5307430294973106832L;
 
+	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_SWEET_FILL", parser = StringFieldParser.class)
 	private String fill;
 	private static final String fieldFill = "fill";
 
