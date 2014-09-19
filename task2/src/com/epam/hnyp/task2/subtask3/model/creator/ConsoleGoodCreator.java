@@ -40,8 +40,8 @@ public class ConsoleGoodCreator implements GoodCreator {
 				System.out.print("Please enter field '" + e.getKey() + "' : ");
 				String line = sc.nextLine();
 				try {
-					String parsed = parser.parse(line);
-					stringData.append(e.getKey()).append(":").append(parsed).append(";");
+					Object parsed = parser.parse(line);
+					stringData.append(e.getKey()).append(":").append(parsed.toString()).append(";");
 				} catch (IllegalFieldFormatException ex) {
 					System.out.println("##field format error##");
 					continue;
