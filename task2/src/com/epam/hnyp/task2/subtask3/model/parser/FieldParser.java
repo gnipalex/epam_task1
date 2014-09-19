@@ -13,7 +13,7 @@ public interface FieldParser {
 	 * @return parsed value
 	 * @throws IllegalFieldFormatException field in wrong format
 	 */
-	String parse(String input) throws IllegalFieldFormatException;
+	Object parse(String input) throws IllegalFieldFormatException;
 	
 	/**
 	 * IllegalFieldFormatException is thrown when parse method reads string in wrong format
