@@ -18,9 +18,11 @@ public class Good implements Serializable, ParsableGoodNoReflection {
 
 	private static final long serialVersionUID = 6101697799798820856L;
 
+	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_NAME", parser = StringFieldParser.class)
 	private String name;
 	private static final String fieldName = "name";
 
+	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_PRICE", parser = IntFieldParser.class)
 	private int price;
 	private static final String fieldPrice = "price";
 
