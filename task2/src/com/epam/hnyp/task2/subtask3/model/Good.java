@@ -7,15 +7,20 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.epam.hnyp.task2.subtask3.model.reader.console.IntConsoleFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.console.StringConsoleFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.random.IntRandomFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.random.StringRandomFieldReader;
+
 public class Good implements Serializable, ParsableGoodNoReflection {
 
 	private static final long serialVersionUID = 6101697799798820856L;
 
-	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_NAME", parser = StringFieldParser.class)
+	@GoodFieldAnnotation(friendlyMessage = "TOVAR_NAME")
 	private String name;
 	private static final String fieldName = "name";
 
-	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_PRICE", parser = IntFieldParser.class)
+	@GoodFieldAnnotation(friendlyMessage = "TOVAR_PRICE")
 	private int price;
 	private static final String fieldPrice = "price";
 

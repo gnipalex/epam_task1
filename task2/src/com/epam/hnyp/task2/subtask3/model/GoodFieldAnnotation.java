@@ -5,11 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
+import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GoodFieldParseAnnotation {
+public @interface GoodFieldAnnotation {
 	String friendlyMessage();
-	Class<? extends FieldParser> parser();
 }

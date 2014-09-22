@@ -16,7 +16,7 @@ public class WeightableGood extends Good implements Serializable {
 	
 	private static final long serialVersionUID = 2262341991941044041L;
 	
-	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_WEIGHTABLE_WEIGHT", parser = DoubleFieldParser.class)
+	@GoodFieldAnnotation(friendlyMessage = "TOVAR_WEIGHTABLE_WEIGHT")
 	private double weight;
 	private static final String fieldWeight = "weight";
 	

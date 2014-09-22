@@ -12,11 +12,12 @@ import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFo
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.StringConsoleFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.random.StringRandomFieldReader;
 
 public class SweetGood extends WeightableGood implements Serializable {
 	private static final long serialVersionUID = 5307430294973106832L;
 
-	@GoodFieldParseAnnotation(friendlyMessage = "TOVAR_SWEET_FILL", parser = StringFieldParser.class)
+	@GoodFieldAnnotation(friendlyMessage = "TOVAR_SWEET_FILL")
 	private String fill;
 	private static final String fieldFill = "fill";
 

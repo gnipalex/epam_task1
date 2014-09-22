@@ -7,8 +7,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.StringFieldParser;
+import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.console.StringConsoleFieldReader;
 
 public class Test2 {
 	public static void main(String[] args) {
@@ -53,7 +53,7 @@ public class Test2 {
 class MyClassA {
 	//@MyAnn(message = "field a")
 	private int a;
-	@MyAnn(message = "field name", parser=StringFieldParser.class)
+	@MyAnn(message = "field name", parser=StringConsoleFieldReader.class)
 	private String name;
 
 	public int getA() {
@@ -74,7 +74,7 @@ class MyClassA {
 }
 
 class MyClassB extends MyClassA {
-	@MyAnn(message = "field b", parser=StringFieldParser.class)
+	@MyAnn(message = "field b", parser=StringConsoleFieldReader.class)
 	private int b;
 
 	public int getB() {
@@ -90,5 +90,5 @@ class MyClassB extends MyClassA {
 @Target(ElementType.FIELD)
 @interface MyAnn {
 	String message();
-	Class<? extends FieldParser> parser();
+	Class<? extends FieldReader> parser();
 }
