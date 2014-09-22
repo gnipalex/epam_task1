@@ -2,17 +2,10 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.io.Serializable;
 import java.util.Formatter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.IntFieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.LongFieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.StringFieldParser;
 
 public class Good implements Serializable, ParsableGoodNoReflection {
 
