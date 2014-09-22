@@ -35,6 +35,7 @@ public class ConsoleReflectionGoodCreator implements GoodCreator {
 	}
 	
 	public List<Field> readFieldsWithAnn(Class<?> c, Class<? extends Annotation> a) {
+
 		List<Field> fieldsList = new ArrayList<>();
 		Field[] fields = c.getDeclaredFields();
 		if (fields != null) {

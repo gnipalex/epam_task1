@@ -2,20 +2,13 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.io.Serializable;
 import java.util.Formatter;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
-import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.console.StringConsoleFieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.random.StringRandomFieldReader;
-
 public class SweetGood extends WeightableGood implements Serializable {
 	private static final long serialVersionUID = 5307430294973106832L;
+
 
 	@GoodFieldAnnotation(friendlyMessage = "TOVAR_SWEET_FILL")
 	private String fill;

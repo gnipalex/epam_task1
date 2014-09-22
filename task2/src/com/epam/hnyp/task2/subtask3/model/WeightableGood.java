@@ -2,20 +2,15 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.io.Serializable;
 import java.util.Formatter;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
-import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
 
 public class WeightableGood extends Good implements Serializable {
 	
 	private static final long serialVersionUID = 2262341991941044041L;
 	
+
 	@GoodFieldAnnotation(friendlyMessage = "TOVAR_WEIGHTABLE_WEIGHT")
 	private double weight;
 	private static final String fieldWeight = "weight";

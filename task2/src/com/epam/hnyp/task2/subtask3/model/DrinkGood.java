@@ -6,13 +6,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.random.DoubleRandomFieldReader;
-
 public class DrinkGood extends Good implements Serializable {
 	private static final long serialVersionUID = -7896820585762605712L;
 	
 	@GoodFieldAnnotation(friendlyMessage = "TOVAR_DRINK_VOLUME")
+
 	private double volume; 
 	private static final String fieldVolume = "volume";
 	

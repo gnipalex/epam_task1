@@ -53,6 +53,7 @@ public class Test2 {
 class MyClassA {
 	//@MyAnn(message = "field a")
 	private int a;
+	
 	@MyAnn(message = "field name", parser=StringConsoleFieldReader.class)
 	private String name;
 
