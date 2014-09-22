@@ -25,10 +25,7 @@ public class MusicInstrument {
 		if (vendor == null) {
 			throw new IllegalArgumentException("vendor must be specified");
 		}
-		if (year < 1900 && year > Calendar.getInstance().get(Calendar.YEAR)) {
-			throw new IllegalArgumentException(
-					"year must be in 1900...nowadays");
-		}
+		checkYear(year);
 		this.vendor = vendor;
 		this.year = year;
 	}
@@ -53,6 +50,17 @@ public class MusicInstrument {
 	}
 
 	/**
+	 * Checks year to be in 1900..nowadays
+	 * @param year
+	 */
+	protected void checkYear(int year) {
+		if (!(year > 1900 && year <= Calendar.getInstance().get(Calendar.YEAR))) {
+			throw new IllegalArgumentException(
+					"year must be in 1900...nowadays");
+		}
+	}
+	
+	/**
 	 * Sets year
 	 * 
 	 * @param year
@@ -60,9 +68,7 @@ public class MusicInstrument {
 	 *             if year < 1900 OR year > current year
 	 */
 	public void setYear(int year) {
-		if (!(year > 1900 && year <= Calendar.getInstance().get(Calendar.YEAR))) {
-			throw new IllegalArgumentException();
-		}
+		checkYear(year);
 		this.year = year;
 	}
 

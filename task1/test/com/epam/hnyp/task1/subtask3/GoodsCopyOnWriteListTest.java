@@ -28,11 +28,11 @@ public class GoodsCopyOnWriteListTest {
 		items.add(9);
 		ListIteratorBridge<Integer> b2 = items.getBridge();
 		
-		assertTrue(b1.getList() == b2.getList());
+		assertSame(b1.getList(), b2.getList());
 		
 		ParameterizedCopyOnWriteIterator<Integer> it1 = (ParameterizedCopyOnWriteIterator<Integer>)items.iterator();
 		
-		assertTrue(it1.getBridge().getList() == items);
+		assertSame(it1.getBridge().getList(), items);
 	}
 	
 	@Test
@@ -41,8 +41,8 @@ public class GoodsCopyOnWriteListTest {
 		ParameterizedCopyOnWriteIterator<Integer> it1 = (ParameterizedCopyOnWriteIterator<Integer>)items.iterator();
 		items.add(8);
 		ListIteratorBridge<Integer> b2 = items.getBridge();
-		assertFalse(b1 == b2);
-		assertFalse(b1.getList() == items);
+		assertNotSame(b1, b2);
+		assertNotSame(b1.getList(), items);
 	}
 	
 	

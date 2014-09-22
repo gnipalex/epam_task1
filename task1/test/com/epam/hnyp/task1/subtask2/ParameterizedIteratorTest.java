@@ -25,24 +25,29 @@ public class ParameterizedIteratorTest {
 		Condition<Integer> cond = new Condition<Integer>() {
 			@Override
 			public boolean satisfy(Integer item) {
-				return item > 1;
+				return item > 2;
+			}
+		};
+		list.setIteratorCondition(cond);
+		Iterator<Integer> iter = list.iterator();
+		assertTrue(iter.hasNext());
+		assertEquals(new Integer(3), iter.next());
+	}
+	
+	
+	
+	@Test
+	public void testConditionAllNotSatisfy() {
+		Condition<Integer> cond = new Condition<Integer>() {
+			@Override
+			public boolean satisfy(Integer item) {
+				return item < 0;
 			}
 		};
 		list.setIteratorCondition(cond);
 		int count = 0;
-		for (Integer i : list) {
-			count++;
-		}
-		assertTrue(count == 2);
-	}
-	
-	@Test
-	public void testWithoutCondition() {
-		int count = 0;
-		for (Integer i : list) {
-			count++;
-		}
-		assertTrue(count == list.size());
+		Iterator<Integer> iter = list.iterator();
+		assertFalse(iter.hasNext());
 	}
 	
 	@Test
@@ -56,15 +61,15 @@ public class ParameterizedIteratorTest {
 		Iterator<Integer> iter = list.iterator();
 		assertTrue(iter.hasNext());
 		assertTrue(iter.hasNext());
-		assertTrue(iter.next().equals(1));
+		assertEquals(new Integer(1), iter.next());
 	}
 	
 	@Test
 	public void testNext() {
 		Iterator<Integer> iter = list.iterator();
-		assertTrue(iter.next().equals(1));
-		assertTrue(iter.next().equals(2));
-		assertTrue(iter.next().equals(3));
+		assertEquals(new Integer(1), iter.next());
+		assertEquals(new Integer(2), iter.next());
+		assertEquals(new Integer(3), iter.next());
 	}
 	
 	@Test

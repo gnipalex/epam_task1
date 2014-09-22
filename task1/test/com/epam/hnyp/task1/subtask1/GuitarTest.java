@@ -10,7 +10,7 @@ public class GuitarTest {
 	public void testEquals() {
 		Guitar g1 = new Guitar();
 		Guitar g2 = new Guitar();
-		assertTrue(g1.equals(g2));
+		assertEquals(g2, g1);
 	}
 	
 	@Test

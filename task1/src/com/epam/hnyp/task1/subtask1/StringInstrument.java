@@ -16,6 +16,7 @@ public abstract class StringInstrument extends MusicInstrument {
 	 * @param vendor
 	 * @param year
 	 * @param stringCount
+	 * @throws IllegalArgumentException if stringCount < 1 or stringCount > MAX_STRINGS_COUNT
 	 */
 	public StringInstrument(String vendor, int year, int stringCount) {
 		super(vendor, year);
@@ -23,6 +24,11 @@ public abstract class StringInstrument extends MusicInstrument {
 		this.stringCount = stringCount;
 	}
 
+	/**
+	 * 
+	 * @param stringCount
+	 * @throws IllegalArgumentException if stringCount < 1 or stringCount > MAX_STRINGS_COUNT
+	 */
 	public StringInstrument(int stringCount) {
 		super();
 		checkStringCount(stringCount);
@@ -53,7 +59,7 @@ public abstract class StringInstrument extends MusicInstrument {
 	 * 
 	 * @param stringCount
 	 *            count of strings must be > 0 & < MAX_STRINGS_COUNT
-	 * @throws IllegalArgumentException if stringCount <= 0 || stringCount > MAX_STRINGS_COUNT
+	 * @throws IllegalArgumentException if stringCount < 1 or stringCount > MAX_STRINGS_COUNT
 	 */
 	public void setStringCount(int stringCount) {
 		checkStringCount(stringCount);

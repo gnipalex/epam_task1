@@ -28,7 +28,7 @@ public class ParameterizedCopyOnWriteIteratorTest {
 		ParameterizedCopyOnWriteIterator<Integer> it1 = (ParameterizedCopyOnWriteIterator<Integer>)items.iterator();
 		it1.next();
 		items.remove(magicValue);
-		assertTrue(it1.next().equals(magicValue));
+		assertEquals(magicValue, it1.next());
 	}
 	
 	@Test
@@ -36,9 +36,9 @@ public class ParameterizedCopyOnWriteIteratorTest {
 		ParameterizedCopyOnWriteIterator<Integer> it1 = (ParameterizedCopyOnWriteIterator<Integer>)items.iterator();
 		ParameterizedCopyOnWriteIterator<Integer> it2 = (ParameterizedCopyOnWriteIterator<Integer>)items.iterator();
 		
-		assertTrue(it1.getBridge() == it2.getBridge());
-		assertTrue(it1.getBridge() == items.getBridge());
-		assertTrue(it1.getBridge().getList() == items);
+		assertSame(it1.getBridge(), it2.getBridge());
+		assertSame(it1.getBridge(), items.getBridge());
+		assertSame(it1.getBridge().getList(), items);
 	}
 	
 	@Test
@@ -48,9 +48,9 @@ public class ParameterizedCopyOnWriteIteratorTest {
 		
 		items.remove(0);
 		
-		assertTrue(it1.getBridge() == it2.getBridge());
-		assertTrue(it1.getBridge() != items.getBridge());
-		assertTrue(it1.getBridge().getList() != items);
+		assertSame(it1.getBridge(), it2.getBridge());
+		assertNotSame(it1.getBridge(), items.getBridge());
+		assertNotSame(it1.getBridge().getList(), items);
 	}
 
 }

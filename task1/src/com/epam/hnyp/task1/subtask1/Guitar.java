@@ -33,6 +33,7 @@ public class Guitar extends StringInstrument {
 	 * @param stringCount
 	 * @param color
 	 * @param stringType
+	 * @throws IllegalArgumentException if stringCount < MIN_GUITAR_STRINGS or stringCount > MAX_GUITAR_STRINGS
 	 */
 	public Guitar(String vendor, int year, int stringCount, String color,
 			StringType stringType) {
@@ -83,10 +84,6 @@ public class Guitar extends StringInstrument {
 	 */
 	@Override
 	public void setStringCount(int stringCount) {
-		if (stringCount < MIN_GUITAR_STRINGS
-				|| stringCount > MAX_GUITAR_STRINGS) {
-			throw new IllegalArgumentException();
-		}
 		super.setStringCount(stringCount);
 	}
 
