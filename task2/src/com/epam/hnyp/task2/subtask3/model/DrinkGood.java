@@ -9,8 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
-import com.epam.hnyp.task2.subtask3.model.parser.DoubleFieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
+import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
 
 public class DrinkGood extends Good implements Serializable {
 	private static final long serialVersionUID = -7896820585762605712L;

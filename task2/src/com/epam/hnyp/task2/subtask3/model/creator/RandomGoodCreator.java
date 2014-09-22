@@ -1,36 +1,52 @@
 package com.epam.hnyp.task2.subtask3.model.creator;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection;
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
+import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.FieldReader.IllegalFieldFormatException;
+import com.epam.hnyp.task2.subtask3.model.reader.random.DoubleRandomFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.random.IntRandomFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.random.LongRandomFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.random.StringRandomFieldReader;
 
 public class RandomGoodCreator implements GoodCreator {
 
+	private static final Map<Class<?>, FieldReader> READERS = new HashMap<Class<?>, FieldReader>();
+	static {
+		READERS.put(String.class, new StringRandomFieldReader(5));
+		READERS.put(Integer.class, new IntRandomFieldReader(99));
+		READERS.put(Double.class, new DoubleRandomFieldReader(99));
+		READERS.put(Long.class, new LongRandomFieldReader());
+	}
+	
 	@Override
 	public void createGood(ParsableGoodNoReflection g) throws GoodCreateException {
 		StringBuilder stringData = new StringBuilder();
 		Map<String, Class<?>> fields = g.getFields();
-		Random rand = new Random(System.currentTimeMillis());
 		for (Entry<String, Class<?>> e : fields.entrySet()) {
-			if (e.getValue() == String.class) {
-				stringData.append(makeParam(e.getKey(), e.getKey() + " " + rand.nextInt(99999)));
-			} else if (e.getValue() == Integer.class) {
-				stringData.append(makeParam(e.getKey(), String.valueOf(rand.nextInt(99))));
-			} else if (e.getValue() == Double.class) {
-				stringData.append(makeParam(e.getKey(), String.valueOf(rand.nextDouble() * 20 + 0.1)));
-			} else if (e.getValue() == Long.class) {
-				stringData.append(makeParam(e.getKey(), String.valueOf(rand.nextLong())));
-			} else {
-				throw new GoodCreateException("cannot fill field '" + e.getKey() + "' type of " + e.getValue().getName());
+			FieldReader reader = READERS.get(e.getValue());
+			if (reader == null) {
+				throw new GoodCreateException("reader for type" + e.getValue().getName() + " not found");
 			}
+			String readedVal = null;
+			try {
+				readedVal = reader.read().toString();
+			} catch (IllegalFieldFormatException e1) {
+				throw new GoodCreateException("unexpected random field read exception");
+			}
+			if (e.getValue() == String.class) {
+				readedVal = e.getKey() + "_" + readedVal;
+			}
+			stringData.append(makeParam(e.getKey(), readedVal));
 		}
 		try {
 			g.make(stringData.toString());
 		} catch (IllegalDataFormatException e) {
-			throw new GoodCreateException("error while random filling of class " + g.getClass().getName());
+			throw new GoodCreateException("error while random filling class " + g.getClass().getName());
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask3.model.parser;
+package com.epam.hnyp.task2.subtask3.model.reader;
 
 
 /**
@@ -6,14 +6,13 @@ package com.epam.hnyp.task2.subtask3.model.parser;
  * @author Oleksandr_Hnyp
  *
  */
-public interface FieldParser {
+public interface FieldReader {
 	/**
-	 * Reads from line value of the field
-	 * @param input input string to parse
-	 * @return parsed value
+	 * Reads value of the field
+	 * @return read value
 	 * @throws IllegalFieldFormatException field in wrong format
 	 */
-	Object parse(String input) throws IllegalFieldFormatException;
+	Object read() throws IllegalFieldFormatException;
 	
 	/**
 	 * IllegalFieldFormatException is thrown when parse method reads string in wrong format

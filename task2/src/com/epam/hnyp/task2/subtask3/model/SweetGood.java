@@ -9,9 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
-import com.epam.hnyp.task2.subtask3.model.parser.DoubleFieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.FieldParser;
-import com.epam.hnyp.task2.subtask3.model.parser.StringFieldParser;
+import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.console.StringConsoleFieldReader;
 
 public class SweetGood extends WeightableGood implements Serializable {
 	private static final long serialVersionUID = 5307430294973106832L;
