@@ -7,25 +7,24 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Good implements Serializable, ParsableGoodNoReflection {
-
+public class Product implements Serializable, ParsableGoodNoReflection {
 	private static final long serialVersionUID = 6101697799798820856L;
 
-	@GoodFieldAnnotation(friendlyMessage = "TOVAR_NAME")
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_NAME")
 	private String name;
 	private static final String fieldName = "name";
 
-	@GoodFieldAnnotation(friendlyMessage = "TOVAR_PRICE")
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_PRICE")
 	private int price;
 	private static final String fieldPrice = "price";
 
 	private long id;
 	//private static final String fieldId = "id";
 
-	public Good() {
+	public Product() {
 	}
 	
-	public Good(long id, String name, int price) {
+	public Product(long id, String name, int price) {
 		this.id = id;
 		this.name = name;
 		this.price = price;

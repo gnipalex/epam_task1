@@ -10,36 +10,36 @@ import java.util.Scanner;
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
 import com.epam.hnyp.task2.subtask3.command.MainMenuCommand;
 import com.epam.hnyp.task2.subtask3.command.MyKeyValue;
-import com.epam.hnyp.task2.subtask3.command.main.AddGoodCommand;
-import com.epam.hnyp.task2.subtask3.factory.GoodsInitializer;
+import com.epam.hnyp.task2.subtask3.command.main.AddProductCommand;
+import com.epam.hnyp.task2.subtask3.factory.ProductsInitializer;
 import com.epam.hnyp.task2.subtask3.factory.ServicesContainer;
 import com.epam.hnyp.task2.subtask3.factory.ServicesFactory;
 import com.epam.hnyp.task2.subtask3.factory.ServicesFactoryInMemory;
-import com.epam.hnyp.task2.subtask3.model.creator.ConsoleGoodCreator;
-import com.epam.hnyp.task2.subtask3.model.creator.GoodCreator;
-import com.epam.hnyp.task2.subtask3.model.creator.RandomGoodCreator;
-import com.epam.hnyp.task2.subtask3.serialize.GoodsSerializer;
-import com.epam.hnyp.task2.subtask3.serialize.GzipGoodsSerializer;
-import com.epam.hnyp.task2.subtask3.serialize.NtimesGoodsSerializer;
+import com.epam.hnyp.task2.subtask3.model.creator.ConsoleProductCreator;
+import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator;
+import com.epam.hnyp.task2.subtask3.model.creator.RandomProductCreator;
+import com.epam.hnyp.task2.subtask3.serialize.ProductsSerializer;
+import com.epam.hnyp.task2.subtask3.serialize.GzipProductsSerializer;
+import com.epam.hnyp.task2.subtask3.serialize.NtimesProductsSerializer;
 
 public class ConsoleGrocery {
-	public static final String SERIALIZED_GOODS_FILE = "goods.dat";
-	public static final String SERIALIZED_NTIMES_GOODS_FILE = "goods.ntimes.dat";
+	public static final String SERIALIZED_PRODUCTS_FILE = "products.dat";
+	public static final String SERIALIZED_NTIMES_PRODUCTS_FILE = "products.ntimes.dat";
 	public static final int SERIALIZE_COUNT = 3;
-	public static final String SERIALIZED_GZIP_GOODS_FILE = "goods.gzip.dat";
+	public static final String SERIALIZED_GZIP_PRODUCTS_FILE = "products.gzip.dat";
 	
 	private static ServicesContainer servicesContainer;
 	
-	private static GoodsSerializer serializer = new GoodsSerializer();
-	private static GoodsSerializer ntimesSerializer = new NtimesGoodsSerializer(SERIALIZE_COUNT);
-	private static GoodsSerializer gzipSerializer = new GzipGoodsSerializer();
+	private static ProductsSerializer serializer = new ProductsSerializer();
+	private static ProductsSerializer ntimesSerializer = new NtimesProductsSerializer(SERIALIZE_COUNT);
+	private static ProductsSerializer gzipSerializer = new GzipProductsSerializer();
 	
-	private static String goodCreatorImplClass;
+	private static String productCreatorImplClass;
 	
-	private static final Map<String, MyKeyValue<String, Class<? extends GoodCreator>>> goodCreators = new LinkedHashMap<>();
+	private static final Map<String, MyKeyValue<String, Class<? extends ProductCreator>>> productCreators = new LinkedHashMap<>();
 	static {
-		goodCreators.put("1", new MyKeyValue<String, Class<? extends GoodCreator>>("from console mode", ConsoleGoodCreator.class));
-		goodCreators.put("2", new MyKeyValue<String, Class<? extends GoodCreator>>("random mode", RandomGoodCreator.class));
+		productCreators.put("1", new MyKeyValue<String, Class<? extends ProductCreator>>("from console mode", ConsoleProductCreator.class));
+		productCreators.put("2", new MyKeyValue<String, Class<? extends ProductCreator>>("random mode", RandomProductCreator.class));
 	}
 	
 	private static void initServicesContainer() {
@@ -47,35 +47,35 @@ public class ConsoleGrocery {
 		servicesContainer = factory.buildServicesContainer(5);
 	}
 	
-	private static void serializeAllGoods() {
+	private static void serializeAllProducts() {
 		try {
-			serializer.serialize(servicesContainer.getGoodsService(), new File(SERIALIZED_GOODS_FILE));
+			serializer.serialize(servicesContainer.getProductsService(), new File(SERIALIZED_PRODUCTS_FILE));
 		} catch (IOException e) {
-			System.out.println("--Error while writing goods to file--");
+			System.out.println("--Error while writing products to file--");
 		}
 		try {
-			ntimesSerializer.serialize(servicesContainer.getGoodsService(), new File(SERIALIZED_NTIMES_GOODS_FILE));
+			ntimesSerializer.serialize(servicesContainer.getProductsService(), new File(SERIALIZED_NTIMES_PRODUCTS_FILE));
 		} catch (IOException e) {
-			System.out.println("--Error while writing goods to file (ntimes)--");
+			System.out.println("--Error while writing products to file (ntimes)--");
 		}
 		try {
-			gzipSerializer.serialize(servicesContainer.getGoodsService(), new File(SERIALIZED_GZIP_GOODS_FILE));
+			gzipSerializer.serialize(servicesContainer.getProductsService(), new File(SERIALIZED_GZIP_PRODUCTS_FILE));
 		} catch (IOException e) {
-			System.out.println("--Error while writing goods to file (gzip)--");
-		}
-	}
-	
-	private static void deserializeAllGoods() {
-		try {
-			serializer.deserialize(servicesContainer.getGoodsService(), new File(SERIALIZED_GOODS_FILE));
-		} catch (IOException e) {
-			System.out.println("--Error while reading goods from file--");
+			System.out.println("--Error while writing products to file (gzip)--");
 		}
 	}
 	
-	private static void chooseAddGoodCreatorImpl() {
-		System.out.println("Before grocery starts you should choose the mode of adding goods :");
-		for (Entry<String, MyKeyValue<String, Class<? extends GoodCreator>>> e : goodCreators.entrySet()) {
+	private static void deserializeAllProducts() {
+		try {
+			serializer.deserialize(servicesContainer.getProductsService(), new File(SERIALIZED_PRODUCTS_FILE));
+		} catch (IOException e) {
+			System.out.println("--Error while reading products from file--");
+		}
+	}
+	
+	private static void chooseAddProductCreatorImpl() {
+		System.out.println("Before grocery starts you should choose the mode of adding products :");
+		for (Entry<String, MyKeyValue<String, Class<? extends ProductCreator>>> e : productCreators.entrySet()) {
 			System.out.println(e.getKey() + " - " + e.getValue().getKey());
 		}
 		Scanner sc = new Scanner(System.in);
@@ -85,35 +85,35 @@ public class ConsoleGrocery {
 			if (line.isEmpty()) {
 				continue;
 			}
-			MyKeyValue<String, Class<? extends GoodCreator>> entry = goodCreators.get(String.valueOf(line.charAt(0)));
+			MyKeyValue<String, Class<? extends ProductCreator>> entry = productCreators.get(String.valueOf(line.charAt(0)));
 			if (entry == null) {
 				System.out.println("wrong input, try again");
 				continue;
 			}
 			System.out.println("chosen " + entry.getKey());
 			System.out.println();
-			goodCreatorImplClass = entry.getValue().getName();
+			productCreatorImplClass = entry.getValue().getName();
 			break;
 		}
 	}
 	
 	
 	public static void main(String[] args) {
-		chooseAddGoodCreatorImpl();
+		chooseAddProductCreatorImpl();
 		
 		initServicesContainer();
-		
-		deserializeAllGoods();
+
+		deserializeAllProducts();
 		
 		//hardcode filling
-		//GoodsInitializer.fillGoods(servicesContainer.getGoodsService(), 1);
+		//ProductsInitializer.fillProducts(servicesContainer.getProductsService(), 1);
 		
 		AbstractCommand.services = servicesContainer;
 		//grocery start
 		AbstractCommand main = new MainMenuCommand();
-		String addConfParam = AddGoodCommand.CREATOR_CLASS_PARAM + ":" + goodCreatorImplClass;
+		String addConfParam = AddProductCommand.CREATOR_CLASS_PARAM + ":" + productCreatorImplClass;
 		main.execute(new String[] {addConfParam});
 		
-		serializeAllGoods();
+		serializeAllProducts();
 	}
 }

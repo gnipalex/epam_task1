@@ -48,12 +48,4 @@ public class MusicInstrumentTest {
 		m1.setYear(m1.getYear() + 1);
 		assertTrue(m1.equals(m2));
 	}
-	
-	@Test
-	public void testEqualsToAnotherClass() {
-		MusicInstrument m1 = new MusicInstrument();
-		Sax s1 = new Sax();
-		assertFalse(m1.equals(s1));
-	}
-
 }

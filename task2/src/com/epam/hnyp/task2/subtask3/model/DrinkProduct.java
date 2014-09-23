@@ -6,40 +6,40 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WeightableGood extends Good implements Serializable {
-	
-	private static final long serialVersionUID = 2262341991941044041L;
-	
 
-	@GoodFieldAnnotation(friendlyMessage = "TOVAR_WEIGHTABLE_WEIGHT")
-	private double weight;
-	private static final String fieldWeight = "weight";
+public class DrinkProduct extends Product implements Serializable {
+
+	private static final long serialVersionUID = -7896820585762605712L;
 	
-	public WeightableGood() {
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_DRINK_VOLUME")
+	private double volume; 
+	private static final String fieldVolume = "volume";
+	
+	public DrinkProduct() {
 	}
 	
-	public WeightableGood(long id, String name, int price, double weight) {
+	public DrinkProduct(long id, String name, int price, double volume) {
 		super(id, name, price);
-		this.weight = weight;
+		this.volume = volume;
 	}
 
-	public double getWeight() {
-		return weight;
+	public double getVolume() {
+		return volume;
 	}
 
-	public void setWeight(double weight) {
-		this.weight = weight;
+	public void setVolume(double volume) {
+		this.volume = volume;
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + "\tweight = " + weight;
+		return super.toString() + "\tvol = " + volume;
 	}
 	
 	@Override
 	protected String printOtherColumn() {
 		Formatter fmt = new Formatter();
-		String s = String.format("weight=%1$.2f", weight);
+		String s = String.format("volume=%1$.2f", volume);
 		fmt.format("%1$20s", s);
 		return fmt.toString();
 	}
@@ -47,13 +47,13 @@ public class WeightableGood extends Good implements Serializable {
 	@Override
 	public void make(String data) throws IllegalDataFormatException {
 		super.make(data);
-		Matcher matcher = Pattern.compile(makeReqularExpression(fieldWeight))
+		Matcher matcher = Pattern.compile(makeReqularExpression(fieldVolume))
 				.matcher(data);
 		if (!matcher.find()) {
 			throw new IllegalDataFormatException();
 		}
 		try {
-			this.weight = Double.parseDouble(matcher.group(1));
+			this.volume = Double.parseDouble(matcher.group(1));
 		} catch (NumberFormatException e) {
 			throw new IllegalDataFormatException();
 		}
@@ -62,7 +62,7 @@ public class WeightableGood extends Good implements Serializable {
 	@Override
 	public Map<String, Class<?>> getFields() {
 		Map<String, Class<?>> map = super.getFields();
-		map.put(fieldWeight, Double.class);
+		map.put(fieldVolume, Double.class);
 		return map;
 	}
 }

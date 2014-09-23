@@ -53,7 +53,7 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 //		for (Order o : ConfigGrocery.STORE.getOrdersOfPeriod(date_left, date_right)) {
 //			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
 		for (Order o : getOrderService().getOrdersOfPeriod(date_left, date_right)) {
-			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfGoods());
+			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfProducts());
 		}
 		System.out.println("------------------------------------");
 	}

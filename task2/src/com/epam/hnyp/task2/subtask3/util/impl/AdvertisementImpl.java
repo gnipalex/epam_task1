@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.Product;
 import com.epam.hnyp.task2.subtask3.util.Advertisement;
 
 public class AdvertisementImpl implements Advertisement {
@@ -13,7 +13,7 @@ public class AdvertisementImpl implements Advertisement {
 	private final int listMaxCount;
 	
 	/**
-	 * Creates advertisement containing last goods
+	 * Creates advertisement containing last products
 	 * @param maxElements
 	 * @throws IllegalArgumentException if maxElements < 1
 	 */
@@ -25,23 +25,23 @@ public class AdvertisementImpl implements Advertisement {
 	}
 	
 	//container for last added elements
-	private Map<Long, Good> lastGoods = new LinkedHashMap<Long, Good>(
+	private Map<Long, Product> lastProducts = new LinkedHashMap<Long, Product>(
 			16, 0.75f, true) {
 		@Override
 		protected boolean removeEldestEntry(
-				java.util.Map.Entry<Long, Good> eldest) {
+				java.util.Map.Entry<Long, Product> eldest) {
 			return size() > listMaxCount;
 		}
 	};
 	
 	@Override
-	public void put(Good g) {
-		lastGoods.put(g.getId(), g);
+	public void put(Product p) {
+		lastProducts.put(p.getId(), p);
 	}
 
 	@Override
-	public Collection<Good> getLastGoods() {
-		return Collections.unmodifiableCollection(lastGoods.values());
+	public Collection<Product> getLastProducts() {
+		return Collections.unmodifiableCollection(lastProducts.values());
 	}
 	
 }

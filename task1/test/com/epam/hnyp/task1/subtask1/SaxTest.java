@@ -7,35 +7,25 @@ import org.junit.Test;
 public class SaxTest {
 
 	@Test
-	public void testEqualsSymetry() {
+	public void testEquals() {
 		Sax s1 = new Sax();
 		Sax s2 = new Sax();
 		assertTrue(s1.equals(s2) && s2.equals(s1));
 	}
 	
 	@Test
-	public void testEqualsReflection() {
+	public void testEqualsFalse() {
 		Sax s1 = new Sax();
-		assertTrue(s1.equals(s1));
+		Sax s2 = new Sax();
+		s2.setMaterial("aaa");
+		assertFalse(s1.equals(s2) && s2.equals(s1));
 	}
 	
 	@Test
-	public void testEqualsTransition() {
+	public void testEqualsToAnotherClass() {
+		MusicInstrument m1 = new MusicInstrument();
 		Sax s1 = new Sax();
-		Sax s2 = new Sax();
-		Sax s3 = new Sax();
-		assertTrue(s1.equals(s2) && s2.equals(s3) && s1.equals(s3));
-	}
-	
-	@Test
-	public void testEqualsConstancy() {
-		Sax s1 = new Sax();
-		Sax s2 = new Sax();
-		String oldMaterial = s1.getMaterial();
-		s1.setMaterial("");
-		assertFalse(s1.equals(s2));
-		s1.setMaterial(oldMaterial);
-		assertTrue(s1.equals(s2));
+		assertFalse(m1.equals(s1));
 	}
 
 }

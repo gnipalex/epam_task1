@@ -13,7 +13,7 @@ import com.epam.hnyp.task2.subtask3.model.reader.random.IntRandomFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.random.LongRandomFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.random.StringRandomFieldReader;
 
-public class RandomGoodCreator implements GoodCreator {
+public class RandomProductCreator implements ProductCreator {
 
 	private static final Map<Class<?>, FieldReader> READERS = new HashMap<Class<?>, FieldReader>();
 	static {
@@ -24,19 +24,19 @@ public class RandomGoodCreator implements GoodCreator {
 	}
 	
 	@Override
-	public void createGood(ParsableGoodNoReflection g) throws GoodCreateException {
+	public void createProduct(ParsableGoodNoReflection g) throws ProductCreateException {
 		StringBuilder stringData = new StringBuilder();
 		Map<String, Class<?>> fields = g.getFields();
 		for (Entry<String, Class<?>> e : fields.entrySet()) {
 			FieldReader reader = READERS.get(e.getValue());
 			if (reader == null) {
-				throw new GoodCreateException("reader for type" + e.getValue().getName() + " not found");
+				throw new ProductCreateException("reader for type" + e.getValue().getName() + " not found");
 			}
 			String readedVal = null;
 			try {
 				readedVal = reader.read().toString();
 			} catch (IllegalFieldFormatException e1) {
-				throw new GoodCreateException("unexpected random field read exception");
+				throw new ProductCreateException("unexpected random field read exception");
 			}
 			if (e.getValue() == String.class) {
 				readedVal = e.getKey() + "_" + readedVal;
@@ -46,7 +46,7 @@ public class RandomGoodCreator implements GoodCreator {
 		try {
 			g.make(stringData.toString());
 		} catch (IllegalDataFormatException e) {
-			throw new GoodCreateException("error while random filling class " + g.getClass().getName());
+			throw new ProductCreateException("error while random filling class " + g.getClass().getName());
 		}
 	}
 	

@@ -9,6 +9,6 @@ import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GoodFieldAnnotation {
+public @interface ProductFieldAnnotation {
 	String friendlyMessage();
 }

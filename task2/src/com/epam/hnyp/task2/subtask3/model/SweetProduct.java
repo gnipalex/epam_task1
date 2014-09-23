@@ -6,18 +6,19 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SweetGood extends WeightableGood implements Serializable {
+
+public class SweetProduct extends WeightableProduct implements Serializable {
+
 	private static final long serialVersionUID = 5307430294973106832L;
 
-
-	@GoodFieldAnnotation(friendlyMessage = "TOVAR_SWEET_FILL")
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_SWEET_FILL")
 	private String fill;
 	private static final String fieldFill = "fill";
 
-	public SweetGood() {
+	public SweetProduct() {
 	}
 	
-	public SweetGood(long id, String name, int price, double weight, String fill) {
+	public SweetProduct(long id, String name, int price, double weight, String fill) {
 		super(id, name, price, weight);
 		this.fill = fill;
 	}

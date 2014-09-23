@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.epam.hnyp.task2.subtask3.model.GoodFieldAnnotation;
+import com.epam.hnyp.task2.subtask3.model.ProductFieldAnnotation;
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection;
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
@@ -15,7 +15,7 @@ import com.epam.hnyp.task2.subtask3.model.reader.console.IntConsoleFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.LongConsoleFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.StringConsoleFieldReader;
 
-public class ConsoleReflectionGoodCreator implements GoodCreator {
+public class ConsoleReflectionProductCreator implements ProductCreator {
 
 	private static final Map<Class<?>, FieldReader> READERS = new HashMap<Class<?>, FieldReader>();
 	static {
@@ -26,16 +26,16 @@ public class ConsoleReflectionGoodCreator implements GoodCreator {
 	}
 	
 	@Override
-	public void createGood(ParsableGoodNoReflection g)
-			throws GoodCreateException {
-		List<Field> fields = readFieldsWithAnn(g.getClass(), GoodFieldAnnotation.class);
+	public void createProduct(ParsableGoodNoReflection g)
+			throws ProductCreateException {
+		List<Field> fields = readFieldsWithAnn(g.getClass(), ProductFieldAnnotation.class);
 		for (Field f : fields) {
 			
 		}
+		
 	}
 	
 	public List<Field> readFieldsWithAnn(Class<?> c, Class<? extends Annotation> a) {
-
 		List<Field> fieldsList = new ArrayList<>();
 		Field[] fields = c.getDeclaredFields();
 		if (fields != null) {
@@ -51,5 +51,7 @@ public class ConsoleReflectionGoodCreator implements GoodCreator {
 		}
 		return fieldsList;
 	}
+
+
 
 }
