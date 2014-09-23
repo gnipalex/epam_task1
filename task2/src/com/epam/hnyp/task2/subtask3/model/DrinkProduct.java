@@ -2,10 +2,10 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.util.Formatter;
 
-public class DrinkGood extends Good {
+public class DrinkProduct extends Product {
 	private double volume; 
 	
-	public DrinkGood(long id, String name, int price, double volume) {
+	public DrinkProduct(long id, String name, int price, double volume) {
 		super(id, name, price);
 		this.volume = volume;
 	}

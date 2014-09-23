@@ -11,7 +11,7 @@ import com.epam.hnyp.task2.subtask3.command.cart.CartPriceCommand;
 import com.epam.hnyp.task2.subtask3.command.cart.EmptyCartCommand;
 import com.epam.hnyp.task2.subtask3.command.cart.MakeOrderCommand;
 import com.epam.hnyp.task2.subtask3.command.cart.RemoveElementFromCartCommand;
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.Product;
 
 public class ViewCartCommand extends AbstractCommand {
 
@@ -58,14 +58,12 @@ public class ViewCartCommand extends AbstractCommand {
 		System.out.println("Items in cart :");
 		System.out.printf("%1$s\t%2$20s\t%3$s\t%4$s\n", "id", "name", "count", "cse");
 		System.out.println("-----------------------------------------------");
-//		if (ConfigGrocery.CART.size() == 0) {
 		if (getShopService().getCurrentCart().size() == 0) {
 			System.out.println("\t\t---empty---");
 		}
-//		for (Entry<Long, Integer> e : ConfigGrocery.CART.getAllItems().entrySet()){
+
 		for (Entry<Long, Integer> e : getShopService().getCurrentCart().getAllItems().entrySet()){
-//			Good g = ConfigGrocery.STORE.get(e.getKey());
-			Good g = getGoodsService().get(e.getKey());
+			Product g = getProductsService().get(e.getKey());
 			if (g != null) {
 				System.out.printf("%1$d\t%2$20s\t%3$d\t%4$d\n", g.getId(), g.getName(), e.getValue() ,g.getPrice());
 			} else {

@@ -8,7 +8,7 @@ public class RemoveElementFromCartCommand extends AbstractCommand {
 
 	@Override
 	public void execute(String... args) {
-		System.out.print("Please enter id of good to remove or just pass enter to cancel: ");
+		System.out.print("Please enter id of product to remove or just pass enter to cancel: ");
 		Scanner sc = new Scanner(System.in);
 		String line = sc.nextLine();
 		if (line.isEmpty()) {
@@ -21,7 +21,6 @@ public class RemoveElementFromCartCommand extends AbstractCommand {
 			System.out.println("##wrong format of id##");
 			return;
 		}
-//		ConfigGrocery.CART.remove(id);
 		getShopService().getCurrentCart().remove(id);
 	}
 

@@ -2,9 +2,9 @@ package com.epam.hnyp.task2.subtask3.util;
 
 import java.util.Collection;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.Product;
 
 public interface Advertisement {
-	void put(Good g);
-	Collection<Good> getLastGoods();
+	void put(Product p);
+	Collection<Product> getLastProducts();
 }

@@ -2,12 +2,12 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.util.Formatter;
 
-public class Good {
+public class Product {
 	private String name;
 	private int price;
 	private long id;
 	
-	public Good(long id, String name, int price) {
+	public Product(long id, String name, int price) {
 		this.id = id;
 		this.name = name;
 		this.price = price;

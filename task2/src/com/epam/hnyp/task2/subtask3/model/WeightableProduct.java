@@ -2,10 +2,10 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.util.Formatter;
 
-public class WeightableGood extends Good {
+public class WeightableProduct extends Product {
 	private double weight;
 	
-	public WeightableGood(long id, String name, int price, double weight) {
+	public WeightableProduct(long id, String name, int price, double weight) {
 		super(id, name, price);
 		this.weight = weight;
 	}

@@ -5,15 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.Product;
 import com.epam.hnyp.task2.subtask3.util.Cart;
 
 public class CartImpl implements Cart {
-	// key - id of good, val - count
+	// key - id of product, val - count
 	private Map<Long, Integer> cart = new HashMap<>();
 
 	@Override
-	public void add(Good g) {
+	public void add(Product g) {
 		if (cart.containsKey(g.getId())) {
 			int val = cart.get(g.getId());
 			cart.put(g.getId(), ++val);
@@ -23,7 +23,7 @@ public class CartImpl implements Cart {
 	}
 
 	@Override
-	public void remove(Good g) {
+	public void remove(Product g) {
 		remove(g.getId());
 	}
 	
