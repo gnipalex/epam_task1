@@ -11,4 +11,5 @@ import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 @Target(ElementType.FIELD)
 public @interface ProductFieldAnnotation {
 	String friendlyMessage();
+	Class<?> type();
 }

@@ -11,7 +11,7 @@ public class SweetProduct extends WeightableProduct implements Serializable {
 
 	private static final long serialVersionUID = 5307430294973106832L;
 
-	@ProductFieldAnnotation(friendlyMessage = "TOVAR_SWEET_FILL")
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_SWEET_FILL", type = String.class)
 	private String fill;
 	private static final String fieldFill = "fill";
 

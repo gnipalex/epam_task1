@@ -11,7 +11,7 @@ public class WeightableProduct extends Product implements Serializable {
 	
 	private static final long serialVersionUID = 2262341991941044041L;
 	
-	@ProductFieldAnnotation(friendlyMessage = "TOVAR_WEIGHTABLE_WEIGHT")
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_WEIGHTABLE_WEIGHT", type = Double.class)
 	private double weight;
 	private static final String fieldWeight = "weight";
 	

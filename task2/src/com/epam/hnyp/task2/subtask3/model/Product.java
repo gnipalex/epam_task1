@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 public class Product implements Serializable, ParsableGoodNoReflection {
 	private static final long serialVersionUID = 6101697799798820856L;
 
-	@ProductFieldAnnotation(friendlyMessage = "TOVAR_NAME")
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_NAME", type = String.class)
 	private String name;
 	private static final String fieldName = "name";
 
-	@ProductFieldAnnotation(friendlyMessage = "TOVAR_PRICE")
+	@ProductFieldAnnotation(friendlyMessage = "TOVAR_PRICE", type = Integer.class)
 	private int price;
 	private static final String fieldPrice = "price";
 

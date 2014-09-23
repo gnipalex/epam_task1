@@ -9,7 +9,9 @@ import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.model.ProductFieldAnnotation;
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection;
+import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator.ProductCreateException;
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
+import com.epam.hnyp.task2.subtask3.model.reader.FieldReader.IllegalFieldFormatException;
 import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.IntConsoleFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.LongConsoleFieldReader;
@@ -24,18 +26,36 @@ public class ConsoleReflectionProductCreator implements ProductCreator {
 		READERS.put(Integer.class, new IntConsoleFieldReader(System.in));
 		READERS.put(Long.class, new LongConsoleFieldReader(System.in));
 	}
-	
+
 	@Override
 	public void createProduct(ParsableGoodNoReflection g)
 			throws ProductCreateException {
-		List<Field> fields = readFieldsWithAnn(g.getClass(), ProductFieldAnnotation.class);
+		List<Field> fields = readFieldsWithAnn(g.getClass(),
+				ProductFieldAnnotation.class);
 		for (Field f : fields) {
-			
+			ProductFieldAnnotation ann = f.getAnnotation(ProductFieldAnnotation.class);
+			FieldReader reader = READERS.get(ann.type());
+			if (reader == null) {
+				throw new ProductCreateException("reader not found for field '"
+						+ ann.type() + "'");
+			}
+			while(true) {
+				//parsing field with parser
+				System.out.print("Enter " + ann.friendlyMessage() + " : ");
+				try {
+					Object parsed = reader.read();
+					
+				} catch (IllegalFieldFormatException ex) {
+					System.out.println("##field format error##");
+					continue;
+				}
+				break;
+			}
 		}
-		
 	}
-	
-	public List<Field> readFieldsWithAnn(Class<?> c, Class<? extends Annotation> a) {
+
+	public List<Field> readFieldsWithAnn(Class<?> c,
+			Class<? extends Annotation> a) {
 		List<Field> fieldsList = new ArrayList<>();
 		Field[] fields = c.getDeclaredFields();
 		if (fields != null) {
@@ -51,7 +71,5 @@ public class ConsoleReflectionProductCreator implements ProductCreator {
 		}
 		return fieldsList;
 	}
-
-
 
 }
