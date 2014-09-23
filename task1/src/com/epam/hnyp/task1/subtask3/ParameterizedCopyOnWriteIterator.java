@@ -5,13 +5,13 @@ import java.util.NoSuchElementException;
 
 import com.epam.hnyp.task1.subtask2.Condition;
 
-public class ParameterizedStableIterator<E> implements Iterator<E> {
+public class ParameterizedCopyOnWriteIterator<E> implements Iterator<E> {
 	private ListIteratorBridge<E> bridge;
 	private Condition<E> condition;
 
 	private int curentIndex;
 
-	public ParameterizedStableIterator(ListIteratorBridge<E> bridge, Condition<E> condition) {
+	public ParameterizedCopyOnWriteIterator(ListIteratorBridge<E> bridge, Condition<E> condition) {
 		this.bridge = bridge;
 		this.condition = condition;
 	}
@@ -20,7 +20,6 @@ public class ParameterizedStableIterator<E> implements Iterator<E> {
 	public boolean hasNext() {
 		int i = curentIndex;
 		while (i < bridge.getList().size()) {
-			// if condition is not specified just take next element
 			E e = bridge.getList().get(i);
 			if (condition != null) {
 				if (!condition.satisfy(e)) {

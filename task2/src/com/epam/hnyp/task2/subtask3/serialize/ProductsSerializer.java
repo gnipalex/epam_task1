@@ -11,15 +11,15 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
-import com.epam.hnyp.task2.subtask3.service.GoodsService;
+import com.epam.hnyp.task2.subtask3.model.Product;
+import com.epam.hnyp.task2.subtask3.service.ProductsService;
 
-public class GoodsSerializer {
+public class ProductsSerializer {
 	
-	public void serialize(GoodsService goodServ, File file) throws IOException {
+	public void serialize(ProductsService prodServ, File file) throws IOException {
 		OutputStream stream = new FileOutputStream(file);
 		try {
-			serialize(goodServ, stream);
+			serialize(prodServ, stream);
 		} finally {
 			if (stream != null) {
 				stream.close();
@@ -27,22 +27,22 @@ public class GoodsSerializer {
 		}
 	}
 	
-	protected void serialize(GoodsService goodServ, OutputStream stream) throws IOException {
+	protected void serialize(ProductsService prodServ, OutputStream stream) throws IOException {
 		ObjectOutputStream objectStream = new ObjectOutputStream(stream);
-		Collection<Good> goods = goodServ.getAll();
-		serializeObjects(goods, objectStream);
+		Collection<Product> prods = prodServ.getAll();
+		serializeObjects(prods, objectStream);
 	}
 	
-	protected void serializeObjects(Collection<Good> goods, ObjectOutputStream oos) throws IOException {
-		for (Good g : goods) {
+	protected void serializeObjects(Collection<Product> prods, ObjectOutputStream oos) throws IOException {
+		for (Product g : prods) {
 			oos.writeObject(g);
 		}
 	}
 	
-	public void deserialize(GoodsService goodServ, File file) throws IOException {
+	public void deserialize(ProductsService prodServ, File file) throws IOException {
 		InputStream stream = new FileInputStream(file);
 		try {
-			deserialize(goodServ, stream);
+			deserialize(prodServ, stream);
 		} finally {
 			if (stream != null) {
 				stream.close();
@@ -50,14 +50,14 @@ public class GoodsSerializer {
 		}
 	}
 	
-	protected void deserialize(GoodsService goodServ, InputStream stream) throws IOException {
+	protected void deserialize(ProductsService prodServ, InputStream stream) throws IOException {
 		ObjectInputStream objectStream = new ObjectInputStream(stream);
 		Object obj = null;
 		while (true) {
 			try {
 				obj = objectStream.readObject();
-				if (obj instanceof Good) {
-					goodServ.add((Good)obj);
+				if (obj instanceof Product) {
+					prodServ.add((Product)obj);
 				}
 			} catch (ClassNotFoundException e) {
 				continue;

@@ -8,7 +8,7 @@ public class AddToCartCommand extends AbstractCommand{
 
 	@Override
 	public void execute(String... args) {
-		System.out.print("Please enter good id to add it to cart or just pass enter to cancel : ");
+		System.out.print("Please enter product id to add it to cart or just pass enter to cancel : ");
 		Scanner sc = new Scanner(System.in);
 		String line = sc.nextLine();
 		if (line.isEmpty()) {
@@ -21,19 +21,11 @@ public class AddToCartCommand extends AbstractCommand{
 			System.out.println("##wrong format of id##");
 			return;
 		}
-		//Good good = ConfigGrocery.STORE.get(id);
-//		Good good = AbstractCommand.services.getGoodsService().get(id);
-//		if (good == null) {
-//			System.out.println("good with id=[" + id + "] not found");
-//			return;
-//		}
-		//ConfigGrocery.CART.add(good);
 		if (!getShopService().addToCart(id)) {
-			System.out.println("good with id=[" + id + "] not found");
+			System.out.println("product with id=[" + id + "] not found");
 			return;
 		}
-		//System.out.println("good id=[" + id + "] added, now you have " + ConfigGrocery.CART.size() + " items in your cart");
-		System.out.println("good id=[" + id + "] added, now you have " + getShopService().getCurrentCart().size() + " items in your cart");
+		System.out.println("product id=[" + id + "] added, now you have " + getShopService().getCurrentCart().size() + " items in your cart");
 	}
 
 	@Override

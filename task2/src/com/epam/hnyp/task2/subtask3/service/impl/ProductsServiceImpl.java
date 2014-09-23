@@ -4,25 +4,25 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
-import com.epam.hnyp.task2.subtask3.repo.GoodRepo;
-import com.epam.hnyp.task2.subtask3.service.GoodsService;
+import com.epam.hnyp.task2.subtask3.model.Product;
+import com.epam.hnyp.task2.subtask3.repo.ProductRepo;
+import com.epam.hnyp.task2.subtask3.service.ProductsService;
 
-public class GoodsServiceImpl implements GoodsService {
-	private GoodRepo goodRepo;
+public class ProductsServiceImpl implements ProductsService {
+	private ProductRepo goodRepo;
 	
 	@Override
-	public Good get(long id) {
+	public Product get(long id) {
 		return goodRepo.get(id);
 	}
 
 	@Override
-	public Collection<Good> getAll() {
+	public Collection<Product> getAll() {
 		return goodRepo.getAll();
 	}
 
 	@Override
-	public boolean add(Good g) {
+	public boolean add(Product g) {
 		return goodRepo.add(g);
 	}
 
@@ -30,7 +30,7 @@ public class GoodsServiceImpl implements GoodsService {
 	public int getPriceForAll(Map<Long, Integer> items) {
 		int cost = 0;
 		for (Entry<Long, Integer> e : items.entrySet()) {
-			Good g = get(e.getKey());
+			Product g = get(e.getKey());
 			if (g != null) {
 				cost += g.getPrice() * e.getValue();
 			}
@@ -38,11 +38,11 @@ public class GoodsServiceImpl implements GoodsService {
 		return cost;
 	}
 	
-	public GoodRepo getGoodRepo() {
+	public ProductRepo getGoodRepo() {
 		return goodRepo;
 	}
 	
-	public void setGoodRepo(GoodRepo goodRepo) {
+	public void setGoodRepo(ProductRepo goodRepo) {
 		this.goodRepo = goodRepo;
 	}
 }

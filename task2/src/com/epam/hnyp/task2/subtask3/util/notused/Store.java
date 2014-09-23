@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.Product;
 import com.epam.hnyp.task2.subtask3.model.Order;
 
 public interface Store {
@@ -14,12 +14,12 @@ public interface Store {
 	 * @param id
 	 * @return
 	 */
-	Good get(long id);
+	Product get(long id);
 	/**
 	 * Returns all goods from the store
 	 * @return good
 	 */
-	Collection<Good> getAll();
+	Collection<Product> getAll();
 	/**
 	 * Returns the price of all goods in cart. If some elements do not present in the store, they will be omitted.
 	 * 

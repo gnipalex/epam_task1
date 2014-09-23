@@ -3,8 +3,8 @@ package com.epam.hnyp.task2.subtask3.service.impl;
 import java.util.Collection;
 import java.util.Date;
 
-import com.epam.hnyp.task2.subtask3.model.Good;
-import com.epam.hnyp.task2.subtask3.service.GoodsService;
+import com.epam.hnyp.task2.subtask3.model.Product;
+import com.epam.hnyp.task2.subtask3.service.ProductsService;
 import com.epam.hnyp.task2.subtask3.service.OrderService;
 import com.epam.hnyp.task2.subtask3.service.ShopService;
 import com.epam.hnyp.task2.subtask3.util.Advertisement;
@@ -14,11 +14,11 @@ public class ShopServiceImpl implements ShopService {
 	private Cart cart;
 	private Advertisement advertisement;
 	private OrderService orderService;
-	private GoodsService goodsService;
+	private ProductsService productsService;
 	
 	@Override
 	public boolean addToCart(long id) {
-		Good g = goodsService.get(id);
+		Product g = productsService.get(id);
 		if (g == null) {
 			return false;
 		}
@@ -44,13 +44,13 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	@Override
-	public Collection<Good> getPopularGoods() {
-		return advertisement.getLastGoods();
+	public Collection<Product> getPopularProducts() {
+		return advertisement.getLastProducts();
 	}
 
 	@Override
 	public int getPriceForCart() {
-		return goodsService.getPriceForAll(cart.getAllItems());
+		return productsService.getPriceForAll(cart.getAllItems());
 	}
 
 	public Cart getCart() {
@@ -77,11 +77,11 @@ public class ShopServiceImpl implements ShopService {
 		this.orderService = orderService;
 	}
 
-	public GoodsService getGoodsService() {
-		return goodsService;
+	public ProductsService getProductsService() {
+		return productsService;
 	}
 
-	public void setGoodsService(GoodsService goodsService) {
-		this.goodsService = goodsService;
+	public void setProductsService(ProductsService goodsService) {
+		this.productsService = goodsService;
 	}
 }

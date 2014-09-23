@@ -1,7 +1,4 @@
 import java.io.IOException;
-import java.util.Scanner;
-
-import com.epam.hnyp.task2.subtask3.model.Good;
 
 
 public class Test { 
