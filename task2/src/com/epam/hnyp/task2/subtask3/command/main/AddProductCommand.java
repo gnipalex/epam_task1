@@ -32,8 +32,8 @@ public class AddProductCommand extends AbstractCommand {
 
 	@Override
 	public void execute(String... args) {
-		ProductCreator goodCreator = buildCreator(args);
-		if (goodCreator == null) {
+		ProductCreator productCreator = buildCreator(args);
+		if (productCreator == null) {
 			return;
 		}
 		
@@ -55,22 +55,22 @@ public class AddProductCommand extends AbstractCommand {
 			return;
 		}
 		
-		Product good = instantiateProduct(chosedType.getValue());
-		if (good == null) {
+		Product product = instantiateProduct(chosedType.getValue());
+		if (product == null) {
 			System.out.println("##error, product cannot be added##");
 			return;
 		}
 		
 		System.out.println("Creating new '" + chosedType.getKey() + "'");
 		try {
-			goodCreator.createProduct(good);
+			productCreator.createProduct(product);
 		} catch (ProductCreateException e) {
 			System.out.println("##error while creating product##");
 			System.out.println(e.getMessage());
 			return;
 		}
-		System.out.println("Created new '" + chosedType.getKey() + "' : " + good.toString());
-		if (getProductsService().add(good)) {
+		System.out.println("Created new '" + chosedType.getKey() + "' : " + product.toString());
+		if (getProductsService().add(product)) {
 			System.out.println("Product successfuly saved");
 		} else {
 			System.out.println("Product NOT saved, something went wrong");
@@ -95,7 +95,7 @@ public class AddProductCommand extends AbstractCommand {
 	}
 	
 	private ProductCreator buildCreator(String[] args) {
-		ProductCreator goodCreator = null;
+		ProductCreator prodCreator = null;
 		String className = null;
 		for (String s : args) {
 			if (s.startsWith(CREATOR_CLASS_PARAM)) {
@@ -110,7 +110,7 @@ public class AddProductCommand extends AbstractCommand {
 			}
 		}
 		try {
-			goodCreator = (ProductCreator) Class.forName(className).newInstance();
+			prodCreator = (ProductCreator) Class.forName(className).newInstance();
 		} catch (ClassNotFoundException e) {
 			System.out
 					.println("##error, implementation of product creator not found##");
@@ -119,7 +119,7 @@ public class AddProductCommand extends AbstractCommand {
 			System.out.println("##error, creator is not created, product cannot be added##");
 			return null;
 		}
-		return goodCreator;
+		return prodCreator;
 	}
 
 	@Override

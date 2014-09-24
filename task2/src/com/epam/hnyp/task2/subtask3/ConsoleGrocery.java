@@ -19,9 +19,9 @@ import com.epam.hnyp.task2.subtask3.model.creator.ConsoleProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ConsoleReflectionProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.RandomProductCreator;
-import com.epam.hnyp.task2.subtask3.serialize.ProductsSerializer;
 import com.epam.hnyp.task2.subtask3.serialize.GzipProductsSerializer;
 import com.epam.hnyp.task2.subtask3.serialize.NtimesProductsSerializer;
+import com.epam.hnyp.task2.subtask3.serialize.ProductsSerializer;
 
 public class ConsoleGrocery {
 	public static final String SERIALIZED_PRODUCTS_FILE = "products.dat";

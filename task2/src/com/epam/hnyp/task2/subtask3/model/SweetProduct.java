@@ -6,9 +6,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class SweetProduct extends WeightableProduct implements Serializable {
-
 	private static final long serialVersionUID = 5307430294973106832L;
 
 	private String fill;

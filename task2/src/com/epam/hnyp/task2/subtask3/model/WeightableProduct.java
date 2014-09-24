@@ -8,9 +8,8 @@ import java.util.regex.Pattern;
 
 
 public class WeightableProduct extends Product implements Serializable {
-	
 	private static final long serialVersionUID = 2262341991941044041L;
-	
+
 	private double weight;
 	private static final String fieldWeight = "weight";
 	

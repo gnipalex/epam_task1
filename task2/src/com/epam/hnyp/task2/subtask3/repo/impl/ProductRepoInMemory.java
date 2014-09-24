@@ -9,7 +9,8 @@ import com.epam.hnyp.task2.subtask3.model.Product;
 import com.epam.hnyp.task2.subtask3.repo.ProductRepo;
 
 public class ProductRepoInMemory implements ProductRepo {
-
+	private long lastId;
+	
 	private Map<Long, Product> products = new LinkedHashMap<>();
 	
 	@Override
@@ -24,9 +25,22 @@ public class ProductRepoInMemory implements ProductRepo {
 
 	@Override
 	public boolean add(Product g) {
-		Product good = products.get(g.getId());
-		if (good != null) {
-			return false;
+		if (g.getId() == 0) {
+			//looking for free id
+			while(true) {
+				g.setId(++lastId);
+				Product prod = products.get(g.getId());
+				if (prod != null) {
+					continue;
+				}
+				break;
+			}
+		} else {
+			Product prod = products.get(g.getId());
+			if (prod != null) {
+				return false;
+			}
+			lastId = g.getId();
 		}
 		products.put(g.getId(), g);
 		return true;

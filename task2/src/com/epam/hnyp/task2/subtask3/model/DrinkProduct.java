@@ -6,9 +6,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class DrinkProduct extends Product implements Serializable {
-
 	private static final long serialVersionUID = -7896820585762605712L;
 	
 	private double volume; 
