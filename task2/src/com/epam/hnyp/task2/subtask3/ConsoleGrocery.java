@@ -16,9 +16,11 @@ import com.epam.hnyp.task2.subtask3.factory.ServicesContainer;
 import com.epam.hnyp.task2.subtask3.factory.ServicesFactory;
 import com.epam.hnyp.task2.subtask3.factory.ServicesFactoryInMemory;
 import com.epam.hnyp.task2.subtask3.model.creator.ConsoleProductCreator;
+import com.epam.hnyp.task2.subtask3.model.creator.RandomProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ConsoleReflectionProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator;
-import com.epam.hnyp.task2.subtask3.model.creator.RandomProductCreator;
+import com.epam.hnyp.task2.subtask3.model.creator.RandomReflectionProductCreator;
+import com.epam.hnyp.task2.subtask3.model.creator.__RandomProductCreator;
 import com.epam.hnyp.task2.subtask3.serialize.GzipProductsSerializer;
 import com.epam.hnyp.task2.subtask3.serialize.NtimesProductsSerializer;
 import com.epam.hnyp.task2.subtask3.serialize.ProductsSerializer;
@@ -41,7 +43,9 @@ public class ConsoleGrocery {
 	static {
 		productCreators.put("1", new MyKeyValue<String, Class<? extends ProductCreator>>("from console mode", ConsoleProductCreator.class));
 		productCreators.put("2", new MyKeyValue<String, Class<? extends ProductCreator>>("random mode", RandomProductCreator.class));
-		productCreators.put("3", new MyKeyValue<String, Class<? extends ProductCreator>>("from console using annotations", ConsoleReflectionProductCreator.class));
+		productCreators.put("3", new MyKeyValue<String, Class<? extends ProductCreator>>("from console using annotations mode", ConsoleReflectionProductCreator.class));
+		productCreators.put("4", new MyKeyValue<String, Class<? extends ProductCreator>>("random using annotations mode", RandomReflectionProductCreator.class));
+		
 	}
 	
 	private static void initServicesContainer() {

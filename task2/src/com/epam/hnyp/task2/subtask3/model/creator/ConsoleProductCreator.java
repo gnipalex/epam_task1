@@ -29,7 +29,7 @@ public class ConsoleProductCreator implements ProductCreator {
 		StringBuilder stringData = new StringBuilder();
 		for (Entry<String, Class<?>> e : fields.entrySet()) {
 			//getting parser for field
-			FieldReader reader = READERS.get(e.getValue());
+			FieldReader reader = getFieldReader(e.getValue());
 			if (reader == null) {
 				throw new ProductCreateException("parser not found for field '" + e.getKey() + "'");
 			}
@@ -38,6 +38,7 @@ public class ConsoleProductCreator implements ProductCreator {
 				System.out.print("Please enter field '" + e.getKey() + "' : ");
 				try {
 					Object parsed = reader.read();
+					parsed = processReadedValue(parsed, e.getValue(), e.getKey());
 					stringData.append(e.getKey()).append(":").append(parsed.toString()).append(";");
 				} catch (IllegalFieldFormatException ex) {
 					System.out.println("##field format error##");
@@ -53,6 +54,12 @@ public class ConsoleProductCreator implements ProductCreator {
 		}
 	}
 	
+	protected Object processReadedValue(Object readedValue, Class<?> valType, String fieldName) {
+		return readedValue;
+	}
 	
+	protected FieldReader getFieldReader(Class<?> type) {
+		return READERS.get(type);
+	}
 
 }

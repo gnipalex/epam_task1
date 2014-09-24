@@ -25,7 +25,7 @@ public class WeightableProduct extends Product implements Serializable {
 		return weight;
 	}
 
-	@ProductSetterAnnotation(friendlyMessage = "TOVAR_WEIGHTABLE_WEIGHT", type = Double.class)
+	@ProductSetterAnnotation(friendlyMessage = "PROD_WEIGHTABLE_WEIGHT", type = Double.class)
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}

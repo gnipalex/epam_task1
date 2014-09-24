@@ -7,7 +7,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection;
 import com.epam.hnyp.task2.subtask3.model.ProductSetterAnnotation;
@@ -31,19 +33,22 @@ public class ConsoleReflectionProductCreator implements ProductCreator {
 	@Override
 	public void createProduct(ParsableGoodNoReflection g)
 			throws ProductCreateException {
+		ResourceBundle resources = ResourceBundle.getBundle("modelFieldsNames", new Locale("ru"));
+		
 		List<Method> setters = getSettersWithAnnotation(g.getClass(), ProductSetterAnnotation.class);
 		for (Method m : setters) {
 			ProductSetterAnnotation ann = m.getAnnotation(ProductSetterAnnotation.class);
-			FieldReader reader = READERS.get(ann.type());
+			FieldReader reader = getFieldReader(ann.type());
 			if (reader == null) {
 				throw new ProductCreateException("reader not found for field '"
 						+ ann.type() + "'");
 			}
 			while(true) {
 				//parsing field with parser
-				System.out.print("Enter " + ann.friendlyMessage() + " : ");
+				System.out.print("Enter " + resources.getString(ann.friendlyMessage()) + " : ");
 				try {
 					Object parsed = reader.read();
+					parsed = processReadedValue(parsed, ann.type(), m.getName().substring(3));
 					try {
 						m.invoke(g, parsed);
 					} catch (Exception e) {
@@ -69,6 +74,15 @@ public class ConsoleReflectionProductCreator implements ProductCreator {
 			}
 		}
 		return setters;
+	}
+	
+	protected Object processReadedValue(Object readedValue, Class<?> valType,
+			String fieldName) {
+		return readedValue;
+	}
+	
+	protected FieldReader getFieldReader(Class<?> type) {
+		return READERS.get(type);
 	}
 
 }

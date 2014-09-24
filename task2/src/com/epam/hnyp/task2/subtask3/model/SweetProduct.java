@@ -24,7 +24,7 @@ public class SweetProduct extends WeightableProduct implements Serializable {
 		return fill;
 	}
 
-	@ProductSetterAnnotation(friendlyMessage = "TOVAR_SWEET_FILL", type = String.class)
+	@ProductSetterAnnotation(friendlyMessage = "PROD_SWEET_FILL", type = String.class)
 	public void setFill(String fill) {
 		this.fill = fill;
 	}

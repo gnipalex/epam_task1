@@ -9,7 +9,7 @@ import com.epam.hnyp.task2.subtask3.model.reader.random.IntRandomFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.random.LongRandomFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.random.StringRandomFieldReader;
 
-public class RandomProductCreator extends ConsoleProductCreator {
+public class RandomReflectionProductCreator extends ConsoleReflectionProductCreator {
 	private static final Map<Class<?>, FieldReader> READERS = new HashMap<Class<?>, FieldReader>();
 	static {
 		READERS.put(String.class, new StringRandomFieldReader(5));

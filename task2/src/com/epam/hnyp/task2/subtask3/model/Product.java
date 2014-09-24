@@ -40,12 +40,12 @@ public class Product implements Serializable, ParsableGoodNoReflection {
 		return id;
 	}
 
-	@ProductSetterAnnotation(friendlyMessage = "TOVAR_NAME", type = String.class)
+	@ProductSetterAnnotation(friendlyMessage = "PROD_NAME", type = String.class)
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	@ProductSetterAnnotation(friendlyMessage = "TOVAR_PRICE", type = Integer.class)
+	@ProductSetterAnnotation(friendlyMessage = "PROD_PRICE", type = Integer.class)
 	public void setPrice(int price) {
 		this.price = price;
 	}

@@ -24,7 +24,7 @@ public class DrinkProduct extends Product implements Serializable {
 		return volume;
 	}
 
-	@ProductSetterAnnotation(friendlyMessage = "TOVAR_DRINK_VOLUME", type = Double.class)
+	@ProductSetterAnnotation(friendlyMessage = "PROD_DRINK_VOLUME", type = Double.class)
 	public void setVolume(double volume) {
 		this.volume = volume;
 	}
