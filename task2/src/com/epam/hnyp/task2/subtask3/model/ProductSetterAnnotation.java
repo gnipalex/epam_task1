@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface ProductFieldAnnotation {
+@Target(ElementType.METHOD)
+public @interface ProductSetterAnnotation {
 	String friendlyMessage();
 	Class<?> type();
 }

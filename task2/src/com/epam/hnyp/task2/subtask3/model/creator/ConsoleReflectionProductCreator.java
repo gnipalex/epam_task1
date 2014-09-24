@@ -2,14 +2,15 @@ package com.epam.hnyp.task2.subtask3.model.creator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.epam.hnyp.task2.subtask3.model.ProductFieldAnnotation;
 import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection;
-import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator.ProductCreateException;
+import com.epam.hnyp.task2.subtask3.model.ProductSetterAnnotation;
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader.IllegalFieldFormatException;
 import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
@@ -30,10 +31,9 @@ public class ConsoleReflectionProductCreator implements ProductCreator {
 	@Override
 	public void createProduct(ParsableGoodNoReflection g)
 			throws ProductCreateException {
-		List<Field> fields = readFieldsWithAnn(g.getClass(),
-				ProductFieldAnnotation.class);
-		for (Field f : fields) {
-			ProductFieldAnnotation ann = f.getAnnotation(ProductFieldAnnotation.class);
+		List<Method> setters = getSettersWithAnnotation(g.getClass(), ProductSetterAnnotation.class);
+		for (Method m : setters) {
+			ProductSetterAnnotation ann = m.getAnnotation(ProductSetterAnnotation.class);
 			FieldReader reader = READERS.get(ann.type());
 			if (reader == null) {
 				throw new ProductCreateException("reader not found for field '"
@@ -44,7 +44,11 @@ public class ConsoleReflectionProductCreator implements ProductCreator {
 				System.out.print("Enter " + ann.friendlyMessage() + " : ");
 				try {
 					Object parsed = reader.read();
-					
+					try {
+						m.invoke(g, parsed);
+					} catch (Exception e) {
+						throw new ProductCreateException("error setting value to " + g.getClass().getName());
+					}
 				} catch (IllegalFieldFormatException ex) {
 					System.out.println("##field format error##");
 					continue;
@@ -53,23 +57,18 @@ public class ConsoleReflectionProductCreator implements ProductCreator {
 			}
 		}
 	}
-
-	public List<Field> readFieldsWithAnn(Class<?> c,
-			Class<? extends Annotation> a) {
-		List<Field> fieldsList = new ArrayList<>();
-		Field[] fields = c.getDeclaredFields();
-		if (fields != null) {
-			for (Field f : fields) {
-				if (f.isAnnotationPresent(a)) {
-					fieldsList.add(f);
+	
+	private List<Method> getSettersWithAnnotation(Class<?> c, Class<? extends Annotation> a) {
+		List<Method> setters = new ArrayList<>();
+		Method[] methods = c.getMethods();
+		if (methods != null) {
+			for (Method m : methods) {
+				if (m.isAnnotationPresent(a)) {
+					setters.add(m);
 				}
 			}
 		}
-		Class<?> sclazz = c.getSuperclass();
-		if (sclazz != null) {
-			fieldsList.addAll(readFieldsWithAnn(sclazz, a));
-		}
-		return fieldsList;
+		return setters;
 	}
 
 }

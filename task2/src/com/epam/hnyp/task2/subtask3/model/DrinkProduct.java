@@ -11,7 +11,6 @@ public class DrinkProduct extends Product implements Serializable {
 
 	private static final long serialVersionUID = -7896820585762605712L;
 	
-	@ProductFieldAnnotation(friendlyMessage = "TOVAR_DRINK_VOLUME", type = Double.class)
 	private double volume; 
 	private static final String fieldVolume = "volume";
 	
@@ -27,6 +26,7 @@ public class DrinkProduct extends Product implements Serializable {
 		return volume;
 	}
 
+	@ProductSetterAnnotation(friendlyMessage = "TOVAR_DRINK_VOLUME", type = Double.class)
 	public void setVolume(double volume) {
 		this.volume = volume;
 	}
