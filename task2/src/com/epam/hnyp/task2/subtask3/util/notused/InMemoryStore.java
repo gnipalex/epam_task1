@@ -9,33 +9,33 @@ import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import com.epam.hnyp.task2.subtask3.model.CerealGood;
-import com.epam.hnyp.task2.subtask3.model.DrinkGood;
-import com.epam.hnyp.task2.subtask3.model.Good;
+import com.epam.hnyp.task2.subtask3.model.CerealProduct;
+import com.epam.hnyp.task2.subtask3.model.DrinkProduct;
+import com.epam.hnyp.task2.subtask3.model.Product;
 import com.epam.hnyp.task2.subtask3.model.Order;
-import com.epam.hnyp.task2.subtask3.model.SweetGood;
-import com.epam.hnyp.task2.subtask3.model.VegetableGood;
-import com.epam.hnyp.task2.subtask3.model.WeightableGood;
+import com.epam.hnyp.task2.subtask3.model.SweetProduct;
+import com.epam.hnyp.task2.subtask3.model.VegetableProduct;
+import com.epam.hnyp.task2.subtask3.model.WeightableProduct;
 
 public class InMemoryStore implements Store {
-	private Map<Long, Good> goods = new LinkedHashMap<>();
+	private Map<Long, Product> goods = new LinkedHashMap<>();
 	{
 		long id = 1;
-		Good g1 = new CerealGood(id++, "sugar", 12, 2);
+		Product g1 = new CerealProduct(id++, "sugar", 12, 2);
 		goods.put(g1.getId(), g1);
-		Good g2 = new DrinkGood(id++, "milk", 11, 1);
+		Product g2 = new DrinkProduct(id++, "milk", 11, 1);
 		goods.put(g2.getId(), g2);
-		Good g3 = new SweetGood(id++, "vafles artek", 30, 0.2, "chocolate");
+		Product g3 = new SweetProduct(id++, "vafles artek", 30, 0.2, "chocolate");
 		goods.put(g3.getId(), g3);
-		Good g4 = new VegetableGood(id++, "potato", 4, 1);
+		Product g4 = new VegetableProduct(id++, "potato", 4, 1);
 		goods.put(g4.getId(), g4);
-		Good g5 = new WeightableGood(id++, "bread", 5, 0.7);
+		Product g5 = new WeightableProduct(id++, "bread", 5, 0.7);
 		goods.put(g5.getId(), g5);
-		Good g6 = new DrinkGood(id++, "cola", 12, 2);
+		Product g6 = new DrinkProduct(id++, "cola", 12, 2);
 		goods.put(g6.getId(), g6);
-		Good g7 = new Good(id++, "sigarettes", 20);
+		Product g7 = new Product(id++, "sigarettes", 20);
 		goods.put(g7.getId(), g7);
-		Good g8 = new Good(id++, "butter", 15);
+		Product g8 = new Product(id++, "butter", 15);
 		goods.put(g8.getId(), g8);
 	}
 
@@ -54,12 +54,12 @@ public class InMemoryStore implements Store {
 	}
 
 	@Override
-	public Good get(long id) {
+	public Product get(long id) {
 		return goods.get(id);
 	}
 
 	@Override
-	public Collection<Good> getAll() {
+	public Collection<Product> getAll() {
 		return Collections.unmodifiableCollection(goods.values());
 	}
 
@@ -67,7 +67,7 @@ public class InMemoryStore implements Store {
 	public int getPriceForAll(Map<Long, Integer> items) {
 		int cost = 0;
 		for (Entry<Long, Integer> e : items.entrySet()) {
-			Good g = get(e.getKey());
+			Product g = get(e.getKey());
 			if (g != null) {
 				cost += g.getPrice() * e.getValue();
 			}

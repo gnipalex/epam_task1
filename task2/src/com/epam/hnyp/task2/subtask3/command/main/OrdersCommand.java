@@ -54,12 +54,10 @@ public class OrdersCommand extends AbstractCommand {
 		SimpleDateFormat sdf_full = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		System.out.println(">> Main Menu >> Orders");
 		System.out.println("All orders:");
-		System.out.printf("%1$20s%2$20s%3$10s\n", "date", "customer", "goods cnt");
+		System.out.printf("%1$20s%2$20s%3$10s\n", "date", "customer", "products cnt");
 		System.out.println("------------------------------------");
-//		for (Order o : ConfigGrocery.STORE.getAllOrders()) {
 		for (Order o : getOrderService().getAll()) {
-//			System.out.printf("%1$20s%2$20s%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
-			System.out.printf("%1$20s%2$20s%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfGoods());
+			System.out.printf("%1$20s%2$20s%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfProducts());
 		}
 		System.out.println("------------------------------------");
 		

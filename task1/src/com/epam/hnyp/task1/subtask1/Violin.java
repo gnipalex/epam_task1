@@ -45,9 +45,6 @@ public class Violin extends StringInstrument {
 	 */
 	@Override
 	public void setStringCount(int stringCount) {
-		if (stringCount < MIN_STRINGS || stringCount > MAX_STRINGS) {
-			throw new IllegalArgumentException();
-		}
 		super.setStringCount(stringCount);
 	}
 

@@ -5,20 +5,20 @@ import java.util.Iterator;
 
 import com.epam.hnyp.task1.subtask2.GoodsList;
 
-public class GoodsStableIteratorList<E> extends GoodsList<E> {
+public class GoodsCopyOnWriteList<E> extends GoodsList<E> {
 	private ListIteratorBridge<E> bridge;
 	private boolean hasIteratorsToCurBridge;
 
-	public GoodsStableIteratorList() {
+	public GoodsCopyOnWriteList() {
 		initBridge();
 	}
 
-	public GoodsStableIteratorList(int capacity) {
+	public GoodsCopyOnWriteList(int capacity) {
 		super(capacity);
 		initBridge();
 	}
 
-	public GoodsStableIteratorList(int capacity, int extraLen) {
+	public GoodsCopyOnWriteList(int capacity, int extraLen) {
 		super(capacity, extraLen);
 		initBridge();
 	}
@@ -30,11 +30,7 @@ public class GoodsStableIteratorList<E> extends GoodsList<E> {
 	@SuppressWarnings("unchecked")
 	private void leaveBridge() {
 		if (hasIteratorsToCurBridge) {
-			// all past iterators now will work with copy of this list
 			bridge.setList((GoodsList<E>) this.clone());
-			// new iterators must work with modified list, so we creating new
-			// bridge
-			// and 'forgeting' about old bridge
 			initBridge();
 			hasIteratorsToCurBridge = false;
 		}
@@ -42,9 +38,8 @@ public class GoodsStableIteratorList<E> extends GoodsList<E> {
 
 	@Override
 	public Iterator<E> iterator() {
-		// iterator works through bridge
 		hasIteratorsToCurBridge = true;
-		return new ParameterizedStableIterator<>(bridge,
+		return new ParameterizedCopyOnWriteIterator<>(bridge,
 				this.getIteratorCondition());
 	}
 

@@ -1,13 +1,13 @@
 package com.epam.hnyp.task2.subtask3.factory;
 
-import com.epam.hnyp.task2.subtask3.service.GoodsService;
+import com.epam.hnyp.task2.subtask3.service.ProductsService;
 import com.epam.hnyp.task2.subtask3.service.OrderService;
 import com.epam.hnyp.task2.subtask3.service.ShopService;
 
 public class ServicesContainer {
 	private ShopService shopService;
 	private OrderService orderService;
-	private GoodsService goodsService;
+	private ProductsService productsService;
 	
 	public ShopService getShopService() {
 		return shopService;
@@ -21,10 +21,10 @@ public class ServicesContainer {
 	public void setOrderService(OrderService orderService) {
 		this.orderService = orderService;
 	}
-	public GoodsService getGoodsService() {
-		return goodsService;
+	public ProductsService getProductsService() {
+		return productsService;
 	}
-	public void setGoodsService(GoodsService goodsService) {
-		this.goodsService = goodsService;
+	public void setProductsService(ProductsService productsService) {
+		this.productsService = productsService;
 	}
 }

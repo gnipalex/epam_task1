@@ -41,7 +41,7 @@ public class Order {
 		this.customer = customer;
 	}
 	
-	public int getCountOfGoods() {
+	public int getCountOfProducts() {
 		int count = 0;
 		for (Integer i : items.values()) {
 			count += i;

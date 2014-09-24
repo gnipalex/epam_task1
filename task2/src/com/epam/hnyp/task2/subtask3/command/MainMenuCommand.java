@@ -6,10 +6,10 @@ import java.util.Scanner;
 import java.util.Map.Entry;
 
 import com.epam.hnyp.task2.subtask3.command.cart.AddToCartCommand;
-import com.epam.hnyp.task2.subtask3.command.main.AddGoodCommand;
+import com.epam.hnyp.task2.subtask3.command.main.AddProductCommand;
 import com.epam.hnyp.task2.subtask3.command.main.OrdersCommand;
-import com.epam.hnyp.task2.subtask3.command.main.PrintGoodsCommand;
-import com.epam.hnyp.task2.subtask3.command.main.ShowPopularGoodsCommand;
+import com.epam.hnyp.task2.subtask3.command.main.PrintProductsCommand;
+import com.epam.hnyp.task2.subtask3.command.main.ShowPopularProductsCommand;
 import com.epam.hnyp.task2.subtask3.command.main.ViewCartCommand;
 
 public class MainMenuCommand extends AbstractCommand {
@@ -18,12 +18,12 @@ public class MainMenuCommand extends AbstractCommand {
 
 	private static Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 	static {
-		commands.put("1", new PrintGoodsCommand());
-		commands.put("2", new ShowPopularGoodsCommand());
+		commands.put("1", new PrintProductsCommand());
+		commands.put("2", new ShowPopularProductsCommand());
 		commands.put("3", new AddToCartCommand());
 		commands.put("4", new ViewCartCommand());
 		commands.put("5", new OrdersCommand());
-		commands.put("6", new AddGoodCommand());
+		commands.put("6", new AddProductCommand());
 	}
 
 	@Override

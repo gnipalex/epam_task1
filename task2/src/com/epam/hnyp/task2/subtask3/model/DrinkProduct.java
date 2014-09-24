@@ -2,26 +2,20 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.io.Serializable;
 import java.util.Formatter;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
-import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
-
-public class DrinkGood extends Good implements Serializable {
+public class DrinkProduct extends Product implements Serializable {
 	private static final long serialVersionUID = -7896820585762605712L;
 	
 	private double volume; 
 	private static final String fieldVolume = "volume";
 	
-	public DrinkGood() {
+	public DrinkProduct() {
 	}
 	
-	public DrinkGood(long id, String name, int price, double volume) {
+	public DrinkProduct(long id, String name, int price, double volume) {
 		super(id, name, price);
 		this.volume = volume;
 	}

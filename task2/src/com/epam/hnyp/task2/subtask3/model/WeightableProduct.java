@@ -2,27 +2,21 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.io.Serializable;
 import java.util.Formatter;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.epam.hnyp.task2.subtask3.model.ParsableGoodNoReflection.IllegalDataFormatException;
-import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.console.DoubleConsoleFieldReader;
-
-public class WeightableGood extends Good implements Serializable {
+public class WeightableProduct extends Product implements Serializable {
 	
 	private static final long serialVersionUID = 2262341991941044041L;
-	
+
 	private double weight;
 	private static final String fieldWeight = "weight";
 	
-	public WeightableGood() {
+	public WeightableProduct() {
 	}
 	
-	public WeightableGood(long id, String name, int price, double weight) {
+	public WeightableProduct(long id, String name, int price, double weight) {
 		super(id, name, price);
 		this.weight = weight;
 	}

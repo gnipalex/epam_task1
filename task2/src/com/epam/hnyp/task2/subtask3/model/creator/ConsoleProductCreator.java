@@ -13,7 +13,7 @@ import com.epam.hnyp.task2.subtask3.model.reader.console.IntConsoleFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.LongConsoleFieldReader;
 import com.epam.hnyp.task2.subtask3.model.reader.console.StringConsoleFieldReader;
 
-public class ConsoleGoodCreator implements GoodCreator {
+public class ConsoleProductCreator implements ProductCreator {
 
 	private static final Map<Class<?>, FieldReader> READERS = new HashMap<Class<?>, FieldReader>();
 	static {
@@ -24,14 +24,14 @@ public class ConsoleGoodCreator implements GoodCreator {
 	}
 	
 	@Override
-	public void createGood(ParsableGoodNoReflection g) throws GoodCreateException {
+	public void createProduct(ParsableGoodNoReflection g) throws ProductCreateException {
 		Map<String, Class<?>> fields = g.getFields();
 		StringBuilder stringData = new StringBuilder();
 		for (Entry<String, Class<?>> e : fields.entrySet()) {
 			//getting parser for field
 			FieldReader reader = READERS.get(e.getValue());
 			if (reader == null) {
-				throw new GoodCreateException("parser not found for field '" + e.getKey() + "'");
+				throw new ProductCreateException("parser not found for field '" + e.getKey() + "'");
 			}
 			while(true) {
 				//parsing field with parser
@@ -49,7 +49,7 @@ public class ConsoleGoodCreator implements GoodCreator {
 		try {
 			g.make(stringData.toString());
 		} catch (IllegalDataFormatException e) {
-			throw new GoodCreateException("error while filling fields of class " + g.getClass().getName());
+			throw new ProductCreateException("error while filling fields of class " + g.getClass().getName());
 		}
 	}
 	

@@ -6,22 +6,22 @@ import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import com.epam.hnyp.task2.subtask3.service.GoodsService;
+import com.epam.hnyp.task2.subtask3.service.ProductsService;
 
-public class GzipGoodsSerializer extends GoodsSerializer {
+public class GzipProductsSerializer extends ProductsSerializer {
 	
 	@Override
-	protected void deserialize(GoodsService goodServ, InputStream stream)
+	protected void deserialize(ProductsService prodServ, InputStream stream)
 			throws IOException {
 		GZIPInputStream gzipStream = new GZIPInputStream(stream);
-		super.deserialize(goodServ, gzipStream);
+		super.deserialize(prodServ, gzipStream);
 	}
 	
 	@Override
-	protected void serialize(GoodsService goodServ, OutputStream stream)
+	protected void serialize(ProductsService prodServ, OutputStream stream)
 			throws IOException {
 		GZIPOutputStream gzipStream = new GZIPOutputStream(stream);
-		super.serialize(goodServ, gzipStream);
+		super.serialize(prodServ, gzipStream);
 		gzipStream.finish();
 	}
 }
