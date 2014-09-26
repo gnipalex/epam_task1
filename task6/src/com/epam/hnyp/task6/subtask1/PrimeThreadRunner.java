@@ -1,5 +1,6 @@
 package com.epam.hnyp.task6.subtask1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrimeThreadRunner {
@@ -9,7 +10,7 @@ public class PrimeThreadRunner {
 	private boolean useSeparateLists;
 	private List<Integer> output;
 	
-	protected List<Runnable> tasks;
+	protected List<Runnable> tasks = new ArrayList<>();
 	
 	public PrimeThreadRunner(int rangeStart, int rangeEnd, int thrCount, List<Integer> output,
 			boolean useSeparateLists) {
@@ -27,12 +28,18 @@ public class PrimeThreadRunner {
 	}
 	
 	public void run() {
-		createTasks();
+		createTasksSimpleAlgorithm();
 		executeAllTasks();
 	}
 	
-	private void createTasks() {
+	/**
+	 * Algorithm : if we have 5 tasks then ranges will divide into 
+	 * length = 5x + 4x + 3x + 2x + x,
+	 * first task uses 5x length and etc.
+	 */
+	private void createTasksXAlgorithm() {
 		int len = rangeEnd - rangeStart;
+		
 		double x = (2d * len) / ((1 + thrCount) * thrCount);
 		
 		for (int i = thrCount, end = rangeStart; i >= 1 && end < rangeEnd; i--) {
@@ -40,37 +47,50 @@ public class PrimeThreadRunner {
 			if (lenthToThread > 1) {
 				int a = (int)Math.ceil(lenthToThread);
 				if (end + a >= rangeEnd) {
-					tasks.add(new PrimeFinder(end, rangeEnd, output, useSeparateLists));
+					createNewTask(end, rangeEnd, output, useSeparateLists);
 					end = rangeEnd;
 				} else {
-					tasks.add(new PrimeFinder(end, end + a, output, useSeparateLists));
+					createNewTask(end, end + a, output, useSeparateLists);
 					end += a;
 				}
 			} else {
-				tasks.add(new PrimeFinder(end, rangeEnd, output, useSeparateLists));
+				createNewTask(end, rangeEnd, output, useSeparateLists);
 				end = rangeEnd;
 			}
 		}
 	}
 	
-	protected void createNewTask() {}
+	private void createTasksSimpleAlgorithm() {
+		int len = rangeEnd - rangeStart;
+		int chunkSz = len / thrCount;
+		
+		for (int i=0; i<thrCount; i++) {
+			int start = rangeStart + chunkSz*i;
+			int end = rangeStart + chunkSz*(i+1);
+			if (i == thrCount - 1) {
+				end = rangeEnd;
+			}
+			createNewTask(start, end, output, useSeparateLists);
+		}
+	}
+	
+	protected void createNewTask(int startItem, int endItem, List<Integer> resultPrimesList, boolean useSeparateLists) {
+		tasks.add(new PrimeFinder(startItem, endItem, resultPrimesList, useSeparateLists));
+	}
 	
 	protected void executeAllTasks(){
-		
-	}
-	
-	/**
-	 * Evaluate coeficient x to equation
-	 * len = x*intervalsCount + x*(intervalsCount - 1) + ... + x*1
-	 * @param len length of data range
-	 * @param intervalsCount count of big intervals
-	 * @return
-	 */
-	public double evalSmalIntervalSize(int len, int lastIndex,
-			int intervalsCount) {
-		return 2d * len / ((1 + intervalsCount) * intervalsCount);
-	}
-
-	
-	
+		Thread[] threads = new Thread[tasks.size()];
+		for (int i=0; i<threads.length; i++) {
+			threads[i] = new Thread(tasks.get(i));
+			threads[i].start();
+		}
+		for (Thread t : threads) {
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				break;
+			}
+		}
+	}	
 }
