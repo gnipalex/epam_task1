@@ -9,11 +9,11 @@ public class PrimeThreadRunner {
 	private int thrCount;
 	private boolean useSeparateLists;
 	private List<Integer> output;
-	
+
 	protected List<Runnable> tasks = new ArrayList<>();
-	
-	public PrimeThreadRunner(int rangeStart, int rangeEnd, int thrCount, List<Integer> output,
-			boolean useSeparateLists) {
+
+	public PrimeThreadRunner(int rangeStart, int rangeEnd, int thrCount,
+			List<Integer> output, boolean useSeparateLists) {
 		if (rangeStart > rangeEnd) {
 			throw new IllegalArgumentException();
 		}
@@ -26,26 +26,25 @@ public class PrimeThreadRunner {
 		this.output = output;
 		this.useSeparateLists = useSeparateLists;
 	}
-	
+
 	public void run() {
 		createTasksSimpleAlgorithm();
 		executeAllTasks();
 	}
-	
+
 	/**
-	 * Algorithm : if we have 5 tasks then ranges will divide into 
-	 * length = 5x + 4x + 3x + 2x + x,
-	 * first task uses 5x length and etc.
+	 * Algorithm : if we have 5 tasks then ranges will divide into length = 5x +
+	 * 4x + 3x + 2x + x, first task uses 5x length and etc.
 	 */
 	private void createTasksXAlgorithm() {
 		int len = rangeEnd - rangeStart;
-		
+
 		double x = (2d * len) / ((1 + thrCount) * thrCount);
-		
+
 		for (int i = thrCount, end = rangeStart; i >= 1 && end < rangeEnd; i--) {
-			double lenthToThread = i*x;
+			double lenthToThread = i * x;
 			if (lenthToThread > 1) {
-				int a = (int)Math.ceil(lenthToThread);
+				int a = (int) Math.ceil(lenthToThread);
 				if (end + a >= rangeEnd) {
 					createNewTask(end, rangeEnd, output, useSeparateLists);
 					end = rangeEnd;
@@ -59,28 +58,36 @@ public class PrimeThreadRunner {
 			}
 		}
 	}
-	
+
 	private void createTasksSimpleAlgorithm() {
 		int len = rangeEnd - rangeStart;
 		int chunkSz = len / thrCount;
-		
-		for (int i=0; i<thrCount; i++) {
-			int start = rangeStart + chunkSz*i;
-			int end = rangeStart + chunkSz*(i+1);
-			if (i == thrCount - 1) {
-				end = rangeEnd;
+
+		if (chunkSz > 0) {
+			for (int i = 0; i < thrCount; i++) {
+				int start = rangeStart + chunkSz * i;
+				int end = rangeStart + chunkSz * (i + 1);
+				if (i == thrCount - 1) {
+					end = rangeEnd;
+				}
+				createNewTask(start, end, output, useSeparateLists);
 			}
-			createNewTask(start, end, output, useSeparateLists);
+		} else {
+			for (int i = rangeStart; i < rangeEnd; i++) {
+				createNewTask(i, i + 1, output, useSeparateLists);
+			}
 		}
 	}
-	
-	protected void createNewTask(int startItem, int endItem, List<Integer> resultPrimesList, boolean useSeparateLists) {
-		tasks.add(new PrimeFinder(startItem, endItem, resultPrimesList, useSeparateLists));
+
+	protected void createNewTask(int startItem, int endItem,
+			List<Integer> resultPrimesList, boolean useSeparateLists) {
+		tasks.add(new PrimeFinder(startItem, endItem, resultPrimesList,
+				useSeparateLists));
 	}
-	
-	protected void executeAllTasks(){
+
+	protected void executeAllTasks() {
 		Thread[] threads = new Thread[tasks.size()];
-		for (int i=0; i<threads.length; i++) {
+		for (int i = 0; i < threads.length; i++) {
 			threads[i] = new Thread(tasks.get(i));
 			threads[i].start();
 		}
@@ -92,5 +99,5 @@ public class PrimeThreadRunner {
 				break;
 			}
 		}
-	}	
+	}
 }
