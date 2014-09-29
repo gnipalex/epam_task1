@@ -11,27 +11,27 @@ import com.epam.hnyp.task6.subtask3.ConsoleSequenceFinder.Runner.SearchStatus;
 
 public class ConsoleSequenceFinder {
 	
-	private static Exchanger<String> fileNameExchanger = new Exchanger<>();
-	private static Exchanger<SearchStatus> searchStatusExchanger = new Exchanger<>();
+	private static final Exchanger<String> FILE_NAME_EXCHANGER = new Exchanger<>();
+	private static final Exchanger<SearchStatus> SEARCH_STATUS_EXCHANGER = new Exchanger<>();
 	
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("MAIN started");
 		startDemon();
 		Scanner sc = new Scanner(System.in);
 		outer: while (true) {
-			System.out.print("Enter file name (empty line to quit) :");
+			System.out.print("Enter file name (empty line to quit) : ");
 			String line = sc.nextLine();
 			if (line.isEmpty()) {
 				break;
 			}
 			
-			fileNameExchanger.exchange(line);
+			FILE_NAME_EXCHANGER.exchange(line);
 			
 			System.out.println("Searching....");
 			
 			SearchStatus prevStatus = null;
 			inner: while (true) {
-				SearchStatus status = searchStatusExchanger.exchange(null);
+				SearchStatus status = SEARCH_STATUS_EXCHANGER.exchange(null);
 				if (status != null) {
 					if (status.isError()) {
 						System.out.println("Error in daemon thread : " + status.getErrorMessage());
@@ -45,7 +45,7 @@ public class ConsoleSequenceFinder {
 						continue outer;
 					}
 					
-					System.out.println("\nLongest sequence --> " + status);
+					System.out.println("\nLongest sequence --> " + prevStatus);
 					System.out.println("---------------------------------");
 					break inner;
 				}
@@ -62,20 +62,18 @@ public class ConsoleSequenceFinder {
 	}
 	
 	static class Runner implements Runnable {
-		private SearchStatus status;
 		private String fileName;
 		
 		@Override
 		public void run() {
-			System.out.println(Thread.currentThread().getName() + " started");
 			while (true) {
-				status = new SearchStatus();
+				SearchStatus status = new SearchStatus();
 				exchangeFileName();
 				byte[] data = null;
 				try {
-					readFile(new File(fileName), status);
+					data = readFile(new File(fileName), status);
 				} catch (IOException e) {
-					exchangeStatus();
+					exchangeStatus(new SearchStatus(status));
 					continue;
 				}
 				for (int i=0; i<data.length; i++) {
@@ -94,26 +92,25 @@ public class ConsoleSequenceFinder {
 							status.item = item;
 							status.length = len;
 							status.offset = offset;
-							exchangeStatus(); //signaling search status 
+							exchangeStatus(new SearchStatus(status)); //signaling search status 
 						}
 						i += len - 1;
 					}
 				}
-				status = null;
-				exchangeStatus();
+				exchangeStatus(null);
 			}
 		}	
 		
-		private void exchangeStatus() {
+		private void exchangeStatus(SearchStatus st) {
 			try {
-				searchStatusExchanger.exchange(status);
+				SEARCH_STATUS_EXCHANGER.exchange(st);
 			} catch (InterruptedException e) {
 			}
 		}
 		
 		private void exchangeFileName() {
 			try {
-				fileName = fileNameExchanger.exchange(null);
+				fileName = FILE_NAME_EXCHANGER.exchange(null);
 			} catch (InterruptedException e) {
 			}
 		}
@@ -130,15 +127,9 @@ public class ConsoleSequenceFinder {
 				throw new IOException();
 			}
 			try (InputStream input = new FileInputStream(f)) {
-				byte[] data = new byte[(int)f.length()];
-				int length = 0;
-				int offset = 0;
-				final int BLOCK_SZ = 1024;
-				while ((length = input.read(data, offset, BLOCK_SZ)) >= 0) {//read indexoutofbounds
-					offset += length;
-				}
+				byte[] data = new byte[input.available()];
+				input.read(data);
 				return data;
-				
 			} catch (IOException e) {
 				st.error = true;
 				st.errorMessage = "i/o error";
@@ -152,6 +143,21 @@ public class ConsoleSequenceFinder {
 			private int offset;
 			private int length;
 			private byte item;
+			
+			public SearchStatus() {
+			}
+			
+			/**
+			 * Creates copy of status
+			 * @param st
+			 */
+			public SearchStatus(SearchStatus st) {
+				this.error = st.error;
+				this.errorMessage = st.errorMessage;
+				this.item = st.item;
+				this.length = st.length;
+				this.offset = st.offset;
+			}
 			
 			public int getOffset() {
 				return offset;
