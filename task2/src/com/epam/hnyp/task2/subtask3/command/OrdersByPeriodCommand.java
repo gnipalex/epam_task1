@@ -1,17 +1,24 @@
-package com.epam.hnyp.task2.subtask3.command.order;
+package com.epam.hnyp.task2.subtask3.command;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Order;
 
 public class OrdersByPeriodCommand extends AbstractCommand {
 
+	private ShopFacade shopFacade;
+
+	public OrdersByPeriodCommand(ShopFacade shopFacade) {
+		this.shopFacade = shopFacade;
+	}
+	
 	@Override
-	public void execute(String... args) {
+	public void execute() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Scanner sc = new Scanner(System.in);
 		
@@ -50,9 +57,8 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 		System.out.println("Orders for period " + sdf.format(date_left) + " -- " + sdf.format(date_right));
 		System.out.printf("%1$20s\t%2$20s\t%3$10s\n", "date", "customer", "goods cnt");
 		System.out.println("------------------------------------");
-//		for (Order o : ConfigGrocery.STORE.getOrdersOfPeriod(date_left, date_right)) {
-//			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCart().size());
-		for (Order o : getOrderService().getOrdersOfPeriod(date_left, date_right)) {
+		
+		for (Order o : shopFacade.getOrdersOfPeriod(date_left, date_right)) {
 			System.out.printf("%1$20s\t%2$20s\t%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfProducts());
 		}
 		System.out.println("------------------------------------");
@@ -61,6 +67,11 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 	@Override
 	public String about() {
 		return "orders by period";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return null;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask3.command.main;
+package com.epam.hnyp.task2.subtask3.command;
 
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
@@ -6,23 +6,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.command.order.FindOrderCommand;
-import com.epam.hnyp.task2.subtask3.command.order.OrdersByPeriodCommand;
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Order;
 
 public class OrdersCommand extends AbstractCommand {
 
 	private static final char QUIT_SYMBOL = 'm';
 
-	private static Map<String, AbstractCommand> commands = new LinkedHashMap<>();
-	static {
-		commands.put("1", new OrdersByPeriodCommand());
-		commands.put("2", new FindOrderCommand());
+	private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
+	
+	private ShopFacade shopFacade;
+
+	public OrdersCommand(ShopFacade shopFacade) {
+		this.shopFacade = shopFacade;
 	}
 	
 	@Override
-	public void execute(String... args) {
+	public void execute() {
 		main: while(true) {
 			print();
 			AbstractCommand cmd = null;
@@ -45,7 +45,7 @@ public class OrdersCommand extends AbstractCommand {
 				}
 				break;
 			}
-			cmd.execute(new String[0]);
+			cmd.execute();
 			System.out.println();
 		}
 	}
@@ -56,7 +56,7 @@ public class OrdersCommand extends AbstractCommand {
 		System.out.println("All orders:");
 		System.out.printf("%1$20s%2$20s%3$10s\n", "date", "customer", "products cnt");
 		System.out.println("------------------------------------");
-		for (Order o : getOrderService().getAll()) {
+		for (Order o : shopFacade.getAllOrders()) {
 			System.out.printf("%1$20s%2$20s%3$10d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfProducts());
 		}
 		System.out.println("------------------------------------");
@@ -71,6 +71,11 @@ public class OrdersCommand extends AbstractCommand {
 	@Override
 	public String about() {
 		return "show orders";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return commands;
 	}
 
 }

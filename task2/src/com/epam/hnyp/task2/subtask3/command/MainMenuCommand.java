@@ -2,30 +2,17 @@ package com.epam.hnyp.task2.subtask3.command;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Map.Entry;
-
-import com.epam.hnyp.task2.subtask3.command.cart.AddToCartCommand;
-import com.epam.hnyp.task2.subtask3.command.main.OrdersCommand;
-import com.epam.hnyp.task2.subtask3.command.main.PrintProductsCommand;
-import com.epam.hnyp.task2.subtask3.command.main.ShowPopularProductsCommand;
-import com.epam.hnyp.task2.subtask3.command.main.ViewCartCommand;
+import java.util.Scanner;
 
 public class MainMenuCommand extends AbstractCommand {
 
 	private static final char QUIT_SYMBOL = 'q';
-
-	private static Map<String, AbstractCommand> commands = new LinkedHashMap<>();
-	static {
-		commands.put("1", new PrintProductsCommand());
-		commands.put("2", new ShowPopularProductsCommand());
-		commands.put("3", new AddToCartCommand());
-		commands.put("4", new ViewCartCommand());
-		commands.put("5", new OrdersCommand());
-	}
+	
+	private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 
 	@Override
-	public void execute(String... args) {
+	public void execute() {
 		main: while (true) {
 			print();
 			AbstractCommand cmd = null;
@@ -48,7 +35,7 @@ public class MainMenuCommand extends AbstractCommand {
 				}
 				break;
 			}
-			cmd.execute(new String[0]);
+			cmd.execute();
 			System.out.println();
 		}
 	}
@@ -64,6 +51,11 @@ public class MainMenuCommand extends AbstractCommand {
 	@Override
 	public String about() {
 		return "main menu";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return commands;
 	}
 
 }

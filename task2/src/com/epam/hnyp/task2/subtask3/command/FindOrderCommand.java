@@ -1,19 +1,26 @@
-package com.epam.hnyp.task2.subtask3.command.order;
+package com.epam.hnyp.task2.subtask3.command;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.model.Product;
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Order;
+import com.epam.hnyp.task2.subtask3.model.Product;
 
 public class FindOrderCommand extends AbstractCommand {
 
+	private ShopFacade shopFacade;
+
+	public FindOrderCommand(ShopFacade shopFacade) {
+		this.shopFacade = shopFacade;
+	}
+	
 	@Override
-	public void execute(String... args) {
+	public void execute() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Scanner sc = new Scanner(System.in);
 		Date date = null; 
@@ -33,8 +40,7 @@ public class FindOrderCommand extends AbstractCommand {
 			break;
 		}
 		
-//		Order order = ConfigGrocery.STORE.getNearest(date);
-		Order order = getOrderService().getNearest(date);
+		Order order = shopFacade.getNearestOrder(date);
 		
 		if (order == null) {
 			System.out.println("---order not found---");
@@ -46,11 +52,10 @@ public class FindOrderCommand extends AbstractCommand {
 		System.out.println("Date of order: " + sdf_full.format(order.getDate()));
 		System.out.println("Customer: " + order.getCustomer());
 		StringBuilder str = new StringBuilder();
+		
 		System.out.print("Goods in cart (name[count]): ");
-//		for (Entry<Long, Integer> e : order.getCart().getAllItems().entrySet()) {
-//			Good g = ConfigGrocery.STORE.get(e.getKey());
 		for (Entry<Long, Integer> e : order.getItems().entrySet()) {
-			Product g = getProductsService().get(e.getKey());
+			Product g = shopFacade.getProductById(e.getKey());
 			if (g == null) {
 				System.out.print("not found, ");
 				continue;
@@ -58,14 +63,18 @@ public class FindOrderCommand extends AbstractCommand {
 			System.out.print(g.getName() + "[" + e.getValue() + "], ");
 		}
 		System.out.println();
-//		int totalPrice = ConfigGrocery.STORE.getPriceForAll(order.getCart().getAllItems());
-		int totalPrice = getProductsService().getPriceForAll(order.getItems());
+		int totalPrice = shopFacade.getPriceForOrder(order);
 		System.out.println("Total price: " + totalPrice);
 	}
 
 	@Override
 	public String about() {
 		return "find order";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return null;
 	}
 
 }

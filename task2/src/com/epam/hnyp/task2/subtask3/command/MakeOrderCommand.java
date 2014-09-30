@@ -1,22 +1,29 @@
-package com.epam.hnyp.task2.subtask3.command.cart;
+package com.epam.hnyp.task2.subtask3.command;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 
 public class MakeOrderCommand extends AbstractCommand {
 
+	private ShopFacade shopFacade;
+
+	public MakeOrderCommand(ShopFacade shopFacade) {
+		this.shopFacade = shopFacade;
+	}
+	
 	@Override
-	public void execute(String... args) {
-		if (getShopService().getCurrentCart().size() == 0) {
+	public void execute() {
+		if (shopFacade.cartSize() == 0) {
 			System.out.println("Your cart is empty, buy something at first");
 			return;
 		}
-		int totalPrice = getShopService().getPriceForCart();
-		System.out.println("You have " + getShopService().getCurrentCart().size() + 
+		int totalPrice = shopFacade.getPriceForCart();
+		System.out.println("You have " + shopFacade.cartSize() + 
 				" products in cart. Total price = " + totalPrice);
 		System.out.print("Please enter your name or just pass enter to cancel : ");
 		
@@ -43,8 +50,7 @@ public class MakeOrderCommand extends AbstractCommand {
 			break;
 		}
 
-		boolean res = getShopService().makeOrder(name, date);
-		if (res) {
+		if (shopFacade.makeOrder(name, date)) {
 			System.out.println("Success. Order created.");
 		} else {
 			System.out.println("Can't create order with date " + sdf.format(date) + "!!!!");
@@ -54,6 +60,11 @@ public class MakeOrderCommand extends AbstractCommand {
 	@Override
 	public String about() {
 		return "buy all items";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return null;
 	}
 
 }

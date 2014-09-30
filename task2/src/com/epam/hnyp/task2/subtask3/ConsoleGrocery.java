@@ -1,22 +1,23 @@
 package com.epam.hnyp.task2.subtask3;
 
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.command.MainMenuCommand;
+import com.epam.hnyp.task2.subtask3.factory.CommandInitializer;
+import com.epam.hnyp.task2.subtask3.factory.CommandInitializerImpl;
 import com.epam.hnyp.task2.subtask3.factory.ProductsInitializer;
-import com.epam.hnyp.task2.subtask3.factory.ServicesContainer;
-import com.epam.hnyp.task2.subtask3.factory.ServicesFactory;
-import com.epam.hnyp.task2.subtask3.factory.ServicesFactoryInMemory;
+import com.epam.hnyp.task2.subtask3.factory.ServicesInMemoryInitializer;
+import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer;
+import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer.ServicesContainer;
 
 public class ConsoleGrocery {
 	public static void main(String[] args) {
-		ServicesFactory factory = new ServicesFactoryInMemory();
+		ServicesInitializer factory = new ServicesInMemoryInitializer();
 		ServicesContainer servicesContainer = factory.buildServicesContainer(5);
 		
 		ProductsInitializer.fillProducts(servicesContainer.getProductsService(), 1);
 		
-		AbstractCommand.services = servicesContainer;
+		CommandInitializer commandInitializer = new CommandInitializerImpl(servicesContainer.getShopFacade());
+		AbstractCommand shopCommand = commandInitializer.initMainCommand();
 		
-		AbstractCommand main = new MainMenuCommand();
-		main.execute(new String[0]);
+		shopCommand.execute();
 	}
 }

@@ -1,13 +1,20 @@
-package com.epam.hnyp.task2.subtask3.command.cart;
+package com.epam.hnyp.task2.subtask3.command;
 
+import java.util.Map;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 
 public class RemoveElementFromCartCommand extends AbstractCommand {
 
+	private ShopFacade shopFacade;
+
+	public RemoveElementFromCartCommand(ShopFacade shopFacade) {
+		this.shopFacade = shopFacade;
+	}
+	
 	@Override
-	public void execute(String... args) {
+	public void execute() {
 		System.out.print("Please enter id of product to remove or just pass enter to cancel: ");
 		Scanner sc = new Scanner(System.in);
 		String line = sc.nextLine();
@@ -21,12 +28,17 @@ public class RemoveElementFromCartCommand extends AbstractCommand {
 			System.out.println("##wrong format of id##");
 			return;
 		}
-		getShopService().getCurrentCart().remove(id);
+		shopFacade.removeFromCart(id);
 	}
 
 	@Override
 	public String about() {
 		return "remove element by id";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return null;
 	}
 
 }

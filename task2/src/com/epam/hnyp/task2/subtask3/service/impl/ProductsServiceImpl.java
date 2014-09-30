@@ -26,17 +26,17 @@ public class ProductsServiceImpl implements ProductsService {
 		return goodRepo.add(g);
 	}
 
-	@Override
-	public int getPriceForAll(Map<Long, Integer> items) {
-		int cost = 0;
-		for (Entry<Long, Integer> e : items.entrySet()) {
-			Product g = get(e.getKey());
-			if (g != null) {
-				cost += g.getPrice() * e.getValue();
-			}
-		}
-		return cost;
-	}
+//	@Override
+//	public int getPriceForAll(Map<Long, Integer> items) {
+//		int cost = 0;
+//		for (Entry<Long, Integer> e : items.entrySet()) {
+//			Product g = get(e.getKey());
+//			if (g != null) {
+//				cost += g.getPrice() * e.getValue();
+//			}
+//		}
+//		return cost;
+//	}
 	
 	public ProductRepo getGoodRepo() {
 		return goodRepo;

@@ -32,14 +32,7 @@ public class ListLikeSet<E> extends ArrayList<E> {
 	
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
-		boolean changed = false;
-		for (E o : c) {
-			if (this.contains(o)) {
-				continue;
-			}
-			changed |= this.add(o); 
-		}
-		return changed;
+		return addAll(size(), c);
 	}
 	
 	@Override

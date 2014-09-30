@@ -1,35 +1,32 @@
-package com.epam.hnyp.task2.subtask3.command.main;
+package com.epam.hnyp.task2.subtask3.command;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.command.cart.AddToCartCommand;
-import com.epam.hnyp.task2.subtask3.command.cart.CartPriceCommand;
-import com.epam.hnyp.task2.subtask3.command.cart.EmptyCartCommand;
-import com.epam.hnyp.task2.subtask3.command.cart.MakeOrderCommand;
-import com.epam.hnyp.task2.subtask3.command.cart.RemoveElementFromCartCommand;
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Product;
 
 public class ViewCartCommand extends AbstractCommand {
 
 	private static final char QUIT_SYMBOL = 'm';
 	
-	private static Map<String, AbstractCommand> commands = new LinkedHashMap<>();
-	static {
-		commands.put("1", new CartPriceCommand());
-		commands.put("2", new AddToCartCommand());
-		commands.put("3", new EmptyCartCommand());
-		commands.put("4", new RemoveElementFromCartCommand());
-		commands.put("5", new MakeOrderCommand());
-	}
+	private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 
+	private ShopFacade shopFacade;
+
+	public ViewCartCommand(ShopFacade shopFacade) {
+		this.shopFacade = shopFacade;
+	}
+	
 	@Override
-	public void execute(String... args) {
+	public void execute() {
 		main: while (true) {
-			print();
+			System.out.println(">> Main Menu >> Cart");
+			printCart();
+			System.out.println("-----------------------------------------------");
+			printCommands();
 			AbstractCommand cmd = null;
 			while (true) {
 				System.out.print("Choice -> ");
@@ -47,30 +44,32 @@ public class ViewCartCommand extends AbstractCommand {
 				}
 				break;
 			}
-			cmd.execute(new String[0]);
+			cmd.execute();
 			System.out.println();
 		}
 
 	}
 
-	public void print() {
-		System.out.println(">> Main Menu >> Cart");
+	public void printCart() {
 		System.out.println("Items in cart :");
 		System.out.printf("%1$s\t%2$20s\t%3$s\t%4$s\n", "id", "name", "count", "cse");
 		System.out.println("-----------------------------------------------");
-		if (getShopService().getCurrentCart().size() == 0) {
+		if (shopFacade.cartSize() == 0) {
 			System.out.println("\t\t---empty---");
 		}
 
-		for (Entry<Long, Integer> e : getShopService().getCurrentCart().getAllItems().entrySet()){
-			Product g = getProductsService().get(e.getKey());
+		for (Entry<Long, Integer> e : shopFacade.getCartItems().entrySet()){
+			Product g = shopFacade.getProductById(e.getKey());
 			if (g != null) {
 				System.out.printf("%1$d\t%2$20s\t%3$d\t%4$d\n", g.getId(), g.getName(), e.getValue() ,g.getPrice());
 			} else {
 				System.out.printf("%1$d ---------not found----------", e.getKey());
 			}
 		}
-		System.out.println("-----------------------------------------------");
+		
+	}
+	
+	private void printCommands() {
 		System.out.println("Cart commands :");
 		for (Entry<String, AbstractCommand> c : commands.entrySet()) {
 			System.out.println(c.getKey() + "\t" + c.getValue().about());
@@ -81,6 +80,11 @@ public class ViewCartCommand extends AbstractCommand {
 	@Override
 	public String about() {
 		return "show cart";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return commands;
 	}
 
 }

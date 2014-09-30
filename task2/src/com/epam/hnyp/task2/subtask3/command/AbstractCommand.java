@@ -1,27 +1,19 @@
 package com.epam.hnyp.task2.subtask3.command;
 
-import com.epam.hnyp.task2.subtask3.factory.ServicesContainer;
-import com.epam.hnyp.task2.subtask3.service.ProductsService;
-import com.epam.hnyp.task2.subtask3.service.OrderService;
-import com.epam.hnyp.task2.subtask3.service.ShopService;
+import java.util.Map;
 
 public abstract class AbstractCommand {
-
-	public static ServicesContainer services;
 	
-	public abstract void execute(String ...args);
+	public abstract void execute();
 	
 	public abstract String about();
 	
-	protected ShopService getShopService() {
-		return services.getShopService();
+	public void addCommand(String key, AbstractCommand c) {
+		Map<String, AbstractCommand> map = getCommandsMap();
+		if (map != null) {
+			map.put(key, c);
+		}
 	}
 	
-	protected OrderService getOrderService() {
-		return services.getOrderService();
-	}
-	
-	protected ProductsService getProductsService() {
-		return services.getProductsService();
-	}
+	public abstract Map<String, AbstractCommand> getCommandsMap();
 }
