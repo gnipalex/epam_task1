@@ -7,6 +7,8 @@ import com.epam.hnyp.task2.subtask3.factory.ProductsInitializer;
 import com.epam.hnyp.task2.subtask3.factory.ServicesInMemoryInitializer;
 import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer;
 import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer.ServicesContainer;
+import com.epam.hnyp.task2.subtask3.util.ConsoleIOProvider;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class ConsoleGrocery {
 	public static void main(String[] args) {
@@ -15,9 +17,11 @@ public class ConsoleGrocery {
 		
 		ProductsInitializer.fillProducts(servicesContainer.getProductsService(), 1);
 		
-		CommandInitializer commandInitializer = new CommandInitializerImpl(servicesContainer.getShopFacade());
-		AbstractCommand shopCommand = commandInitializer.initMainCommand();
+		IOProvider ioProvider = new ConsoleIOProvider();
 		
+		CommandInitializer commandInitializer = new CommandInitializerImpl(servicesContainer.getShopFacade(), ioProvider);
+		
+		AbstractCommand shopCommand = commandInitializer.initMainCommand();
 		shopCommand.execute();
 	}
 }

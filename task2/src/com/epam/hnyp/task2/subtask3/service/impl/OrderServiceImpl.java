@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 import com.epam.hnyp.task2.subtask3.model.Order;
 import com.epam.hnyp.task2.subtask3.repo.OrderRepo;
+import com.epam.hnyp.task2.subtask3.service.CartService;
 import com.epam.hnyp.task2.subtask3.service.OrderService;
-import com.epam.hnyp.task2.subtask3.util.Cart;
 
 public class OrderServiceImpl implements OrderService {
 	private OrderRepo orderRepo;
@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public boolean makeOrder(Cart cart, String customer, Date date) {
+	public boolean makeOrder(CartService cart, String customer, Date date) {
 		Order o = new Order(date, customer, new HashMap<>(cart.getAllItems()));
 		return orderRepo.add(o);
 	}

@@ -2,20 +2,19 @@ package com.epam.hnyp.task2.subtask3.facade;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.epam.hnyp.task2.subtask3.model.Order;
 import com.epam.hnyp.task2.subtask3.model.Product;
-import com.epam.hnyp.task2.subtask3.service.ProductsService;
+import com.epam.hnyp.task2.subtask3.service.AdvertisementService;
+import com.epam.hnyp.task2.subtask3.service.CartService;
 import com.epam.hnyp.task2.subtask3.service.OrderService;
-import com.epam.hnyp.task2.subtask3.util.Advertisement;
-import com.epam.hnyp.task2.subtask3.util.Cart;
+import com.epam.hnyp.task2.subtask3.service.ProductsService;
 
 public class ShopFacadeImpl implements ShopFacade {
-	private Cart cart;
-	private Advertisement advertisement;
+	private CartService cartService;
+	private AdvertisementService advertisementService;
 	private OrderService orderService;
 	private ProductsService productsService;
 	
@@ -25,77 +24,51 @@ public class ShopFacadeImpl implements ShopFacade {
 		if (g == null) {
 			return false;
 		}
-		cart.add(g);
+		cartService.add(g);
+		advertisementService.put(g);
 		return true;
 	}
 
 	@Override
 	public boolean makeOrder(String customer, Date date) {
-		if (cart.size() == 0) {
+		if (cartService.size() == 0) {
 			return false;
 		}
-		boolean res = orderService.makeOrder(cart, customer, date);
+		boolean res = orderService.makeOrder(cartService, customer, date);
 		if (res) {
-			cart.clear();
+			cartService.clear();
 		}
 		return res;
 	}
 
 	@Override
 	public Collection<Product> getPopularProducts() {
-		return advertisement.getLastProducts();
+		return advertisementService.getLastProducts();
 	}
 
 	@Override
 	public int getPriceForCart() {
-		return getPriceForItems(cart.getAllItems());
-	}
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-
-	public Advertisement getAdvertisement() {
-		return advertisement;
-	}
-
-	public void setAdvertisement(Advertisement advertisement) {
-		this.advertisement = advertisement;
-	}
-
-	public OrderService getOrderService() {
-		return orderService;
-	}
-
-	public void setOrderService(OrderService orderService) {
-		this.orderService = orderService;
-	}
-
-	public ProductsService getProductsService() {
-		return productsService;
-	}
-
-	public void setProductsService(ProductsService goodsService) {
-		this.productsService = goodsService;
+		return getPriceForItems(cartService.getAllItems());
 	}
 
 	@Override
 	public Map<Long, Integer> getCartItems() {
-		return cart.getAllItems();
+		return cartService.getAllItems();
 	}
 
 	@Override
 	public void clearCart() {
-		cart.clear();
+		cartService.clear();
+	}
+	
+	@Override
+	public int cartSize() {
+		return cartService.size();
 	}
 
 	@Override
 	public void removeFromCart(Long id) {
-		cart.remove(id);
+		cartService.remove(id);
 	}
 
 	@Override
@@ -144,8 +117,35 @@ public class ShopFacadeImpl implements ShopFacade {
 		return cost;
 	}
 
-	@Override
-	public int cartSize() {
-		return cart.size();
+	public CartService getCartService() {
+		return cartService;
+	}
+
+	public void setCartService(CartService cart) {
+		this.cartService = cart;
+	}
+
+	public AdvertisementService getAdvertisementService() {
+		return advertisementService;
+	}
+
+	public void setAdvertisementService(AdvertisementService advertisement) {
+		this.advertisementService = advertisement;
+	}
+
+	public OrderService getOrderService() {
+		return orderService;
+	}
+
+	public void setOrderService(OrderService orderService) {
+		this.orderService = orderService;
+	}
+
+	public ProductsService getProductsService() {
+		return productsService;
+	}
+
+	public void setProductsService(ProductsService goodsService) {
+		this.productsService = goodsService;
 	}
 }

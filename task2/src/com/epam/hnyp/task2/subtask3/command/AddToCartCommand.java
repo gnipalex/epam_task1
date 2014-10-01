@@ -4,19 +4,22 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class AddToCartCommand extends AbstractCommand{
 
 	private ShopFacade shopFacade;
+	private IOProvider ioProvider;
 	
-	public AddToCartCommand(ShopFacade shopFacade) {
+	public AddToCartCommand(ShopFacade shopFacade, IOProvider ioProvider) {
 		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
 	}
 	
 	@Override
 	public void execute() {
-		System.out.print("Please enter product id to add it to cart or just pass enter to cancel : ");
-		Scanner sc = new Scanner(System.in);
+		ioProvider.getOutput().print("Please enter product id to add it to cart or just pass enter to cancel : ");
+		Scanner sc = new Scanner(ioProvider.getInput());
 		String line = sc.nextLine();
 		if (line.isEmpty()) {
 			return;
@@ -29,10 +32,10 @@ public class AddToCartCommand extends AbstractCommand{
 			return;
 		}
 		if (!shopFacade.addToCart(id)) {
-			System.out.println("product with id=[" + id + "] not found");
+			ioProvider.getOutput().println("product with id=[" + id + "] not found");
 			return;
 		}
-		System.out.println("product id=[" + id + "] added, now you have " + shopFacade.cartSize() + " items in your cart");
+		ioProvider.getOutput().println("product id=[" + id + "] added, now you have " + shopFacade.cartSize() + " items in your cart");
 	}
 
 	@Override

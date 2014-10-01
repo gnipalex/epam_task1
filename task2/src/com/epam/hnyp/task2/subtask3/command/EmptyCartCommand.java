@@ -3,19 +3,22 @@ package com.epam.hnyp.task2.subtask3.command;
 import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class EmptyCartCommand extends AbstractCommand {
 
 	private ShopFacade shopFacade;
-
-	public EmptyCartCommand(ShopFacade shopService) {
-		this.shopFacade = shopService;
+	private IOProvider ioProvider;
+	
+	public EmptyCartCommand(ShopFacade shopFacade, IOProvider ioProvider) {
+		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
 	}
 	
 	@Override
 	public void execute() {
 		shopFacade.clearCart();
-		System.out.println("Ñart has been cleared.");
+		ioProvider.getOutput().println("Cart has been cleared.");
 	}
 
 	@Override

@@ -5,21 +5,30 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
+
 public class MainMenuCommand extends AbstractCommand {
 
 	private static final char QUIT_SYMBOL = 'q';
 	
 	private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
-
+	
+	private IOProvider ioProvider;
+	
+	public MainMenuCommand(IOProvider ioProvider) {
+		this.ioProvider = ioProvider;
+	}
+	
 	@Override
 	public void execute() {
+		Scanner sc = new Scanner(ioProvider.getInput());
 		main: while (true) {
 			print();
 			AbstractCommand cmd = null;
 			while (true) {
-				System.out.print("Choice -> ");
+				ioProvider.getOutput().print("Choice -> ");
 				char key = 0;
-				Scanner sc = new Scanner(System.in);
 				String line = sc.nextLine();
 				if (line.isEmpty()) {
 					continue;
@@ -30,22 +39,22 @@ public class MainMenuCommand extends AbstractCommand {
 				}
 				cmd = commands.get(String.valueOf(key));
 				if (cmd == null) {
-					System.out.println("oups, command not found :(");
+					ioProvider.getOutput().println("oups, command not found :(");
 					continue;
 				}
 				break;
 			}
 			cmd.execute();
-			System.out.println();
+			ioProvider.getOutput().println();
 		}
 	}
 
 	public void print() {
-		System.out.println(">> Main Menu");
+		ioProvider.getOutput().println(">> Main Menu");
 		for (Entry<String, AbstractCommand> c : commands.entrySet()) {
-			System.out.println(c.getKey() + "\t" + c.getValue().about());
+			ioProvider.getOutput().println(c.getKey() + "\t" + c.getValue().about());
 		}
-		System.out.println(QUIT_SYMBOL + "\t" + "quit the grocery");
+		ioProvider.getOutput().println(QUIT_SYMBOL + "\t" + "quit the grocery");
 	}
 
 	@Override

@@ -14,36 +14,39 @@ import com.epam.hnyp.task2.subtask3.command.RemoveElementFromCartCommand;
 import com.epam.hnyp.task2.subtask3.command.ShowPopularProductsCommand;
 import com.epam.hnyp.task2.subtask3.command.ViewCartCommand;
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class CommandInitializerImpl implements CommandInitializer {
 
 	private ShopFacade shopFacade;
-	
-	public CommandInitializerImpl(ShopFacade shopFacade) {
+	private IOProvider ioProvider;
+
+	public CommandInitializerImpl(ShopFacade shopFacade, IOProvider ioProvider) {
 		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
 	}
-	
+
 	@Override
 	public AbstractCommand initMainCommand() {
-		AbstractCommand viewCartCommand = new ViewCartCommand(shopFacade);
-		AbstractCommand addToCartCommand = new AddToCartCommand(shopFacade); 
+		AbstractCommand viewCartCommand = new ViewCartCommand(shopFacade, ioProvider);
+		AbstractCommand addToCartCommand = new AddToCartCommand(shopFacade, ioProvider); 
 		
 		int i = 1;
-		viewCartCommand.addCommand(String.valueOf(i++), new CartPriceCommand(shopFacade));
+		viewCartCommand.addCommand(String.valueOf(i++), new CartPriceCommand(shopFacade, ioProvider));
 		viewCartCommand.addCommand(String.valueOf(i++), addToCartCommand);
-		viewCartCommand.addCommand(String.valueOf(i++), new EmptyCartCommand(shopFacade));
-		viewCartCommand.addCommand(String.valueOf(i++), new RemoveElementFromCartCommand(shopFacade));
-		viewCartCommand.addCommand(String.valueOf(i++), new MakeOrderCommand(shopFacade));
+		viewCartCommand.addCommand(String.valueOf(i++), new EmptyCartCommand(shopFacade, ioProvider));
+		viewCartCommand.addCommand(String.valueOf(i++), new RemoveElementFromCartCommand(shopFacade, ioProvider));
+		viewCartCommand.addCommand(String.valueOf(i++), new MakeOrderCommand(shopFacade, ioProvider));
 		
 		i = 1;
-		AbstractCommand ordersCommand = new OrdersCommand(shopFacade);
-		ordersCommand.addCommand(String.valueOf(i++), new FindOrderCommand(shopFacade));
-		ordersCommand.addCommand(String.valueOf(i++), new OrdersByPeriodCommand(shopFacade));
+		AbstractCommand ordersCommand = new OrdersCommand(shopFacade, ioProvider);
+		ordersCommand.addCommand(String.valueOf(i++), new FindOrderCommand(shopFacade, ioProvider));
+		ordersCommand.addCommand(String.valueOf(i++), new OrdersByPeriodCommand(shopFacade, ioProvider));
 		
 		i = 1;
-		AbstractCommand mainCommand = new MainMenuCommand();
-		mainCommand.addCommand(String.valueOf(i++), new PrintProductsCommand(shopFacade));
-		mainCommand.addCommand(String.valueOf(i++), new ShowPopularProductsCommand(shopFacade));
+		AbstractCommand mainCommand = new MainMenuCommand(ioProvider);
+		mainCommand.addCommand(String.valueOf(i++), new PrintProductsCommand(shopFacade, ioProvider));
+		mainCommand.addCommand(String.valueOf(i++), new ShowPopularProductsCommand(shopFacade, ioProvider));
 		mainCommand.addCommand(String.valueOf(i++), addToCartCommand);
 		mainCommand.addCommand(String.valueOf(i++), viewCartCommand);
 		mainCommand.addCommand(String.valueOf(i++), ordersCommand);

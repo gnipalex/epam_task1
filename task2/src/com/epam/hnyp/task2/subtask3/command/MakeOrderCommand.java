@@ -7,27 +7,30 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class MakeOrderCommand extends AbstractCommand {
 
 	private ShopFacade shopFacade;
-
-	public MakeOrderCommand(ShopFacade shopFacade) {
+	private IOProvider ioProvider;
+	
+	public MakeOrderCommand(ShopFacade shopFacade, IOProvider ioProvider) {
 		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
 	}
 	
 	@Override
 	public void execute() {
 		if (shopFacade.cartSize() == 0) {
-			System.out.println("Your cart is empty, buy something at first");
+			ioProvider.getOutput().println("Your cart is empty, buy something at first");
 			return;
 		}
 		int totalPrice = shopFacade.getPriceForCart();
-		System.out.println("You have " + shopFacade.cartSize() + 
+		ioProvider.getOutput().println("You have " + shopFacade.cartSize() + 
 				" products in cart. Total price = " + totalPrice);
-		System.out.print("Please enter your name or just pass enter to cancel : ");
+		ioProvider.getOutput().print("Please enter your name or just pass enter to cancel : ");
 		
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(ioProvider.getInput());
 		String line = sc.nextLine();
 		if (line.isEmpty()) {
 			return;
@@ -36,7 +39,7 @@ public class MakeOrderCommand extends AbstractCommand {
 		Date date = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		while(true) {
-			System.out.print("Please enter date of order(dd/MM/yyyy HH:mm) or just pass enter to cancel: ");
+			ioProvider.getOutput().print("Please enter date of order(dd/MM/yyyy HH:mm) or just pass enter to cancel: ");
 			line = sc.nextLine();
 			if (line.isEmpty()) {
 				return;
@@ -44,16 +47,16 @@ public class MakeOrderCommand extends AbstractCommand {
 			try {
 				date = sdf.parse(line);
 			} catch (ParseException e) {
-				System.out.println("##date parse error##");
+				ioProvider.getOutput().println("##date parse error##");
 				continue;
 			}
 			break;
 		}
 
 		if (shopFacade.makeOrder(name, date)) {
-			System.out.println("Success. Order created.");
+			ioProvider.getOutput().println("Success. Order created.");
 		} else {
-			System.out.println("Can't create order with date " + sdf.format(date) + "!!!!");
+			ioProvider.getOutput().println("Can't create order with date " + sdf.format(date) + "!!!!");
 		}
 	}
 

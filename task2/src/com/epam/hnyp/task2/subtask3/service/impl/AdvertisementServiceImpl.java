@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask3.util.impl;
+package com.epam.hnyp.task2.subtask3.service.impl;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,9 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.model.Product;
-import com.epam.hnyp.task2.subtask3.util.Advertisement;
+import com.epam.hnyp.task2.subtask3.service.AdvertisementService;
 
-public class AdvertisementImpl implements Advertisement {
+public class AdvertisementServiceImpl implements AdvertisementService {
 
 	private final int listMaxCount;
 	
@@ -17,7 +17,7 @@ public class AdvertisementImpl implements Advertisement {
 	 * @param maxElements
 	 * @throws IllegalArgumentException if maxElements < 1
 	 */
-	public AdvertisementImpl(int maxElements) {
+	public AdvertisementServiceImpl(int maxElements) {
 		if (maxElements < 1) {
 			throw new IllegalArgumentException();
 		}

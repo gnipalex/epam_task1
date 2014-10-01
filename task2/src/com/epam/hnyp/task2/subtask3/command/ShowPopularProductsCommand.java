@@ -4,28 +4,31 @@ import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Product;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class ShowPopularProductsCommand extends AbstractCommand {
 
 	private ShopFacade shopFacade;
+	private IOProvider ioProvider;
 
-	public ShowPopularProductsCommand(ShopFacade shopFacade) {
+	public ShowPopularProductsCommand(ShopFacade shopFacade, IOProvider ioProvider) {
 		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
 	}
 	
 	@Override
 	public void execute() {
-		System.out.println("Popular products :");
-		System.out.printf("%1$s\t%2$20s\t%3$s\n", "id", "name", "price");
-		System.out.println("-----------------------------------");
+		ioProvider.getOutput().println("Popular products :");
+		ioProvider.getOutput().printf("%1$s\t%2$20s\t%3$s\n", "id", "name", "price");
+		ioProvider.getOutput().println("-----------------------------------");
 		if (shopFacade.getPopularProducts().isEmpty()) {
-			System.out.println("\t\t---empty---");
+			ioProvider.getOutput().println("\t\t---empty---");
 		}
 		for (Product g : shopFacade.getPopularProducts()) {
-			System.out.printf("%1$d\t%2$20s\t%3$d\n", g.getId(), g.getName(),
+			ioProvider.getOutput().printf("%1$d\t%2$20s\t%3$d\n", g.getId(), g.getName(),
 					g.getPrice());
 		}
-		System.out.println("-----------------------------------");
+		ioProvider.getOutput().println("-----------------------------------");
 	}
 
 	@Override

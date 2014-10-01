@@ -10,23 +10,26 @@ import java.util.Scanner;
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Order;
 import com.epam.hnyp.task2.subtask3.model.Product;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class FindOrderCommand extends AbstractCommand {
 
 	private ShopFacade shopFacade;
-
-	public FindOrderCommand(ShopFacade shopFacade) {
+	private IOProvider ioProvider;
+	
+	public FindOrderCommand(ShopFacade shopFacade, IOProvider ioProvider) {
 		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
 	}
 	
 	@Override
 	public void execute() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(ioProvider.getInput());
 		Date date = null; 
 		
 		while (true) {
-			System.out.print("Please enter a date of order (dd/MM/yyyy) or just pass enter to cancel: ");
+			ioProvider.getOutput().print("Please enter a date of order (dd/MM/yyyy) or just pass enter to cancel: ");
 			String line = sc.nextLine();
 			if (line.isEmpty()) {
 				return;
@@ -43,28 +46,28 @@ public class FindOrderCommand extends AbstractCommand {
 		Order order = shopFacade.getNearestOrder(date);
 		
 		if (order == null) {
-			System.out.println("---order not found---");
+			ioProvider.getOutput().println("---order not found---");
 			return;
 		} 
 		
-		System.out.println("Order near to date " + sdf.format(date) + " :");
+		ioProvider.getOutput().println("Order near to date " + sdf.format(date) + " :");
 		SimpleDateFormat sdf_full = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		System.out.println("Date of order: " + sdf_full.format(order.getDate()));
-		System.out.println("Customer: " + order.getCustomer());
+		ioProvider.getOutput().println("Date of order: " + sdf_full.format(order.getDate()));
+		ioProvider.getOutput().println("Customer: " + order.getCustomer());
 		StringBuilder str = new StringBuilder();
 		
-		System.out.print("Goods in cart (name[count]): ");
+		ioProvider.getOutput().print("Goods in cart (name[count]): ");
 		for (Entry<Long, Integer> e : order.getItems().entrySet()) {
 			Product g = shopFacade.getProductById(e.getKey());
 			if (g == null) {
-				System.out.print("not found, ");
+				ioProvider.getOutput().print("not found, ");
 				continue;
 			}
-			System.out.print(g.getName() + "[" + e.getValue() + "], ");
+			ioProvider.getOutput().print(g.getName() + "[" + e.getValue() + "], ");
 		}
-		System.out.println();
+		ioProvider.getOutput().println();
 		int totalPrice = shopFacade.getPriceForOrder(order);
-		System.out.println("Total price: " + totalPrice);
+		ioProvider.getOutput().println("Total price: " + totalPrice);
 	}
 
 	@Override

@@ -5,10 +5,10 @@ import com.epam.hnyp.task2.subtask3.repo.ProductRepo;
 import com.epam.hnyp.task2.subtask3.repo.OrderRepo;
 import com.epam.hnyp.task2.subtask3.repo.impl.ProductRepoInMemory;
 import com.epam.hnyp.task2.subtask3.repo.impl.OrderRepoInMemory;
+import com.epam.hnyp.task2.subtask3.service.impl.AdvertisementServiceImpl;
+import com.epam.hnyp.task2.subtask3.service.impl.CartServiceImpl;
 import com.epam.hnyp.task2.subtask3.service.impl.ProductsServiceImpl;
 import com.epam.hnyp.task2.subtask3.service.impl.OrderServiceImpl;
-import com.epam.hnyp.task2.subtask3.util.impl.AdvertisementImpl;
-import com.epam.hnyp.task2.subtask3.util.impl.CartImpl;
 
 public class ServicesInMemoryInitializer implements ServicesInitializer {
 	
@@ -24,8 +24,8 @@ public class ServicesInMemoryInitializer implements ServicesInitializer {
 		orderService.setOrderRepo(orderRepo);
 		
 		ShopFacadeImpl shopFacade = new ShopFacadeImpl();
-		shopFacade.setAdvertisement(new AdvertisementImpl(advMax));
-		shopFacade.setCart(new CartImpl());
+		shopFacade.setAdvertisementService(new AdvertisementServiceImpl(advMax));
+		shopFacade.setCartService(new CartServiceImpl());
 		shopFacade.setProductsService(productService);
 		shopFacade.setOrderService(orderService);
 		

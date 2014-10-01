@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.model.Order;
 import com.epam.hnyp.task2.subtask3.model.Product;
-import com.epam.hnyp.task2.subtask3.util.Cart;
+import com.epam.hnyp.task2.subtask3.service.CartService;
 
 public interface ShopFacade {
 	/**

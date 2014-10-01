@@ -4,19 +4,22 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class RemoveElementFromCartCommand extends AbstractCommand {
 
 	private ShopFacade shopFacade;
+	private IOProvider ioProvider;
 
-	public RemoveElementFromCartCommand(ShopFacade shopFacade) {
+	public RemoveElementFromCartCommand(ShopFacade shopFacade, IOProvider ioProvider) {
 		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
 	}
 	
 	@Override
 	public void execute() {
-		System.out.print("Please enter id of product to remove or just pass enter to cancel: ");
-		Scanner sc = new Scanner(System.in);
+		ioProvider.getOutput().print("Please enter id of product to remove or just pass enter to cancel: ");
+		Scanner sc = new Scanner(ioProvider.getInput());
 		String line = sc.nextLine();
 		if (line.isEmpty()) {
 			return;
@@ -25,7 +28,7 @@ public class RemoveElementFromCartCommand extends AbstractCommand {
 		try {
 			id = Long.parseLong(line);
 		} catch (NumberFormatException e) {
-			System.out.println("##wrong format of id##");
+			ioProvider.getOutput().println("##wrong format of id##");
 			return;
 		}
 		shopFacade.removeFromCart(id);
