@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask3.command;
+package com.epam.hnyp.task2.subtask3.util;
 
 public class MyKeyValue<K, V> {
 	private K key;

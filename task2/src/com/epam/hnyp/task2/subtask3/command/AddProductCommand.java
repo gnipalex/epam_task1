@@ -13,6 +13,7 @@ import com.epam.hnyp.task2.subtask3.model.VegetableProduct;
 import com.epam.hnyp.task2.subtask3.model.WeightableProduct;
 import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator.ProductCreateException;
+import com.epam.hnyp.task2.subtask3.util.MyKeyValue;
 
 public class AddProductCommand extends AbstractCommand {
 	
@@ -29,11 +30,11 @@ public class AddProductCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void execute(String... args) {
-		ProductCreator productCreator = buildCreator(args);
-		if (productCreator == null) {
-			return;
-		}
+	public void execute() {
+//		ProductCreator productCreator = buildCreator(args);
+//		if (productCreator == null) {
+//			return;
+//		}
 		
 		System.out.println("Adding of new product to grocery.");
 		printProductsTypes();
@@ -92,37 +93,42 @@ public class AddProductCommand extends AbstractCommand {
 		}
 	}
 	
-	private ProductCreator buildCreator(String[] args) {
-		ProductCreator prodCreator = null;
-		String className = null;
-		for (String s : args) {
-			if (s.startsWith(CREATOR_CLASS_PARAM)) {
-				String[] split = s.split(":");
-				if (split == null || split.length < 2) {
-					System.out
-							.println("##error, config implementation to add product##");
-					return null;
-				}
-				className = split[1];
-				break;
-			}
-		}
-		try {
-			prodCreator = (ProductCreator) Class.forName(className).newInstance();
-		} catch (ClassNotFoundException e) {
-			System.out
-					.println("##error, implementation of product creator not found##");
-			return null;
-		} catch (Exception e) {
-			System.out.println("##error, creator is not created, product cannot be added##");
-			return null;
-		}
-		return prodCreator;
-	}
+//	private ProductCreator buildCreator(String[] args) {
+//		ProductCreator prodCreator = null;
+//		String className = null;
+//		for (String s : args) {
+//			if (s.startsWith(CREATOR_CLASS_PARAM)) {
+//				String[] split = s.split(":");
+//				if (split == null || split.length < 2) {
+//					System.out
+//							.println("##error, config implementation to add product##");
+//					return null;
+//				}
+//				className = split[1];
+//				break;
+//			}
+//		}
+//		try {
+//			prodCreator = (ProductCreator) Class.forName(className).newInstance();
+//		} catch (ClassNotFoundException e) {
+//			System.out
+//					.println("##error, implementation of product creator not found##");
+//			return null;
+//		} catch (Exception e) {
+//			System.out.println("##error, creator is not created, product cannot be added##");
+//			return null;
+//		}
+//		return prodCreator;
+//	}
 
 	@Override
 	public String about() {
 		return "add new product to store";
+	}
+
+	@Override
+	public Map<String, AbstractCommand> getCommandsMap() {
+		return null;
 	}
 
 }

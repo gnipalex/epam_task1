@@ -8,12 +8,11 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.command.MyKeyValue;
-import com.epam.hnyp.task2.subtask3.factory.CommandInitializer;
-import com.epam.hnyp.task2.subtask3.factory.CommandInitializerImpl;
-import com.epam.hnyp.task2.subtask3.factory.ServicesInMemoryInitializer;
-import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer;
-import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer.ServicesContainer;
+import com.epam.hnyp.task2.subtask3.initializer.CommandInitializer;
+import com.epam.hnyp.task2.subtask3.initializer.CommandInitializerImpl;
+import com.epam.hnyp.task2.subtask3.initializer.ServicesInMemoryInitializer;
+import com.epam.hnyp.task2.subtask3.initializer.ServicesInitializer;
+import com.epam.hnyp.task2.subtask3.initializer.ServicesInitializer.ServicesContainer;
 import com.epam.hnyp.task2.subtask3.model.creator.ConsoleProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ConsoleReflectionProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator;
@@ -24,6 +23,7 @@ import com.epam.hnyp.task2.subtask3.serialize.NtimesProductsSerializer;
 import com.epam.hnyp.task2.subtask3.serialize.ProductsSerializer;
 import com.epam.hnyp.task2.subtask3.util.ConsoleIOProvider;
 import com.epam.hnyp.task2.subtask3.util.IOProvider;
+import com.epam.hnyp.task2.subtask3.util.MyKeyValue;
 
 public class ConsoleGrocery {
 	public static final String SERIALIZED_PRODUCTS_FILE = "products.dat";
