@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask3.factory;
+package com.epam.hnyp.task2.subtask3.initializer;
 
 import com.epam.hnyp.task2.subtask3.model.CerealProduct;
 import com.epam.hnyp.task2.subtask3.model.DrinkProduct;
