@@ -1,12 +1,10 @@
-package com.epam.hnyp.task2.subtask3.command.main;
+package com.epam.hnyp.task2.subtask3.command;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.command.MyKeyValue;
 import com.epam.hnyp.task2.subtask3.model.CerealProduct;
 import com.epam.hnyp.task2.subtask3.model.DrinkProduct;
 import com.epam.hnyp.task2.subtask3.model.Product;

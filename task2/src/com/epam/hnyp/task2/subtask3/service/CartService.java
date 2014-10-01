@@ -1,10 +1,10 @@
-package com.epam.hnyp.task2.subtask3.util;
+package com.epam.hnyp.task2.subtask3.service;
 
 import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.model.Product;
 
-public interface Cart {
+public interface CartService {
 	/**
 	 * Adds product to cart. If good already presents, just increases count of products
 	 * by one

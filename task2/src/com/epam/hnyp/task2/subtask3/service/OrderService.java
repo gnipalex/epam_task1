@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.epam.hnyp.task2.subtask3.model.Order;
-import com.epam.hnyp.task2.subtask3.util.Cart;
 
 public interface OrderService {
 	/**
@@ -33,6 +32,6 @@ public interface OrderService {
 	 * @param date
 	 * @return true if order created
 	 */
-	boolean makeOrder(Cart cart, String customer, Date date);
+	boolean makeOrder(CartService cart, String customer, Date date);
 	
 }

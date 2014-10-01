@@ -1,4 +1,4 @@
-package com.epam.hnyp.task2.subtask3.util.impl;
+package com.epam.hnyp.task2.subtask3.service.impl;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,10 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.epam.hnyp.task2.subtask3.model.Product;
-import com.epam.hnyp.task2.subtask3.util.Cart;
+import com.epam.hnyp.task2.subtask3.service.CartService;
 
-public class CartImpl implements Cart {
-	// key - id of product, val - count
+public class CartServiceImpl implements CartService {
 	private Map<Long, Integer> cart = new HashMap<>();
 
 	@Override

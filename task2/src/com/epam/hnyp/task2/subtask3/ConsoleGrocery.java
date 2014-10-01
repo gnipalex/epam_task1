@@ -8,22 +8,22 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
-import com.epam.hnyp.task2.subtask3.command.MainMenuCommand;
 import com.epam.hnyp.task2.subtask3.command.MyKeyValue;
-import com.epam.hnyp.task2.subtask3.command.main.AddProductCommand;
-import com.epam.hnyp.task2.subtask3.factory.ProductsInitializer;
-import com.epam.hnyp.task2.subtask3.factory.ServicesContainer;
-import com.epam.hnyp.task2.subtask3.factory.ServicesFactory;
-import com.epam.hnyp.task2.subtask3.factory.ServicesFactoryInMemory;
+import com.epam.hnyp.task2.subtask3.factory.CommandInitializer;
+import com.epam.hnyp.task2.subtask3.factory.CommandInitializerImpl;
+import com.epam.hnyp.task2.subtask3.factory.ServicesInMemoryInitializer;
+import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer;
+import com.epam.hnyp.task2.subtask3.factory.ServicesInitializer.ServicesContainer;
 import com.epam.hnyp.task2.subtask3.model.creator.ConsoleProductCreator;
-import com.epam.hnyp.task2.subtask3.model.creator.RandomProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ConsoleReflectionProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator;
+import com.epam.hnyp.task2.subtask3.model.creator.RandomProductCreator;
 import com.epam.hnyp.task2.subtask3.model.creator.RandomReflectionProductCreator;
-import com.epam.hnyp.task2.subtask3.model.creator.__RandomProductCreator;
 import com.epam.hnyp.task2.subtask3.serialize.GzipProductsSerializer;
 import com.epam.hnyp.task2.subtask3.serialize.NtimesProductsSerializer;
 import com.epam.hnyp.task2.subtask3.serialize.ProductsSerializer;
+import com.epam.hnyp.task2.subtask3.util.ConsoleIOProvider;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class ConsoleGrocery {
 	public static final String SERIALIZED_PRODUCTS_FILE = "products.dat";
@@ -45,12 +45,11 @@ public class ConsoleGrocery {
 		productCreators.put("2", new MyKeyValue<String, Class<? extends ProductCreator>>("random mode", RandomProductCreator.class));
 		productCreators.put("3", new MyKeyValue<String, Class<? extends ProductCreator>>("from console using annotations mode", ConsoleReflectionProductCreator.class));
 		productCreators.put("4", new MyKeyValue<String, Class<? extends ProductCreator>>("random using annotations mode", RandomReflectionProductCreator.class));
-		
 	}
 	
 	private static void initServicesContainer() {
-		ServicesFactory factory = new ServicesFactoryInMemory();
-		servicesContainer = factory.buildServicesContainer(5);
+		ServicesInitializer initializer = new ServicesInMemoryInitializer();
+		servicesContainer = initializer.buildServicesContainer(5);
 	}
 	
 	private static void serializeAllProducts() {
@@ -110,15 +109,15 @@ public class ConsoleGrocery {
 		initServicesContainer();
 
 		deserializeAllProducts();
-		
 		//hardcode filling
 		//ProductsInitializer.fillProducts(servicesContainer.getProductsService(), 1);
+
+		IOProvider ioProvider = new ConsoleIOProvider();
 		
-		AbstractCommand.services = servicesContainer;
-		//grocery start
-		AbstractCommand main = new MainMenuCommand();
-		String addConfParam = AddProductCommand.CREATOR_CLASS_PARAM + ":" + productCreatorImplClass;
-		main.execute(new String[] {addConfParam});
+		CommandInitializer commandInitializer = new CommandInitializerImpl(servicesContainer.getShopFacade(), ioProvider);
+		
+		AbstractCommand shopCommand = commandInitializer.initMainCommand();
+		shopCommand.execute();
 		
 		serializeAllProducts();
 	}

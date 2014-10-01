@@ -7,14 +7,14 @@ public class Order {
 	private Date date;
 	private String customer;
 	private Map<Long, Integer> items;
-	
+
 	public Order() {
 	}
 	
-	public Order(Date date, String customer, Map<Long, Integer> goods) {
+	public Order(Date date, String customer, Map<Long, Integer> products) {
 		this.date = date;
 		this.customer = customer;
-		this.items = goods;
+		this.items = products;
 	}
 	
 	public Date getDate() {
@@ -27,18 +27,6 @@ public class Order {
 	
 	public Map<Long, Integer> getItems() {
 		return items;
-	}
-
-	public void setItems(Map<Long, Integer> items) {
-		this.items = items;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public void setCustomer(String customer) {
-		this.customer = customer;
 	}
 	
 	public int getCountOfProducts() {

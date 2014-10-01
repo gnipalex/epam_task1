@@ -26,10 +26,10 @@ public interface ProductsService {
 	 */
 	boolean add(Product g);
 	
-	/**
-	 * Returns the price of all products in cart. If some elements do not present in the store, they will be omitted.
-	 * 
-	 * @return total price
-	 */
-	int getPriceForAll(Map<Long, Integer> items);
+//	/**
+//	 * Returns the price of all products in cart. If some elements do not present in the store, they will be omitted.
+//	 * 
+//	 * @return total price
+//	 */
+//	int getPriceForAll(Map<Long, Integer> items);
 }
