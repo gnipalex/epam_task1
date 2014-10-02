@@ -5,7 +5,7 @@ import java.util.Map;
 import com.epam.hnyp.task2.subtask3.model.Product;
 
 /**
- * Interface enabling good to be parseable
+ * Interface of product creation helper. Each product must have own implementation of helper 
  * @author Oleksandr_Hnyp
  *
  */

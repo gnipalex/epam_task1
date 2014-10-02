@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
-import com.epam.hnyp.task2.subtask3.model.reader.FieldReader.IllegalFieldFormatException;
 
 public class IntConsoleFieldReader implements FieldReader {
 	private InputStream stream;
@@ -15,7 +14,7 @@ public class IntConsoleFieldReader implements FieldReader {
 
 	@Override
 	public Object read() throws IllegalFieldFormatException {
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(stream);
 		int v = 0;
 		try {
 			v = Integer.parseInt(sc.nextLine());

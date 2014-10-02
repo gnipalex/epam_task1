@@ -34,6 +34,7 @@ public class ConsoleUI {
 		}
 
 		System.out.println("Search in dir : " + startDir.getAbsolutePath());
+		
 		BaseFileCondition filter = null;
 
 		System.out.print("Use name filter ? (y - yes) : ");

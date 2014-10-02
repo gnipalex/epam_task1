@@ -1,7 +1,6 @@
 package com.epam.hnyp.task2.subtask3.service;
 
 import java.util.Collection;
-import java.util.Map;
 
 import com.epam.hnyp.task2.subtask3.model.Product;
 
@@ -25,11 +24,4 @@ public interface ProductsService {
 	 * @return true if good was added
 	 */
 	boolean add(Product g);
-	
-//	/**
-//	 * Returns the price of all products in cart. If some elements do not present in the store, they will be omitted.
-//	 * 
-//	 * @return total price
-//	 */
-//	int getPriceForAll(Map<Long, Integer> items);
 }

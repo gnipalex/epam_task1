@@ -5,121 +5,83 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.epam.hnyp.task2.subtask3.model.CerealProduct;
-import com.epam.hnyp.task2.subtask3.model.DrinkProduct;
+import com.epam.hnyp.task2.subtask3.creator.AbstractProductCreator;
+import com.epam.hnyp.task2.subtask3.creator.AbstractProductCreator.CreateProductException;
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Product;
-import com.epam.hnyp.task2.subtask3.model.SweetProduct;
-import com.epam.hnyp.task2.subtask3.model.VegetableProduct;
-import com.epam.hnyp.task2.subtask3.model.WeightableProduct;
-import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator;
-import com.epam.hnyp.task2.subtask3.model.creator.ProductCreator.ProductCreateException;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 import com.epam.hnyp.task2.subtask3.util.MyKeyValue;
 
-public class AddProductCommand extends AbstractCommand {
+public class AddProductCommand extends AbstractCommand {	
+//	private static Map<String, MyKeyValue<String ,Class<? extends Product>>> prods = new LinkedHashMap<>();
+//	static {
+//		prods.put("1",  new MyKeyValue<String, Class<? extends Product>>("simple product", Product.class));
+//		prods.put("2",  new MyKeyValue<String, Class<? extends Product>>("vegetable", VegetableProduct.class));
+//		prods.put("3",  new MyKeyValue<String, Class<? extends Product>>("drink", DrinkProduct.class));
+//		prods.put("4",  new MyKeyValue<String, Class<? extends Product>>("sweet", SweetProduct.class));
+//		prods.put("5",  new MyKeyValue<String, Class<? extends Product>>("cereal", CerealProduct.class));
+//		prods.put("6",  new MyKeyValue<String, Class<? extends Product>>("weightable product", WeightableProduct.class));
+//	}
 	
-	public static final String CREATOR_CLASS_PARAM = "AddProductCommand_CREATOR_CLASS";
+	private ShopFacade shopFacade;
+	private IOProvider ioProvider;
+	private AbstractProductCreator productCreator;
 	
-	private static Map<String, MyKeyValue<String ,Class<? extends Product>>> prods = new LinkedHashMap<>();
-	static {
-		prods.put("1",  new MyKeyValue<String, Class<? extends Product>>("simple product", Product.class));
-		prods.put("2",  new MyKeyValue<String, Class<? extends Product>>("vegetable", VegetableProduct.class));
-		prods.put("3",  new MyKeyValue<String, Class<? extends Product>>("drink", DrinkProduct.class));
-		prods.put("4",  new MyKeyValue<String, Class<? extends Product>>("sweet", SweetProduct.class));
-		prods.put("5",  new MyKeyValue<String, Class<? extends Product>>("cereal", CerealProduct.class));
-		prods.put("6",  new MyKeyValue<String, Class<? extends Product>>("weightable product", WeightableProduct.class));
+	private Map<String, MyKeyValue<String ,Class<? extends Product>>> availableProducts = new LinkedHashMap<>();
+	
+	public AddProductCommand(ShopFacade shopFacade, IOProvider ioProvider, AbstractProductCreator productCreator) {
+		this.shopFacade = shopFacade;
+		this.ioProvider = ioProvider;
+		this.productCreator = productCreator;
+		int i = 1;
+		for (Entry<String, Class<? extends Product>> e : productCreator.getProducts().entrySet()) {
+			availableProducts.put(String.valueOf(i++), 
+					new MyKeyValue<String, Class<? extends Product>>(e.getKey(), e.getValue()));
+		}
 	}
 
 	@Override
 	public void execute() {
-//		ProductCreator productCreator = buildCreator(args);
-//		if (productCreator == null) {
-//			return;
-//		}
-		
-		System.out.println("Adding of new product to grocery.");
+		ioProvider.getOutput().println("Adding of new product to grocery.");
 		printProductsTypes();
+		ioProvider.getOutput().println();
+		ioProvider.getOutput().print("Choice (or nothing to cancel) -> ");
 		
-		System.out.println();
-		System.out.print("Choice (or nothing to cancel) -> ");
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(ioProvider.getInput());
 		String line = sc.nextLine();
 		
 		if (line.isEmpty()) {
 			return;
 		}
 		
-		MyKeyValue<String, Class<? extends Product>> chosedType = prods.get(String.valueOf(line.charAt(0)));
+		MyKeyValue<String, Class<? extends Product>> chosedType = availableProducts.get(String.valueOf(line.charAt(0)));
 		if (chosedType == null) {
-			System.out.println("wrong input, type with key " + line.charAt(0) + " not found");
+			ioProvider.getOutput().println("wrong input, type with key " + line.charAt(0) + " not found");
 			return;
 		}
 		
-		Product product = instantiateProduct(chosedType.getValue());
-		if (product == null) {
-			System.out.println("##error, product cannot be added##");
-			return;
-		}
-		
-		System.out.println("Creating new '" + chosedType.getKey() + "'");
-		try {
-			productCreator.createProduct(product);
-		} catch (ProductCreateException e) {
-			System.out.println("##error while creating product##");
-			System.out.println(e.getMessage());
-			return;
-		}
-		System.out.println("Created new '" + chosedType.getKey() + "' : " + product.toString());
-		if (getProductsService().add(product)) {
-			System.out.println("Product successfuly saved");
-		} else {
-			System.out.println("Product NOT saved, something went wrong");
-		}
-	}
-	
-	private Product instantiateProduct(Class<? extends Product> prodType) {
 		Product product = null;
 		try {
-			product = prodType.newInstance();
-		} catch (Exception e) {
-			return null;
+			product = productCreator.createProduct(chosedType.getValue());
+		} catch (CreateProductException e) {
+			ioProvider.getOutput().println("##error product creating : " + e.getMessage());
+			return;
 		}
-		return product;
+		
+		ioProvider.getOutput().println("Created new '" + chosedType.getKey() + "' : " + product.toString());
+		if (shopFacade.addNewProduct(product)) {
+			ioProvider.getOutput().println("Product successfuly saved");
+		} else {
+			ioProvider.getOutput().println("Product NOT saved, something went wrong");
+		}
 	}
 	
 	private void printProductsTypes() {
-		System.out.println("Available types of products:");
-		for (Entry<String, MyKeyValue<String ,Class<? extends Product>>> e : prods.entrySet()) {
-			System.out.println(e.getKey() + " - " + e.getValue().getKey());
+		ioProvider.getOutput().println("Available types of products:");
+		for (Entry<String, MyKeyValue<String ,Class<? extends Product>>> e : availableProducts.entrySet()) {
+			ioProvider.getOutput().println(e.getKey() + " - " + e.getValue().getKey());
 		}
 	}
-	
-//	private ProductCreator buildCreator(String[] args) {
-//		ProductCreator prodCreator = null;
-//		String className = null;
-//		for (String s : args) {
-//			if (s.startsWith(CREATOR_CLASS_PARAM)) {
-//				String[] split = s.split(":");
-//				if (split == null || split.length < 2) {
-//					System.out
-//							.println("##error, config implementation to add product##");
-//					return null;
-//				}
-//				className = split[1];
-//				break;
-//			}
-//		}
-//		try {
-//			prodCreator = (ProductCreator) Class.forName(className).newInstance();
-//		} catch (ClassNotFoundException e) {
-//			System.out
-//					.println("##error, implementation of product creator not found##");
-//			return null;
-//		} catch (Exception e) {
-//			System.out.println("##error, creator is not created, product cannot be added##");
-//			return null;
-//		}
-//		return prodCreator;
-//	}
 
 	@Override
 	public String about() {

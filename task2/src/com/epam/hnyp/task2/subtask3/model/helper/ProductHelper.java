@@ -37,18 +37,6 @@ public class ProductHelper implements HelperNoReflection {
 		} catch (NumberFormatException e) {
 			throw new IllegalDataFormatException();
 		}
-
-		// parsing id
-//		matcher = Pattern.compile(makeReqularExpression(fieldId)).matcher(
-//				data);
-//		if (!matcher.find()) {
-//			throw new IllegalDataFormatException();
-//		}
-//		try {
-//			this.id = Long.parseLong(matcher.group(1));
-//		} catch (NumberFormatException e) {
-//			throw new IllegalDataFormatException();
-//		}
 		return p;
 	}
 

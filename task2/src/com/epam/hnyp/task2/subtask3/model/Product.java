@@ -2,22 +2,15 @@ package com.epam.hnyp.task2.subtask3.model;
 
 import java.io.Serializable;
 import java.util.Formatter;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class Product implements Serializable, ParsableGoodNoReflection {
+public class Product implements Serializable {
 	private static final long serialVersionUID = 6101697799798820856L;
 
 	private String name;
-	private static final String fieldName = "name";
 
 	private int price;
-	private static final String fieldPrice = "price";
 
 	private long id;
-	//private static final String fieldId = "id";
 
 	public Product() {
 	}
@@ -83,52 +76,5 @@ public class Product implements Serializable, ParsableGoodNoReflection {
 	 */
 	protected String printOtherColumn() {
 		return "";
-	}
-
-	@Override
-	public void make(String data) throws IllegalDataFormatException {
-		// parsing name
-		Matcher matcher = Pattern.compile(makeReqularExpression(fieldName))
-				.matcher(data);
-		if (!matcher.find()) {
-			throw new IllegalDataFormatException();
-		}
-		this.name = matcher.group(1);
-
-		// parsing price
-		matcher = Pattern.compile(makeReqularExpression(fieldPrice)).matcher(
-				data);
-		if (!matcher.find()) {
-			throw new IllegalDataFormatException();
-		}
-		try {
-			this.price = Integer.parseInt(matcher.group(1));
-		} catch (NumberFormatException e) {
-			throw new IllegalDataFormatException();
-		}
-
-		// parsing id
-//		matcher = Pattern.compile(makeReqularExpression(fieldId)).matcher(
-//				data);
-//		if (!matcher.find()) {
-//			throw new IllegalDataFormatException();
-//		}
-//		try {
-//			this.id = Long.parseLong(matcher.group(1));
-//		} catch (NumberFormatException e) {
-//			throw new IllegalDataFormatException();
-//		}
-	}
-
-	protected String makeReqularExpression(String fieldName) {
-		return fieldName + ":(.+?)(?=;)|" + fieldName + ":(.+)";
-	}
-
-	@Override
-	public Map<String, Class<?>> getFields() {
-		Map<String, Class<?>> map = new LinkedHashMap<String, Class<?>>();
-		map.put(fieldName, String.class);
-		map.put(fieldPrice, Integer.class);
-		return map;
 	}
 }

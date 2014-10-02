@@ -6,17 +6,18 @@ import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 
 public class DoubleRandomFieldReader implements FieldReader {
 	private int max;
-	private Random rand = new Random(System.currentTimeMillis());
+	private Random rand;
 	/**
 	 * 
 	 * @param max
 	 * @throws IllegalArgumentException if max <= 0
 	 */
-	public DoubleRandomFieldReader(int max) {
+	public DoubleRandomFieldReader(int max, Random rand) {
 		if (max <= 0) {
 			throw new IllegalArgumentException();
 		}
 		this.max = max;
+		this.rand = rand;
 	}
 	
 	@Override

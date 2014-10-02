@@ -28,7 +28,7 @@ public class AddToCartCommand extends AbstractCommand{
 		try { 
 			id = Long.parseLong(line);		
 		} catch (NumberFormatException e) {
-			System.out.println("##wrong format of id##");
+			ioProvider.getOutput().println("##wrong format of id##");
 			return;
 		}
 		if (!shopFacade.addToCart(id)) {

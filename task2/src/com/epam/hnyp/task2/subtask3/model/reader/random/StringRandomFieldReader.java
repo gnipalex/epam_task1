@@ -5,21 +5,22 @@ import java.util.Random;
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
 
 public class StringRandomFieldReader implements FieldReader {
-	private Random rand = new Random(System.currentTimeMillis());
-	private int digitCount;
+	private Random rand;
+	private int symbolsCount;
 	
-	public StringRandomFieldReader(int digitCount) {
-		if (digitCount <=0) {
+	public StringRandomFieldReader(int symbolsCount, Random rand) {
+		if (symbolsCount <=0) {
 			throw new IllegalArgumentException();
 		}
-		this.digitCount = digitCount;
+		this.symbolsCount = symbolsCount;
+		this.rand = rand;
 	}
 	
 	
 	@Override
 	public Object read() throws IllegalFieldFormatException {
 		StringBuilder str = new StringBuilder();
-		for (int i=0; i < digitCount; i++){
+		for (int i=0; i < symbolsCount; i++){
 			int r = rand.nextInt(9);
 			str.append(String.valueOf(r));
 		}
