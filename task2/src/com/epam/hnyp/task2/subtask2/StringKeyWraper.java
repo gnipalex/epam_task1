@@ -13,6 +13,10 @@ public abstract class StringKeyWraper {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return key == obj ? true : key.equals(obj);
+		if (obj == null || !(obj instanceof StringKeyWraper)) {
+			return false;
+		}
+		String keyO = ((StringKeyWraper)obj).key;
+		return key == keyO ? true : key.equals(keyO);
 	}
 }
