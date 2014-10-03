@@ -1,10 +1,11 @@
-package com.epam.hnyp.task2.subtask3.facade;
+package com.epam.hnyp.task2.subtask3.facade.impl;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Order;
 import com.epam.hnyp.task2.subtask3.model.Product;
 import com.epam.hnyp.task2.subtask3.service.AdvertisementService;

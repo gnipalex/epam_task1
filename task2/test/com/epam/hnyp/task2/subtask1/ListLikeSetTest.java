@@ -23,7 +23,7 @@ public class ListLikeSetTest {
 	}
 	
 	@Test
-	public void testAddE() {
+	public void testAdd() {
 		assertTrue(list.add(6));
 	}
 	
@@ -33,12 +33,12 @@ public class ListLikeSetTest {
 	}
 
 	@Test
-	public void testAddIntE() {
+	public void testAddAtIndex() {
 		list.add(0, 0);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void testAddIntEDuplicate() {
+	public void testAddAtIndexDuplicate() {
 		list.add(0, 1);
 	}
 
@@ -62,12 +62,12 @@ public class ListLikeSetTest {
 	}
 
 	@Test
-	public void testSetIntE() {
+	public void testSetAtIndex() {
 		assertTrue(list.set(0, 0).equals(1));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void testSetIntEDuplicate() {
+	public void testSetAtIndexDuplicate() {
 		list.set(0, 3);
 	}
 

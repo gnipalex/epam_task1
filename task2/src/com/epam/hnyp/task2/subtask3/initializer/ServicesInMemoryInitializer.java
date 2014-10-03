@@ -1,6 +1,6 @@
 package com.epam.hnyp.task2.subtask3.initializer;
 
-import com.epam.hnyp.task2.subtask3.facade.ShopFacadeImpl;
+import com.epam.hnyp.task2.subtask3.facade.impl.ShopFacadeImpl;
 import com.epam.hnyp.task2.subtask3.repo.ProductRepo;
 import com.epam.hnyp.task2.subtask3.repo.OrderRepo;
 import com.epam.hnyp.task2.subtask3.repo.impl.ProductRepoInMemory;
