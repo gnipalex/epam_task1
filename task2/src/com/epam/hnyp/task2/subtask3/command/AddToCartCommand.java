@@ -1,7 +1,6 @@
 package com.epam.hnyp.task2.subtask3.command;
 
 import java.util.Map;
-import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.util.IOProvider;
@@ -18,9 +17,8 @@ public class AddToCartCommand extends AbstractCommand{
 	
 	@Override
 	public void execute() {
-		ioProvider.getOutput().print("Please enter product id to add it to cart or just pass enter to cancel : ");
-		Scanner sc = new Scanner(ioProvider.getInput());
-		String line = sc.nextLine();
+		ioProvider.print("Please enter product id to add it to cart or just pass enter to cancel : ");
+		String line = ioProvider.readLine();
 		if (line.isEmpty()) {
 			return;
 		}
@@ -28,14 +26,14 @@ public class AddToCartCommand extends AbstractCommand{
 		try { 
 			id = Long.parseLong(line);		
 		} catch (NumberFormatException e) {
-			ioProvider.getOutput().println("##wrong format of id##");
+			ioProvider.printLine("##wrong format of id##");
 			return;
 		}
 		if (!shopFacade.addToCart(id)) {
-			ioProvider.getOutput().println("product with id=[" + id + "] not found");
+			ioProvider.printLine("product with id=[" + id + "] not found");
 			return;
 		}
-		ioProvider.getOutput().println("product id=[" + id + "] added, now you have " + shopFacade.cartSize() + " items in your cart");
+		ioProvider.printLine("product id=[" + id + "] added, now you have " + shopFacade.cartSize() + " items in your cart");
 	}
 
 	@Override

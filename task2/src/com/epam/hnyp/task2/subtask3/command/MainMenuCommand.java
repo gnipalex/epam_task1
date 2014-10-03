@@ -3,58 +3,56 @@ package com.epam.hnyp.task2.subtask3.command;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class MainMenuCommand extends AbstractCommand {
 
-	private static final char QUIT_SYMBOL = 'q';
-	
+	public static final char QUIT_SYMBOL = 'q';
+
 	private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
-	
+
 	private IOProvider ioProvider;
-	
+
 	public MainMenuCommand(IOProvider ioProvider) {
 		this.ioProvider = ioProvider;
 	}
-	
+
 	@Override
 	public void execute() {
-		Scanner sc = new Scanner(ioProvider.getInput());
-		main: while (true) {
-			print();
+		print();
+		char key = 0;
+		do {
+			key = 0;
 			AbstractCommand cmd = null;
-			while (true) {
-				ioProvider.getOutput().print("Choice -> ");
-				char key = 0;
-				String line = sc.nextLine();
-				if (line.isEmpty()) {
-					continue;
-				}
+			ioProvider.print("Choice -> ");
+			String line = ioProvider.readLine();
+			if (!line.isEmpty()) {
 				key = line.charAt(0);
-				if (key == QUIT_SYMBOL) {
-					break main;
-				}
 				cmd = commands.get(String.valueOf(key));
-				if (cmd == null) {
-					ioProvider.getOutput().println("oups, command not found :(");
-					continue;
-				}
-				break;
+			} else {
+				continue;
 			}
-
-			cmd.execute();
-			ioProvider.getOutput().println();
-		}
+			if (cmd == null) {
+				if (key != QUIT_SYMBOL) {
+					ioProvider.printLine("oups, command not found :(");
+				}
+				continue;
+			} else {
+				cmd.execute();
+				ioProvider.printLine();
+				print();
+			}
+		} while (key != QUIT_SYMBOL);
 	}
 
 	public void print() {
-		ioProvider.getOutput().println(">> Main Menu");
+		ioProvider.printLine(">> Main Menu");
 		for (Entry<String, AbstractCommand> c : commands.entrySet()) {
-			ioProvider.getOutput().println(c.getKey() + "\t" + c.getValue().about());
+			ioProvider.printLine(
+					c.getKey() + "\t" + c.getValue().about());
 		}
-		ioProvider.getOutput().println(QUIT_SYMBOL + "\t" + "quit the grocery");
+		ioProvider.printLine(QUIT_SYMBOL + "\t" + "quit the grocery");
 	}
 
 	@Override

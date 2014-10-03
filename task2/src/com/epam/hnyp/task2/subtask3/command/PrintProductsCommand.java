@@ -18,14 +18,14 @@ public class PrintProductsCommand extends AbstractCommand {
 
 	@Override
 	public void execute() {
-		ioProvider.getOutput().println("All products from grocery");
-		ioProvider.getOutput().printf("%1$10s%2$20s%3$10s%4$20s\n", "id", "name", "price",
-				"other");
-		ioProvider.getOutput().printf("%1$s%1$s%1$s%1$s%1$s%1$s\n", "----------");
+		ioProvider.printLine("All products from grocery");
+		ioProvider.printLine(String.format("%1$10s%2$20s%3$10s%4$20s", "id", "name", "price",
+				"other"));
+		ioProvider.printLine(String.format("%1$s%1$s%1$s%1$s%1$s%1$s", "----------"));
 		for (Product g : shopFacade.getAllProducts()) {
-			ioProvider.getOutput().println(g.printTableRow());
+			ioProvider.printLine(g.printTableRow());
 		}
-		ioProvider.getOutput().printf("%1$s%1$s%1$s%1$s%1$s%1$s\n", "----------");
+		ioProvider.printLine(String.format("%1$s%1$s%1$s%1$s%1$s%1$s", "----------"));
 	}
 
 	@Override

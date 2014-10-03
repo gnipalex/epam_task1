@@ -46,32 +46,31 @@ public class ConsoleGrocery {
 			serializer.serialize(prodService,
 					new File(SERIALIZED_PRODUCTS_FILE));
 		} catch (IOException e) {
-			ioProvider.getOutput().println(
-					"--Error while writing products to file--");
+			ioProvider.printLine("--Error while writing products to file--");
 		}
 		try {
 			ntimesSerializer.serialize(prodService, new File(
 					SERIALIZED_NTIMES_PRODUCTS_FILE));
 		} catch (IOException e) {
-			ioProvider.getOutput().println(
-					"--Error while writing products to file (ntimes)--");
+			ioProvider
+					.printLine("--Error while writing products to file (ntimes)--");
 		}
 		try {
 			gzipSerializer.serialize(prodService, new File(
 					SERIALIZED_GZIP_PRODUCTS_FILE));
 		} catch (IOException e) {
-			ioProvider.getOutput().println(
-					"--Error while writing products to file (gzip)--");
+			ioProvider
+					.printLine("--Error while writing products to file (gzip)--");
 		}
 	}
 
 	private static void deserializeAllProducts(ProductsService prodService,
 			IOProvider ioProvider) {
 		try {
-			serializer.deserialize(prodService,
-					new File(SERIALIZED_PRODUCTS_FILE));
+			serializer.deserialize(prodService, new File(
+					SERIALIZED_PRODUCTS_FILE));
 		} catch (IOException e) {
-			ioProvider.getOutput().println("--Error while reading products from file--");
+			ioProvider.printLine("--Error while reading products from file--");
 		}
 	}
 
@@ -79,18 +78,14 @@ public class ConsoleGrocery {
 			IOProvider ioProvider) {
 		AbstractProductCreator productCreator = null;
 		ioProvider
-				.getOutput()
-				.println(
-						"Before grocery starts you should choose the mode of adding products :");
-		ioProvider.getOutput().println("1 - from console mode");
-		ioProvider.getOutput().println("2 - random mode");
-		ioProvider.getOutput().println(
-				"3 - from console using annotations mode");
-		ioProvider.getOutput().println("4 - random using annotations mode");
-		Scanner sc = new Scanner(ioProvider.getInput());
+				.printLine("Before grocery starts you should choose the mode of adding products :");
+		ioProvider.printLine("1 - from console mode");
+		ioProvider.printLine("2 - random mode");
+		ioProvider.printLine("3 - from console using annotations mode");
+		ioProvider.printLine("4 - random using annotations mode");
 		outer: while (true) {
-			ioProvider.getOutput().print("Choice -> ");
-			String line = sc.nextLine();
+			ioProvider.print("Choice -> ");
+			String line = ioProvider.readLine();
 			if (line.isEmpty()) {
 				continue;
 			}
@@ -130,17 +125,19 @@ public class ConsoleGrocery {
 
 		ServicesContainer servicesContainer = initServicesContainer();
 
-		deserializeAllProducts(servicesContainer.getProductsService(), ioProvider);
-		
+		deserializeAllProducts(servicesContainer.getProductsService(),
+				ioProvider);
+
 		// hardcode filling
 		// ProductsInitializer.fillProducts(servicesContainer.getProductsService(),
 		// 1);
 
-//		CommandInitializer commandInitializer = new CommandInitializerOrdinary(
-//				servicesContainer.getShopFacade(), ioProvider);
-		
-		CommandInitializer commandInitializer = new CommandInitializerUltra(servicesContainer.getShopFacade(),
-				ioProvider, prodCreator);
+		// CommandInitializer commandInitializer = new
+		// CommandInitializerOrdinary(
+		// servicesContainer.getShopFacade(), ioProvider);
+
+		CommandInitializer commandInitializer = new CommandInitializerUltra(
+				servicesContainer.getShopFacade(), ioProvider, prodCreator);
 
 		AbstractCommand shopCommand = commandInitializer.initMainCommand();
 		shopCommand.execute();

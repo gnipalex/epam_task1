@@ -17,7 +17,7 @@ public class IntRandomFieldReader implements FieldReader {
 	}
 	
 	@Override
-	public Object read() throws IllegalFieldFormatException {
+	public Integer read() throws IllegalFieldFormatException {
 		return rand.nextInt(max);
 	}
 

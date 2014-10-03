@@ -3,7 +3,6 @@ package com.epam.hnyp.task2.subtask3.command;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.creator.AbstractProductCreator;
 import com.epam.hnyp.task2.subtask3.creator.AbstractProductCreator.CreateProductException;
@@ -13,16 +12,6 @@ import com.epam.hnyp.task2.subtask3.util.IOProvider;
 import com.epam.hnyp.task2.subtask3.util.MyKeyValue;
 
 public class AddProductCommand extends AbstractCommand {	
-//	private static Map<String, MyKeyValue<String ,Class<? extends Product>>> prods = new LinkedHashMap<>();
-//	static {
-//		prods.put("1",  new MyKeyValue<String, Class<? extends Product>>("simple product", Product.class));
-//		prods.put("2",  new MyKeyValue<String, Class<? extends Product>>("vegetable", VegetableProduct.class));
-//		prods.put("3",  new MyKeyValue<String, Class<? extends Product>>("drink", DrinkProduct.class));
-//		prods.put("4",  new MyKeyValue<String, Class<? extends Product>>("sweet", SweetProduct.class));
-//		prods.put("5",  new MyKeyValue<String, Class<? extends Product>>("cereal", CerealProduct.class));
-//		prods.put("6",  new MyKeyValue<String, Class<? extends Product>>("weightable product", WeightableProduct.class));
-//	}
-	
 	private ShopFacade shopFacade;
 	private IOProvider ioProvider;
 	private AbstractProductCreator productCreator;
@@ -42,21 +31,19 @@ public class AddProductCommand extends AbstractCommand {
 
 	@Override
 	public void execute() {
-		ioProvider.getOutput().println("Adding of new product to grocery.");
+		ioProvider.printLine("Adding of new product to grocery.");
 		printProductsTypes();
-		ioProvider.getOutput().println();
-		ioProvider.getOutput().print("Choice (or nothing to cancel) -> ");
+		ioProvider.printLine();
+		ioProvider.print("Choice (or nothing to cancel) -> ");
 		
-		Scanner sc = new Scanner(ioProvider.getInput());
-		String line = sc.nextLine();
-		
+		String line = ioProvider.readLine();
 		if (line.isEmpty()) {
 			return;
 		}
 		
 		MyKeyValue<String, Class<? extends Product>> chosedType = availableProducts.get(String.valueOf(line.charAt(0)));
 		if (chosedType == null) {
-			ioProvider.getOutput().println("wrong input, type with key " + line.charAt(0) + " not found");
+			ioProvider.printLine("wrong input, type with key " + line.charAt(0) + " not found");
 			return;
 		}
 		
@@ -64,22 +51,22 @@ public class AddProductCommand extends AbstractCommand {
 		try {
 			product = productCreator.createProduct(chosedType.getValue());
 		} catch (CreateProductException e) {
-			ioProvider.getOutput().println("##error product creating : " + e.getMessage());
+			ioProvider.printLine("##error product creating : " + e.getMessage());
 			return;
 		}
 		
-		ioProvider.getOutput().println("Created new '" + chosedType.getKey() + "' : " + product.toString());
+		ioProvider.printLine("Created new '" + chosedType.getKey() + "' : " + product.toString());
 		if (shopFacade.addNewProduct(product)) {
-			ioProvider.getOutput().println("Product successfuly saved");
+			ioProvider.printLine("Product successfuly saved");
 		} else {
-			ioProvider.getOutput().println("Product NOT saved, something went wrong");
+			ioProvider.printLine("Product NOT saved, something went wrong");
 		}
 	}
 	
 	private void printProductsTypes() {
-		ioProvider.getOutput().println("Available types of products:");
+		ioProvider.printLine("Available types of products:");
 		for (Entry<String, MyKeyValue<String ,Class<? extends Product>>> e : availableProducts.entrySet()) {
-			ioProvider.getOutput().println(e.getKey() + " - " + e.getValue().getKey());
+			ioProvider.printLine(e.getKey() + " - " + e.getValue().getKey());
 		}
 	}
 

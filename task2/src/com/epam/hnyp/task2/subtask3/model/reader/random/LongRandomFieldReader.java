@@ -12,7 +12,7 @@ public class LongRandomFieldReader implements FieldReader {
 	}
 	
 	@Override
-	public Object read() throws IllegalFieldFormatException {
+	public Long read() throws IllegalFieldFormatException {
 		return rand.nextLong();
 	}
 

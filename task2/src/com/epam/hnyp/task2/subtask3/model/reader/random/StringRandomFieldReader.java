@@ -16,9 +16,8 @@ public class StringRandomFieldReader implements FieldReader {
 		this.rand = rand;
 	}
 	
-	
 	@Override
-	public Object read() throws IllegalFieldFormatException {
+	public String read() throws IllegalFieldFormatException {
 		StringBuilder str = new StringBuilder();
 		for (int i=0; i < symbolsCount; i++){
 			int r = rand.nextInt(9);

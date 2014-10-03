@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.facade.ShopFacade;
 import com.epam.hnyp.task2.subtask3.model.Order;
@@ -12,7 +11,7 @@ import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class OrdersCommand extends AbstractCommand {
 
-	private static final char QUIT_SYMBOL = 'm';
+	public static final char QUIT_SYMBOL = 'm';
 
 	private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 	
@@ -27,15 +26,14 @@ public class OrdersCommand extends AbstractCommand {
 	@Override
 	public void execute() {
 		main: while(true) {
-			ioProvider.getOutput().println(">> Main Menu >> Orders");
+			ioProvider.printLine(">> Main Menu >> Orders");
 			printOrders();
 			printCommands();
 			AbstractCommand cmd = null;
 			while (true) {
-				ioProvider.getOutput().print("Choice -> ");
+				ioProvider.print("Choice -> ");
 				char key = 0;
-				Scanner sc = new Scanner(ioProvider.getInput());
-				String line = sc.nextLine();
+				String line = ioProvider.readLine();
 				if (line.isEmpty()) {
 					continue;
 				}
@@ -45,34 +43,34 @@ public class OrdersCommand extends AbstractCommand {
 				}
 				cmd = commands.get(String.valueOf(key));
 				if (cmd == null) {
-					ioProvider.getOutput().println("oups, command not found :(");
+					ioProvider.printLine("oups, command not found :(");
 					continue;
 				}
 				break;
 			}
 			cmd.execute();
-			System.out.println();
+			ioProvider.printLine();
 		}
 	}
 
 	private void printOrders() {
 		SimpleDateFormat sdf_full = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		ioProvider.getOutput().println("All orders:");
-		ioProvider.getOutput().printf("%1$20s%2$20s%3$15s\n", "date", "customer", "products cnt");
-		ioProvider.getOutput().println("---------------------------------------------------------");
+		ioProvider.printLine("All orders:");
+		ioProvider.printLine(String.format("%1$20s%2$20s%3$15s", "date", "customer", "products cnt"));
+		ioProvider.printLine("---------------------------------------------------------");
 		for (Order o : shopFacade.getAllOrders()) {
-			ioProvider.getOutput().printf("%1$20s%2$20s%3$15d\n", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfProducts());
+			ioProvider.printLine(String.format("%1$20s%2$20s%3$15d", sdf_full.format(o.getDate()), o.getCustomer(), o.getCountOfProducts()));
 		}
-		ioProvider.getOutput().println("---------------------------------------------------------");
+		ioProvider.printLine("---------------------------------------------------------");
 
 	}
 	
 	private void printCommands() {
-		ioProvider.getOutput().println("Commands for orders:");
+		ioProvider.printLine("Commands for orders:");
 		for (Entry<String, AbstractCommand> c : commands.entrySet()) {
-			ioProvider.getOutput().println(c.getKey() + "\t" + c.getValue().about());
+			ioProvider.printLine(c.getKey() + "\t" + c.getValue().about());
 		}
-		ioProvider.getOutput().println(QUIT_SYMBOL + "\t" + "back to main menu");
+		ioProvider.printLine(QUIT_SYMBOL + "\t" + "back to main menu");
 	}
 	
 	@Override

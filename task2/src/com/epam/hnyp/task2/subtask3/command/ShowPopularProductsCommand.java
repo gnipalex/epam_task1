@@ -18,17 +18,18 @@ public class ShowPopularProductsCommand extends AbstractCommand {
 	
 	@Override
 	public void execute() {
-		ioProvider.getOutput().println("Popular products :");
-		ioProvider.getOutput().printf("%1$s\t%2$20s\t%3$s\n", "id", "name", "price");
-		ioProvider.getOutput().println("-----------------------------------");
+		ioProvider.printLine("Popular products :");
+		
+		ioProvider.printLine(String.format("%1$s\t%2$20s\t%3$s", "id", "name", "price"));
+		ioProvider.printLine("-----------------------------------");
 		if (shopFacade.getPopularProducts().isEmpty()) {
-			ioProvider.getOutput().println("\t\t---empty---");
+			ioProvider.printLine("\t\t---empty---");
 		}
 		for (Product g : shopFacade.getPopularProducts()) {
-			ioProvider.getOutput().printf("%1$d\t%2$20s\t%3$d\n", g.getId(), g.getName(),
-					g.getPrice());
+			ioProvider.printLine(String.format("%1$d\t%2$20s\t%3$d\n", g.getId(), g.getName(),
+					g.getPrice()));
 		}
-		ioProvider.getOutput().println("-----------------------------------");
+		ioProvider.printLine("-----------------------------------");
 	}
 
 	@Override

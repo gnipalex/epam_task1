@@ -18,7 +18,7 @@ public class EmptyCartCommand extends AbstractCommand {
 	@Override
 	public void execute() {
 		shopFacade.clearCart();
-		ioProvider.getOutput().println("Cart has been cleared.");
+		ioProvider.printLine("Cart has been cleared.");
 	}
 
 	@Override

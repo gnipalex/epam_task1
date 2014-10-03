@@ -34,13 +34,13 @@ public class SimpleProductCreator extends AbstractProductCreator {
 				throw new CreateProductException("reader not found for type '" + e.getValue() + "'");
 			}
 			while(true) {
-				ioProvider.getOutput().println("Please enter field '" + e.getKey() + "' :");
+				ioProvider.printLine("Please enter field '" + e.getKey() + "' :");
 				try {
 					Object parsed = reader.read();
 					parsed = processReadedValue(parsed, e.getValue(), e.getKey());
 					stringData.append(e.getKey()).append(":").append(parsed.toString()).append(";");
 				} catch (IllegalFieldFormatException ex) {
-					ioProvider.getOutput().println("##field format error##");
+					ioProvider.printLine("##field format error##");
 					continue;
 				}
 				break;

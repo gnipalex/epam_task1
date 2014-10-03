@@ -1,19 +1,29 @@
 package com.epam.hnyp.task2.subtask3.util;
 
-import java.io.InputStream;
-import java.io.PrintStream;
-
+import java.util.Scanner;
 
 public class ConsoleIOProvider implements IOProvider {
 
+	private Scanner scanner = new Scanner(System.in);
+
 	@Override
-	public InputStream getInput() {
-		return System.in;
+	public String readLine() {
+		return scanner.nextLine();
 	}
 
 	@Override
-	public PrintStream getOutput() {
-		return System.out;
+	public void print(String str) {
+		System.out.print(str);
 	}
 
+	@Override
+	public void printLine(String str) {
+		System.out.println(str);
+
+	}
+
+	@Override
+	public void printLine() {
+		System.out.println();
+	}
 }

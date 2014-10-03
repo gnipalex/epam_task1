@@ -1,29 +1,23 @@
 package com.epam.hnyp.task2.subtask3.model.reader.console;
 
-import java.io.InputStream;
-import java.util.Scanner;
-
 import com.epam.hnyp.task2.subtask3.model.reader.FieldReader;
+import com.epam.hnyp.task2.subtask3.util.IOProvider;
 
 public class IntConsoleFieldReader implements FieldReader {
-	private InputStream stream;
+	IOProvider io;
 	
-	public IntConsoleFieldReader(InputStream stream) {
-		this.stream = stream;
+	public IntConsoleFieldReader(IOProvider io) {
+		this.io = io;
 	}
 
 	@Override
-	public Object read() throws IllegalFieldFormatException {
-		Scanner sc = new Scanner(stream);
+	public Integer read() throws IllegalFieldFormatException {
 		int v = 0;
 		try {
-			v = Integer.parseInt(sc.nextLine());
+			v = Integer.parseInt(io.readLine());
 		} catch (NumberFormatException e) {
 			throw new IllegalFieldFormatException();
 		}
 		return v; 
 	}
-	
-	
-
 }

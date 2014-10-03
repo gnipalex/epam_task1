@@ -43,7 +43,7 @@ public class ReflectionProductCreator extends AbstractProductCreator {
 						+ ann.type() + "'");
 			}
 			while(true) {
-				ioProvider.getOutput().println("Enter " + resources.getString(ann.friendlyMessage()) + " :");
+				ioProvider.printLine("Enter " + resources.getString(ann.friendlyMessage()) + " :");
 				try {
 					Object parsed = reader.read();
 					parsed = processReadedValue(parsed, ann.type(), m.getName().substring(3));
@@ -53,7 +53,7 @@ public class ReflectionProductCreator extends AbstractProductCreator {
 						throw new CreateProductException("error setting value to " + ann.type().getName());
 					}
 				} catch (IllegalFieldFormatException ex) {
-					ioProvider.getOutput().println("##field format error##");
+					ioProvider.printLine("##field format error##");
 					continue;
 				}
 				break;

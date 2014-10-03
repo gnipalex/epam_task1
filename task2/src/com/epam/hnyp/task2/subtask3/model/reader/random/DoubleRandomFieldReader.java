@@ -21,9 +21,9 @@ public class DoubleRandomFieldReader implements FieldReader {
 	}
 	
 	@Override
-	public Object read() throws IllegalFieldFormatException {
+	public Double read() throws IllegalFieldFormatException {
 		int max_ = max * 100;
-		return rand.nextInt(max_) / 100f;
+		return (double) (rand.nextInt(max_) / 100f);
 	}
 
 }

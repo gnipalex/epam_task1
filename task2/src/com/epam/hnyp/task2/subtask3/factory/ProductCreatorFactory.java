@@ -54,10 +54,10 @@ public class ProductCreatorFactory {
 	
 	private static Map<Class<?>, FieldReader> getConsoleReaders(IOProvider ioProvider) {
 		Map<Class<?>, FieldReader> readers = new HashMap<>();
-		readers.put(String.class, new StringConsoleFieldReader(ioProvider.getInput()));
-		readers.put(Double.class, new DoubleConsoleFieldReader(ioProvider.getInput()));
-		readers.put(Integer.class, new IntConsoleFieldReader(ioProvider.getInput()));
-		readers.put(Long.class, new LongConsoleFieldReader(ioProvider.getInput()));
+		readers.put(String.class, new StringConsoleFieldReader(ioProvider));
+		readers.put(Double.class, new DoubleConsoleFieldReader(ioProvider));
+		readers.put(Integer.class, new IntConsoleFieldReader(ioProvider));
+		readers.put(Long.class, new LongConsoleFieldReader(ioProvider));
 		return readers;
 	}
 	

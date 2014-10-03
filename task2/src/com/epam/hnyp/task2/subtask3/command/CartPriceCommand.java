@@ -18,7 +18,7 @@ public class CartPriceCommand extends AbstractCommand {
 	@Override
 	public void execute() {
 		int price = shopFacade.getPriceForCart();
-		ioProvider.getOutput().println("Total elements = "
+		ioProvider.printLine("Total elements = "
 				+ shopFacade.cartSize() + ", price --> "
 				+ price);
 	}
