@@ -101,6 +101,15 @@ public class ConsoleSequenceFinder {
 			}
 		}	
 		
+		private boolean sequencesEqual(byte[] data, int offset1, int offset2, int length) {
+			for (int i=0; i<length; i++) {
+				if (data[offset1 + i] != data[offset2 + i]) {
+					return false;
+				}
+			}
+			return true;
+		}
+		
 		private void exchangeStatus(SearchStatus st) {
 			try {
 				SEARCH_STATUS_EXCHANGER.exchange(st);
@@ -142,7 +151,7 @@ public class ConsoleSequenceFinder {
 			private String errorMessage;
 			private int offset;
 			private int length;
-			private byte item;
+			private int offset2;
 			
 			public SearchStatus() {
 			}
@@ -154,7 +163,6 @@ public class ConsoleSequenceFinder {
 			public SearchStatus(SearchStatus st) {
 				this.error = st.error;
 				this.errorMessage = st.errorMessage;
-				this.item = st.item;
 				this.length = st.length;
 				this.offset = st.offset;
 			}
@@ -165,9 +173,6 @@ public class ConsoleSequenceFinder {
 			public int getLength() {
 				return length;
 			}
-			public byte getItem() {
-				return item;
-			}
 			public boolean isError() {
 				return error;
 			}
@@ -177,7 +182,7 @@ public class ConsoleSequenceFinder {
 			
 			@Override
 			public String toString() {
-				return "item = [" + item + "], offset = " + offset + ", lenght = " + length;
+				return "offset = " + offset + ", lenght = " + length;
 			}
 		}
 	}
