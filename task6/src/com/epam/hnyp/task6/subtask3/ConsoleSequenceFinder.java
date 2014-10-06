@@ -1,13 +1,9 @@
 package com.epam.hnyp.task6.subtask3;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Scanner;
 import java.util.concurrent.Exchanger;
 
-import com.epam.hnyp.task6.subtask3.ConsoleSequenceFinder.Runner.SearchStatus;
+import com.epam.hnyp.task6.subtask3.SequenceFinderRunnable.SearchStatus;
 
 public class ConsoleSequenceFinder {
 	
@@ -56,134 +52,8 @@ public class ConsoleSequenceFinder {
 	}
 	
 	private static void startDemon() {
-		Thread t = new Thread(new Runner());
+		Thread t = new Thread(new SequenceFinderRunnable(FILE_NAME_EXCHANGER, SEARCH_STATUS_EXCHANGER));
 		t.setDaemon(true);
 		t.start();
-	}
-	
-	static class Runner implements Runnable {
-		private String fileName;
-		
-		@Override
-		public void run() {
-			while (true) {
-				SearchStatus status = new SearchStatus();
-				exchangeFileName();
-				byte[] data = null;
-				try {
-					data = readFile(new File(fileName), status);
-				} catch (IOException e) {
-					exchangeStatus(new SearchStatus(status));
-					continue;
-				}
-				for (int i=0; i<data.length; i++) {
-					byte item = data[i];
-					int offset = i;
-					int len = 1;
-					for (int j=i; j<data.length; j++) {
-						if (j + 1 < data.length && data[j + 1] == item) {
-							len++;
-							continue;
-						}
-						break;
-					}
-					if (len > 1) {
-						if (len > status.length) {
-							status.item = item;
-							status.length = len;
-							status.offset = offset;
-							exchangeStatus(new SearchStatus(status)); //signaling search status 
-						}
-						i += len - 1;
-					}
-				}
-				exchangeStatus(null);
-			}
-		}	
-		
-		private boolean sequencesEqual(byte[] data, int offset1, int offset2, int length) {
-			for (int i=0; i<length; i++) {
-				if (data[offset1 + i] != data[offset2 + i]) {
-					return false;
-				}
-			}
-			return true;
-		}
-		
-		private void exchangeStatus(SearchStatus st) {
-			try {
-				SEARCH_STATUS_EXCHANGER.exchange(st);
-			} catch (InterruptedException e) {
-			}
-		}
-		
-		private void exchangeFileName() {
-			try {
-				fileName = FILE_NAME_EXCHANGER.exchange(null);
-			} catch (InterruptedException e) {
-			}
-		}
-		
-		private byte[] readFile(File f, SearchStatus st) throws IOException {
-			if (!f.exists()) {
-				st.error = true;
-				st.errorMessage = "file does't exist";
-				throw new IOException();
-			}
-			if (f.length() == 0) {
-				st.error = true;
-				st.errorMessage = "file is empty";
-				throw new IOException();
-			}
-			try (InputStream input = new FileInputStream(f)) {
-				byte[] data = new byte[input.available()];
-				input.read(data);
-				return data;
-			} catch (IOException e) {
-				st.error = true;
-				st.errorMessage = "i/o error";
-				throw e;
-			}
-		}
-		
-		class SearchStatus {
-			private boolean error;
-			private String errorMessage;
-			private int offset;
-			private int length;
-			private int offset2;
-			
-			public SearchStatus() {
-			}
-			
-			/**
-			 * Creates copy of status
-			 * @param st
-			 */
-			public SearchStatus(SearchStatus st) {
-				this.error = st.error;
-				this.errorMessage = st.errorMessage;
-				this.length = st.length;
-				this.offset = st.offset;
-			}
-			
-			public int getOffset() {
-				return offset;
-			}
-			public int getLength() {
-				return length;
-			}
-			public boolean isError() {
-				return error;
-			}
-			public String getErrorMessage() {
-				return errorMessage;
-			}
-			
-			@Override
-			public String toString() {
-				return "offset = " + offset + ", lenght = " + length;
-			}
-		}
 	}
 }
