@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 import com.epam.hnyp.task2.subtask3.command.AbstractCommand;
 import com.epam.hnyp.task2.subtask3.creator.AbstractProductCreator;
@@ -83,38 +82,39 @@ public class ConsoleGrocery {
 		ioProvider.printLine("2 - random mode");
 		ioProvider.printLine("3 - from console using annotations mode");
 		ioProvider.printLine("4 - random using annotations mode");
-		outer: while (true) {
+		String line = null;
+		boolean inputError = false;
+		do {
+			inputError = false;
 			ioProvider.print("Choice -> ");
-			String line = ioProvider.readLine();
-			if (line.isEmpty()) {
-				continue;
+			line = ioProvider.readLine();
+			if (!line.isEmpty()) {
+				switch (line.charAt(0)) {
+				case '1':
+					productCreator = ProductCreatorFactory
+							.newSimpleProductCreator(ioProvider);
+					break;
+				case '2':
+					productCreator = ProductCreatorFactory
+							.newSimpleRandomProductCreator(ioProvider);
+					break;
+				case '3':
+					productCreator = ProductCreatorFactory
+							.newReflectionProductCreator(ioProvider,
+									ResourceBundle.getBundle(RESOURCES_FILE,
+											new Locale(LOCATION)));
+					break;
+				case '4':
+					productCreator = ProductCreatorFactory
+							.newReflectionRandomProductCreator(ioProvider,
+									ResourceBundle.getBundle(RESOURCES_FILE,
+											new Locale(LOCATION)));
+					break;
+				default:
+					inputError = true;
+				}
 			}
-			switch (line.charAt(0)) {
-			case '1':
-				productCreator = ProductCreatorFactory
-						.newSimpleProductCreator(ioProvider);
-				break;
-			case '2':
-				productCreator = ProductCreatorFactory
-						.newSimpleRandomProductCreator(ioProvider);
-				break;
-			case '3':
-				productCreator = ProductCreatorFactory
-						.newReflectionProductCreator(ioProvider,
-								ResourceBundle.getBundle(RESOURCES_FILE,
-										new Locale(LOCATION)));
-				break;
-			case '4':
-				productCreator = ProductCreatorFactory
-						.newReflectionRandomProductCreator(ioProvider,
-								ResourceBundle.getBundle(RESOURCES_FILE,
-										new Locale(LOCATION)));
-				break;
-			default:
-				continue outer;
-			}
-			break;
-		}
+		} while (line.isEmpty() || inputError);
 		return productCreator;
 	}
 

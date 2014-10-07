@@ -25,32 +25,33 @@ public class OrdersCommand extends AbstractCommand {
 	
 	@Override
 	public void execute() {
-		main: while(true) {
-			ioProvider.printLine(">> Main Menu >> Orders");
-			printOrders();
-			printCommands();
+		print();
+		char key = 0;
+		do {
+			key = 0;
 			AbstractCommand cmd = null;
-			while (true) {
-				ioProvider.print("Choice -> ");
-				char key = 0;
-				String line = ioProvider.readLine();
-				if (line.isEmpty()) {
-					continue;
-				}
+			ioProvider.print("Choice -> ");
+			String line = ioProvider.readLine();
+			if (!line.isEmpty()) {
 				key = line.charAt(0);
-				if (key == QUIT_SYMBOL) {
-					break main;
-				}
 				cmd = commands.get(String.valueOf(key));
 				if (cmd == null) {
-					ioProvider.printLine("oups, command not found :(");
-					continue;
+					if (key != QUIT_SYMBOL) {
+						ioProvider.printLine("oups, command not found :(");
+					}
+				} else {
+					cmd.execute();
+					ioProvider.printLine();
+					print();
 				}
-				break;
 			}
-			cmd.execute();
-			ioProvider.printLine();
-		}
+		} while (key != QUIT_SYMBOL);
+	}
+	
+	private void print() {
+		ioProvider.printLine(">> Main Menu >> Orders");
+		printOrders();
+		printCommands();
 	}
 
 	private void printOrders() {

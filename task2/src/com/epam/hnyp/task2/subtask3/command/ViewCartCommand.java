@@ -11,7 +11,7 @@ import com.epam.hnyp.task2.subtask3.util.IOProvider;
 public class ViewCartCommand extends AbstractCommand {
 
 	public static final char QUIT_SYMBOL = 'm';
-	
+
 	private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 
 	private ShopFacade shopFacade;
@@ -21,52 +21,59 @@ public class ViewCartCommand extends AbstractCommand {
 		this.shopFacade = shopFacade;
 		this.ioProvider = ioProvider;
 	}
-	
+
 	@Override
 	public void execute() {
-		main: while (true) {
-			ioProvider.printLine(">> Main Menu >> Cart");
-			printCart();
-			printCommands();
+		print();
+		char key = 0;
+		do {
+			key = 0;
 			AbstractCommand cmd = null;
-			while (true) {
-				ioProvider.print("Choice -> ");
-				char key = 0;
-				String line = ioProvider.readLine();
+			ioProvider.print("Choice -> ");
+			String line = ioProvider.readLine();
+			if (!line.isEmpty()) {
 				key = line.charAt(0);
-				if (key == QUIT_SYMBOL) {
-					break main;
-				}
 				cmd = commands.get(String.valueOf(key));
 				if (cmd == null) {
-					ioProvider.printLine("oups, command not found :(");
-					continue;
+					if (key != QUIT_SYMBOL) {
+						ioProvider.printLine("oups, command not found :(");
+					}
+				} else {
+					cmd.execute();
+					ioProvider.printLine();
+					print();
 				}
-				break;
 			}
-			cmd.execute();
-			ioProvider.printLine();
-		}
+		} while (key != QUIT_SYMBOL);
+	}
+
+	public void print() {
+		ioProvider.printLine(">> Main Menu >> Cart");
+		printCart();
+		printCommands();
 	}
 
 	public void printCart() {
 		ioProvider.printLine("Items in cart :");
-		ioProvider.printLine(String.format("%1$s\t%2$20s\t%3$s\t%4$s\n", "id", "name", "count", "cse"));
+		ioProvider.printLine(String.format("%1$s\t%2$20s\t%3$s\t%4$s", "id",
+				"name", "count", "cse"));
 		ioProvider.printLine("-----------------------------------------------");
 		if (shopFacade.cartSize() == 0) {
 			ioProvider.printLine("\t\t---empty---");
 		}
-		for (Entry<Long, Integer> e : shopFacade.getCartItems().entrySet()){
+		for (Entry<Long, Integer> e : shopFacade.getCartItems().entrySet()) {
 			Product g = shopFacade.getProductById(e.getKey());
 			if (g != null) {
-				ioProvider.printLine(String.format("%1$d\t%2$20s\t%3$d\t%4$d\n", g.getId(), g.getName(), e.getValue() ,g.getPrice()));
+				ioProvider.printLine(String.format("%1$d\t%2$20s\t%3$d\t%4$d",
+						g.getId(), g.getName(), e.getValue(), g.getPrice()));
 			} else {
-				ioProvider.printLine(String.format("%1$d ---------not found----------", e.getKey()));
+				ioProvider.printLine(String.format(
+						"%1$d ---------not found----------", e.getKey()));
 			}
 		}
 		ioProvider.printLine("-----------------------------------------------");
 	}
-	
+
 	private void printCommands() {
 		ioProvider.printLine("Cart commands :");
 		for (Entry<String, AbstractCommand> c : commands.entrySet()) {

@@ -35,6 +35,9 @@ public class ReflectionProductCreator extends AbstractProductCreator {
 		}
 		
 		List<Method> setters = getSettersWithAnnotation(type, ProductSetterAnnotation.class);
+		if (setters.isEmpty()) {
+			throw new CreateProductException("cannot find annotated setters");
+		}
 		for (Method m : setters) {
 			ProductSetterAnnotation ann = m.getAnnotation(ProductSetterAnnotation.class);
 			FieldReader reader = readers.get((ann.type()));
@@ -67,7 +70,7 @@ public class ReflectionProductCreator extends AbstractProductCreator {
 		Method[] methods = c.getMethods();
 		if (methods != null) {
 			for (Method m : methods) {
-				if (m.isAnnotationPresent(a)) {
+				if (m.isAnnotationPresent(a) && m.getName().startsWith("set")) {
 					setters.add(m);
 				}
 			}

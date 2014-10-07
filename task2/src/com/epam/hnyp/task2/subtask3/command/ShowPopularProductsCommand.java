@@ -21,15 +21,15 @@ public class ShowPopularProductsCommand extends AbstractCommand {
 		ioProvider.printLine("Popular products :");
 		
 		ioProvider.printLine(String.format("%1$s\t%2$20s\t%3$s", "id", "name", "price"));
-		ioProvider.printLine("-----------------------------------");
+		ioProvider.printLine("--------------------------------------");
 		if (shopFacade.getPopularProducts().isEmpty()) {
 			ioProvider.printLine("\t\t---empty---");
 		}
 		for (Product g : shopFacade.getPopularProducts()) {
-			ioProvider.printLine(String.format("%1$d\t%2$20s\t%3$d\n", g.getId(), g.getName(),
+			ioProvider.printLine(String.format("%1$d\t%2$20s\t%3$d", g.getId(), g.getName(),
 					g.getPrice()));
 		}
-		ioProvider.printLine("-----------------------------------");
+		ioProvider.printLine("--------------------------------------");
 	}
 
 	@Override

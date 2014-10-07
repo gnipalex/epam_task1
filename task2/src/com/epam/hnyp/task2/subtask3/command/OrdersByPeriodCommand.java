@@ -26,7 +26,8 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 		Date date_left = null;
 		Date date_right = null;
 		
-		while(true) {
+		boolean parseError = true;
+		do {
 			ioProvider.print("Please enter left border date (dd/MM/yyyy) or pass enter to cancel: ");
 			String line = ioProvider.readLine();
 			if (line.isEmpty()) {
@@ -34,13 +35,14 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 			}
 			try {
 				date_left = sdf.parse(line);
+				parseError = false;
 			} catch (ParseException e) {
 				ioProvider.printLine("##date parse error##");
-				continue;
 			}
-			break;
-		}
-		while(true) {
+		} while (parseError);
+		
+		parseError = true;
+		do {
 			ioProvider.print("Please enter right border date (dd/MM/yyyy) or pass enter to cancel: ");
 			String line = ioProvider.readLine();
 			if (line.isEmpty()) {
@@ -48,12 +50,11 @@ public class OrdersByPeriodCommand extends AbstractCommand {
 			}
 			try {
 				date_right = sdf.parse(line);
+				parseError = false;
 			} catch (ParseException e) {
 				ioProvider.printLine("##date parse error##");
-				continue;
 			}
-			break;
-		}
+		} while (parseError);
 		
 		Collection<Order> orders = shopFacade.getOrdersOfPeriod(date_left, date_right);
 		printOrders(orders, date_left, date_right);

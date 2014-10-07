@@ -14,141 +14,143 @@ import com.epam.hnyp.task3.subtask2.condition.ModifyDateCondition;
 import com.epam.hnyp.task3.subtask2.condition.NameFileCondition;
 
 public class ConsoleUI {
-	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	private static BaseFileCondition filter = null;
+	private static File startDir;
+	private static Scanner sc = new Scanner(System.in);
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+	private static void configureNameFilter() {
+		System.out.print("Use name filter ? (y - yes) : ");
+		String line = sc.nextLine();
+		if (line.isEmpty() || line.charAt(0) != 'y') {
+			return;
+		}
+		do {
+			System.out.print("Enter name of file : ");
+			line = sc.nextLine();
+		} while (line.isEmpty());
+		filter = new NameFileCondition(line, filter);
+
+	}
+
+	private static void configureExtensionFilter() {
+		System.out.print("Use extension filter ? (y - yes) : ");
+		String line = sc.nextLine();
+		if (line.isEmpty() || line.charAt(0) != 'y') {
+			return;
+		}
+		do {
+			System.out.print("Enter extension of file : ");
+			line = sc.nextLine();
+		} while (line.isEmpty());
+		filter = new ExtensionFileCondition(line, filter);
+	}
+
+	private static void configureSizeFilter() {
+		System.out.print("Use size filter ? (y - yes) : ");
+		String line = sc.nextLine();
+		if (line.isEmpty() || line.charAt(0) != 'y') {
+			return;
+		}
+		long minSz = 0, maxSz = 0;
+		boolean inputError = true; 
+		do {
+			minSz = inputSize("Enter min size of file : ");
+			maxSz = inputSize("Enter max size of file : ");
+			if (minSz < 0 || maxSz < minSz) {
+				System.out.println("##Sizes must be min >= 0 and min <= max##");
+			} else {
+				inputError = false;
+			}
+		} while (inputError);
+		filter = new FileSizeCondition(minSz, maxSz, filter);
+	}
+
+	private static long inputSize(String message) {
+		long value = 0;
+		String line = null;
+		boolean inputError = true;
+		do {
+			System.out.print(message);
+			line = sc.nextLine();
+			if (!line.isEmpty()) {
+				try {
+					value = Long.parseLong(line);
+					inputError = false;
+				} catch (NumberFormatException e) {
+					System.out.println("##wrong format##");
+				}
+			}
+		} while (line.isEmpty() || inputError);
+		return value;
+	}
+
+	private static Date inputDate(String message) {
+		boolean inputError = true;
+		Date date = null;
+		String line = null;
+		do {
+			System.out.print(message);
+			line = sc.nextLine();
+			if (!line.isEmpty()) {
+				try {
+					date = sdf.parse(line);
+					inputError = false;
+				} catch (ParseException e) {
+					System.out.println("##wrong format##");
+				}
+			}
+		} while (line.isEmpty() || inputError);
+		return date;
+	}
+
+	private static void configureDateFilter() {
+		System.out.print("Use modify date filter ? (y - yes) : ");
+		String line = sc.nextLine();
+		if (!line.isEmpty() && line.charAt(0) == 'y') {
+			Date dateFrom = null, dateTo = null;
+			boolean inputError = true; 
+			do {
+				dateFrom = inputDate("Enter left border of date(dd/MM/yyyy HH:mm): ");
+				dateTo = inputDate("Enter right border of date(dd/MM/yyyy HH:mm): ");
+				if (dateFrom.compareTo(dateTo) > 0) {
+					System.out.println("##left border must be <= to right border##");
+				} else {
+					inputError = false;
+				}
+			} while(inputError);
+			filter = new ModifyDateCondition(dateFrom, dateTo, filter);
+		}
+	}
+
+	private static void configureSearchDir() {
 		System.out
 				.print("Please specify search folder or pass enter to cancel: ");
 		String line = sc.nextLine();
 		if (line.isEmpty()) {
-			return;
+			System.exit(1);
 		}
-		File startDir = new File(line);
+		startDir = new File(line);
 		if (!startDir.exists()) {
 			System.out.println("--Dir not found--");
-			return;
+			System.exit(1);
 		}
 		if (!startDir.isDirectory()) {
 			System.out.println("--Specified path is not directory--");
-			return;
+			System.exit(1);
 		}
+	}
+
+	public static void main(String[] args) {
+		configureSearchDir();
 
 		System.out.println("Search in dir : " + startDir.getAbsolutePath());
-		
-		BaseFileCondition filter = null;
 
-		System.out.print("Use name filter ? (y - yes) : ");
-		line = sc.nextLine();
-		if (!line.isEmpty() && line.charAt(0) == 'y') {
-			while (true) {
-				System.out.print("Enter name of file : ");
-				line = sc.nextLine();
-				if (line.isEmpty()) {
-					continue;
-				}
-				break;
-			}
-			filter = new NameFileCondition(line, null);
-		}
+		configureNameFilter();
+		configureExtensionFilter();
+		configureSizeFilter();
+		configureDateFilter();
 
-		System.out.print("Use extension filter ? (y - yes) : ");
-		line = sc.nextLine();
-		if (!line.isEmpty() && line.charAt(0) == 'y') {
-			while (true) {
-				System.out.print("Enter extension of file : ");
-				line = sc.nextLine();
-				if (line.isEmpty()) {
-					continue;
-				}
-				break;
-			}
-			filter = new ExtensionFileCondition(line, filter);
-		}
-
-		System.out.print("Use size filter ? (y - yes) : ");
-		line = sc.nextLine();
-		if (!line.isEmpty() && line.charAt(0) == 'y') {
-			long minSz = 0, maxSz = 0;
-			while (true) {
-				while (true) {
-					System.out.print("Enter min size of file : ");
-					line = sc.nextLine();
-					if (line.isEmpty()) {
-						continue;
-					}
-					try {
-						minSz = Long.parseLong(line);
-					} catch (NumberFormatException e) {
-						System.out.println("##wrong format##");
-						continue;
-					}
-					break;
-				}
-				while (true) {
-					System.out.print("Enter max size of file : ");
-					line = sc.nextLine();
-					if (line.isEmpty()) {
-						continue;
-					}
-					try {
-						maxSz = Long.parseLong(line);
-					} catch (NumberFormatException e) {
-						System.out.println("##wrong format##");
-						continue;
-					}
-					break;
-				}
-				if (minSz < 0 || maxSz < minSz) {
-					System.out.println("##Sizes must be min >= 0 and min <= max##");
-					continue;
-				}
-				break;
-			}
-			filter = new FileSizeCondition(minSz, maxSz, filter);
-		}
-		
-		System.out.print("Use modify date filter ? (y - yes) : ");
-		line = sc.nextLine();
-		if (!line.isEmpty() && line.charAt(0) == 'y') {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			Date dateFrom = null, dateTo = null;
-			while (true) {
-				while (true) {
-					System.out.print("Enter left border of date(dd/MM/yyyy HH:mm): ");
-					line = sc.nextLine();
-					if (line.isEmpty()) {
-						continue;
-					}
-					try {
-						dateFrom = sdf.parse(line);
-					} catch (ParseException e) {
-						System.out.println("##wrong format##");
-						continue;
-					}
-					break;
-				}
-				while (true) {
-					System.out.print("Enter right border of date(dd/MM/yyyy HH:mm): ");
-					line = sc.nextLine();
-					if (line.isEmpty()) {
-						continue;
-					}
-					try {
-						dateTo = sdf.parse(line);
-					} catch (ParseException e) {
-						System.out.println("##wrong format##");
-						continue;
-					}
-					break;
-				}
-				if (dateFrom.compareTo(dateTo) > 0) {
-					System.out.println("##left border must be <= to right border##");
-					continue;
-				}
-				break;
-			}
-			filter = new ModifyDateCondition(dateFrom, dateTo, filter);
-		}
 		System.out.println("Searching... Please wait...");
 		FileSearch search = new FileSearch(startDir, filter);
 		List<File> foundFiles = search.find();
@@ -158,7 +160,7 @@ public class ConsoleUI {
 			return;
 		}
 		for (File f : foundFiles) {
-			System.out.println(f.getAbsolutePath());
+			System.out.println(f.getPath());
 		}
 	}
 

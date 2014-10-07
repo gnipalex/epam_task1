@@ -30,18 +30,15 @@ public class MainMenuCommand extends AbstractCommand {
 			if (!line.isEmpty()) {
 				key = line.charAt(0);
 				cmd = commands.get(String.valueOf(key));
-			} else {
-				continue;
-			}
-			if (cmd == null) {
-				if (key != QUIT_SYMBOL) {
-					ioProvider.printLine("oups, command not found :(");
+				if (cmd == null) {
+					if (key != QUIT_SYMBOL) {
+						ioProvider.printLine("oups, command not found :(");
+					}
+				} else {
+					cmd.execute();
+					ioProvider.printLine();
+					print();
 				}
-				continue;
-			} else {
-				cmd.execute();
-				ioProvider.printLine();
-				print();
 			}
 		} while (key != QUIT_SYMBOL);
 	}
@@ -49,8 +46,7 @@ public class MainMenuCommand extends AbstractCommand {
 	public void print() {
 		ioProvider.printLine(">> Main Menu");
 		for (Entry<String, AbstractCommand> c : commands.entrySet()) {
-			ioProvider.printLine(
-					c.getKey() + "\t" + c.getValue().about());
+			ioProvider.printLine(c.getKey() + "\t" + c.getValue().about());
 		}
 		ioProvider.printLine(QUIT_SYMBOL + "\t" + "quit the grocery");
 	}

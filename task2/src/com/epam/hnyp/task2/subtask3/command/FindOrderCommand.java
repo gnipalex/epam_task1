@@ -25,10 +25,10 @@ public class FindOrderCommand extends AbstractCommand {
 	
 	@Override
 	public void execute() {
-		
 		Date date = null; 
+		boolean parseError = true;
 		
-		while (true) {
+		do {
 			ioProvider.print("Please enter a date of order (dd/MM/yyyy) or just pass enter to cancel: ");
 			String line = ioProvider.readLine();
 			if (line.isEmpty()) {
@@ -36,12 +36,11 @@ public class FindOrderCommand extends AbstractCommand {
 			}
 			try {
 				date = sdf.parse(line);
+				parseError = false;
 			} catch (ParseException e) {
 				System.out.println("##date parse error##");
-				continue;
 			}
-			break;
-		}
+		} while (parseError);
 		
 		Order order = shopFacade.getNearestOrder(date);
 		
