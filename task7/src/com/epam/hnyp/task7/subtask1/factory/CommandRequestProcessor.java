@@ -1,4 +1,4 @@
-package com.epam.hnyp.task7.subtask1;
+package com.epam.hnyp.task7.subtask1.factory;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,11 +10,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RequestProcessor implements Runnable {
+import com.epam.hnyp.task7.subtask1.command.Command;
+
+public class CommandRequestProcessor implements Runnable {
 	private Socket socket;
 	private Map<String, Command> commands;
 	
-	public RequestProcessor(Socket socket, Map<String, Command> commands) {
+	public CommandRequestProcessor(Socket socket, Map<String, Command> commands) {
 		this.socket = socket;
 		this.commands = commands;
 	}
@@ -50,7 +52,7 @@ public class RequestProcessor implements Runnable {
 		if (m.find()) {
 			return m.group();
 		}
-		return null;
+		return "";
 	}
 	
 	private String getParams(String line) {
