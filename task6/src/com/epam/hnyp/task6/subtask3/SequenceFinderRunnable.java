@@ -94,7 +94,7 @@ public class SequenceFinderRunnable implements Runnable {
 		}
 	}
 
-	public class SearchStatus {
+	public static class SearchStatus {
 		private boolean error;
 		private String errorMessage;
 		private int offsetFirst;

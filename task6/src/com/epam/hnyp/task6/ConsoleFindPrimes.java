@@ -7,7 +7,9 @@ import java.util.Scanner;
 import com.epam.hnyp.task6.subtask1.PrimeThreadRunner;
 import com.epam.hnyp.task6.subtask2.PrimeExecutorRunner;
 
+
 public class ConsoleFindPrimes {
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int start = 0;

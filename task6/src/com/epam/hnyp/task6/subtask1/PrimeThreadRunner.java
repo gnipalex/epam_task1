@@ -32,33 +32,6 @@ public class PrimeThreadRunner {
 		executeAllTasks();
 	}
 
-	/**
-	 * Algorithm : if we have 5 tasks then ranges will divide into length = 5x +
-	 * 4x + 3x + 2x + x, first task uses 5x length and etc.
-	 */
-	private void createTasksXAlgorithm() {
-		int len = rangeEnd - rangeStart;
-
-		double x = (2d * len) / ((1 + thrCount) * thrCount);
-
-		for (int i = thrCount, end = rangeStart; i >= 1 && end < rangeEnd; i--) {
-			double lenthToThread = i * x;
-			if (lenthToThread > 1) {
-				int a = (int) Math.ceil(lenthToThread);
-				if (end + a >= rangeEnd) {
-					createNewTask(end, rangeEnd, output, useSeparateLists);
-					end = rangeEnd;
-				} else {
-					createNewTask(end, end + a, output, useSeparateLists);
-					end += a;
-				}
-			} else {
-				createNewTask(end, rangeEnd, output, useSeparateLists);
-				end = rangeEnd;
-			}
-		}
-	}
-
 	private void createTasksSimpleAlgorithm() {
 		int len = rangeEnd - rangeStart;
 		int chunkSz = len / thrCount;
