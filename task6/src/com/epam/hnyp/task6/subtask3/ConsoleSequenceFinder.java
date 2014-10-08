@@ -3,7 +3,7 @@ package com.epam.hnyp.task6.subtask3;
 import java.util.Scanner;
 import java.util.concurrent.Exchanger;
 
-import com.epam.hnyp.task6.subtask3.SequenceFinderRunnable.SearchStatus;
+import com.epam.hnyp.task6.subtask3.SearchStatus;
 
 public class ConsoleSequenceFinder {
 
