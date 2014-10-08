@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.Exchanger;
 
 import com.epam.hnyp.task6.subtask3.SearchStatus;
 
@@ -26,7 +25,6 @@ public class SequenceFinderRunnableWaitNotify implements Runnable {
 		while (true) {
 			SearchStatus status = new SearchStatus();
 			synchronized (fileMonitor) {
-				paramContainer.setSearchStatus(new SearchStatus(status));
 				while (true) {
 					try {
 						fileMonitor.wait();
@@ -40,10 +38,8 @@ public class SequenceFinderRunnableWaitNotify implements Runnable {
 				data = readFile(new File(paramContainer.getFileName()),
 						status);
 			} catch (IOException e) {
-				// exchangeStatus(new SearchStatus(status));
 				synchronized (statusMonitor) {
 					paramContainer.setSearchStatus(new SearchStatus(status));
-					paramContainer.setFinished(true);
 					statusMonitor.notify();
 				}
 				continue;
@@ -60,10 +56,13 @@ public class SequenceFinderRunnableWaitNotify implements Runnable {
 							status.setLength(len);
 							status.setOffsetFirst(offset1);
 							status.setOffsetSecond(offset2);
-							//exchangeStatus(new SearchStatus(status));
 							synchronized (statusMonitor) {
+								System.err.println("SYN_STATUS --> MAIN");
 								paramContainer.setSearchStatus(new SearchStatus(status));
 								statusMonitor.notify();
+								try {
+									statusMonitor.wait();
+								} catch (InterruptedException e) {	}
 							}
 							break;
 						}
@@ -71,9 +70,8 @@ public class SequenceFinderRunnableWaitNotify implements Runnable {
 
 				}
 			}
-			//exchangeStatus(null);
 			synchronized (statusMonitor) {
-				paramContainer.setFinished(true);
+				paramContainer.setSearchStatus(null);
 				statusMonitor.notify();
 			}
 		}
@@ -87,10 +85,6 @@ public class SequenceFinderRunnableWaitNotify implements Runnable {
 			}
 		}
 		return true;
-	}
-
-	private void exchangeStatus(SearchStatus st) {
-
 	}
 
 	private byte[] readFile(File f, SearchStatus st) throws IOException {
