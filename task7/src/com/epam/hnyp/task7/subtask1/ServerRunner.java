@@ -28,6 +28,7 @@ public class ServerRunner {
 		
 		Map<String, Command> commands = CommandInitializer.initCommands(facade);
 		RequestProcessorFactory reqFactory = new CommandRequestProcessorFactory(commands);
+		
 		Thread serverThread = new Thread(new Server(reqFactory));
 		serverThread.setDaemon(true);
 		serverThread.start();

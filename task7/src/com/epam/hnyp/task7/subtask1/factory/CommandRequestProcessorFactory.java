@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.util.Map;
 
 import com.epam.hnyp.task7.subtask1.command.Command;
+import com.epam.hnyp.task7.subtask1.processor.CommandRequestProcessor;
 
 public class CommandRequestProcessorFactory implements RequestProcessorFactory {
 	private final Map<String, Command> commands;

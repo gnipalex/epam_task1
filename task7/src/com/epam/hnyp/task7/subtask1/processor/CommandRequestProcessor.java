@@ -1,4 +1,4 @@
-package com.epam.hnyp.task7.subtask1.factory;
+package com.epam.hnyp.task7.subtask1.processor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,9 +34,12 @@ public class CommandRequestProcessor implements Runnable {
 			Command command  = commands.get(key);
 			if (command == null) {
 				bw.write("command not found");
-				return;
+				
+			} else {
+				bw.write(command.process(params));
 			}
-			bw.write(command.process(params));
+			bw.newLine();
+			bw.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -58,7 +61,7 @@ public class CommandRequestProcessor implements Runnable {
 	private String getParams(String line) {
 		Matcher m = Pattern.compile("\\w+\\s+(.*)").matcher(line);
 		if (m.find()) {
-			m.group(1);
+			return m.group(1);
 		}
 		return "";
 	}
