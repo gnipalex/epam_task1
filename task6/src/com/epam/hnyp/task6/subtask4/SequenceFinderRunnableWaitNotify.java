@@ -4,43 +4,52 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Queue;
 
 import com.epam.hnyp.task6.subtask3.SearchStatus;
 
 public class SequenceFinderRunnableWaitNotify implements Runnable {
-	private final SearchParamContainer paramContainer;
-	private final Object fileMonitor;
-	private final Object statusMonitor;
+	
+	private static final long FILE_WAIT_TIMEOUT = 500;
+	private static final long OFFER_WAIT_TIMEOUT = 200;
+	
+	private final SearchParamContainer paramContainerMonitor;
 
 	public SequenceFinderRunnableWaitNotify(
-			SearchParamContainer paramContainer, Object fileMonitor,
-			Object statusMonitor) {
-		this.paramContainer = paramContainer;
-		this.fileMonitor = fileMonitor;
-		this.statusMonitor = statusMonitor;
+			SearchParamContainer paramContainer) {
+		this.paramContainerMonitor = paramContainer;
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			SearchStatus status = new SearchStatus();
-			synchronized (fileMonitor) {
+			SearchStatusExtended status = new SearchStatusExtended();
+			String fileName = null;
+			synchronized (paramContainerMonitor) {
+				//waiting for fileName from other thread
 				while (true) {
 					try {
-						fileMonitor.wait();
+						paramContainerMonitor.wait(FILE_WAIT_TIMEOUT);
+						if (paramContainerMonitor.getFileName() == null) {
+							continue;
+						}
+						fileName = paramContainerMonitor.getFileName();
+						paramContainerMonitor.setFileName(null);
 						break;
 					} catch (InterruptedException e) {
 					}
 				}
 			}
+			Queue<SearchStatusExtended> statusesQueueMonitor = paramContainerMonitor.getStatusesQueue();
+			statusesQueueMonitor.clear();
 			byte[] data = null;
 			try {
-				data = readFile(new File(paramContainer.getFileName()),
-						status);
+				data = readFile(new File(fileName),	status);
 			} catch (IOException e) {
-				synchronized (statusMonitor) {
-					paramContainer.setSearchStatus(new SearchStatus(status));
-					statusMonitor.notify();
+				synchronized (statusesQueueMonitor) {
+					status.setFinish(true);
+					statusesQueueMonitor.offer(new SearchStatusExtended(status));
+					statusesQueueMonitor.notify();
 				}
 				continue;
 			}
@@ -56,24 +65,30 @@ public class SequenceFinderRunnableWaitNotify implements Runnable {
 							status.setLength(len);
 							status.setOffsetFirst(offset1);
 							status.setOffsetSecond(offset2);
-							synchronized (statusMonitor) {
-								System.err.println("SYN_STATUS --> MAIN");
-								paramContainer.setSearchStatus(new SearchStatus(status));
-								statusMonitor.notify();
-								try {
-									statusMonitor.wait();
-								} catch (InterruptedException e) {	}
-							}
+							//passing search info and notifying other thread to read data
+							synchExchangeStatus(statusesQueueMonitor, new SearchStatusExtended(status));
 							break;
 						}
 					}
 
 				}
 			}
-			synchronized (statusMonitor) {
-				paramContainer.setSearchStatus(null);
-				statusMonitor.notify();
+			//passing search info and notifying other thread that search reached end
+			status.setFinish(true);
+			synchExchangeStatus(statusesQueueMonitor, new SearchStatusExtended(status));
+		}
+	} 
+	
+	private void synchExchangeStatus(Queue<SearchStatusExtended> statusesQueueMonitor, 
+			SearchStatusExtended passStatus) {
+		synchronized (statusesQueueMonitor) {
+			while(!statusesQueueMonitor.offer(passStatus)) {
+				statusesQueueMonitor.notify();
+				try {
+				statusesQueueMonitor.wait(OFFER_WAIT_TIMEOUT);
+				} catch (InterruptedException e) {}
 			}
+			statusesQueueMonitor.notify();
 		}
 	}
 
