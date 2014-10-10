@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.epam.hnyp.task7.subtask1.factory.RequestProcessorFactory;
+import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
 
 public class Server implements Runnable {
 	public static final int PORT = 3000;
 	
 	private final int port;
-	private RequestProcessorFactory procFactory;
+	private RequestHandlerFactory procFactory;
 	
-	public Server(RequestProcessorFactory procFactory) {
+	public Server(RequestHandlerFactory procFactory) {
 		this(PORT, procFactory);
 	}
 
@@ -23,7 +23,7 @@ public class Server implements Runnable {
 	 * @throws IllegalArgumentException if port is not in [0..65535]
 	 */
 	public Server(int port,
-			RequestProcessorFactory procFactory) {
+			RequestHandlerFactory procFactory) {
 		if (port < 0 || port > 65535) {
 			throw new IllegalArgumentException();
 		}

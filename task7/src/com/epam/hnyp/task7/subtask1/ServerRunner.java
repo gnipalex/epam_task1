@@ -1,14 +1,12 @@
 package com.epam.hnyp.task7.subtask1;
 
-import java.util.Map;
 import java.util.Scanner;
 
-import com.epam.hnyp.task7.subtask1.command.Command;
-import com.epam.hnyp.task7.subtask1.command.CommandInitializer;
 import com.epam.hnyp.task7.subtask1.facade.ProductsFacade;
-import com.epam.hnyp.task7.subtask1.factory.CommandRequestProcessorFactory;
-import com.epam.hnyp.task7.subtask1.factory.RequestProcessorFactory;
+import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
+import com.epam.hnyp.task7.subtask1.factory.SimpleRequestHandlerFactory;
 import com.epam.hnyp.task7.subtask1.server.Server;
+import com.epam.hnyp.task7.subtask2.factory.HttpRequestHandlerFactory;
 
 public class ServerRunner {
 	public static void main(String[] args) {
@@ -26,10 +24,12 @@ public class ServerRunner {
 			}		
 		};
 		
-		Map<String, Command> commands = CommandInitializer.initCommands(facade);
-		RequestProcessorFactory reqFactory = new CommandRequestProcessorFactory(commands);
+		//Map<String, Command> commands = CommandInitializer.initCommands(facade);
+		RequestHandlerFactory reqFactory = new SimpleRequestHandlerFactory(facade);
+		RequestHandlerFactory httpFactory = new HttpRequestHandlerFactory();
 		
-		Thread serverThread = new Thread(new Server(reqFactory));
+		//Thread serverThread = new Thread(new Server(reqFactory));
+		Thread serverThread = new Thread(new Server(httpFactory));
 		serverThread.setDaemon(true);
 		serverThread.start();
 
