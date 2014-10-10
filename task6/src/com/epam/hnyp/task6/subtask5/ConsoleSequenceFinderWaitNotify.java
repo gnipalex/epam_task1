@@ -1,18 +1,20 @@
 package com.epam.hnyp.task6.subtask5;
 
-import java.util.Queue;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class ConsoleSequenceFinderWaitNotify {
-	private static final long STATUS_WAIT_TIMEOUT = 1000;
 
-	public static void main(String[] args) {
-		final Queue<SearchStatusExtended> statusesQueueMonitor = 
-				new ArrayBlockingQueue<>(5);
-		final SearchParamContainer paramContainerMonitor = new SearchParamContainer(statusesQueueMonitor);
-		
-		startDemon(paramContainerMonitor);
+	public static final long STATUS_CHECK_PERIOD = 500;
+	
+	public static void main(String[] args) {		
+		SequenceFinderRunnableWaitNotify finder = new SequenceFinderRunnableWaitNotify();
+		Thread t = new Thread(finder);
+		t.setDaemon(true);
+		t.start();
 		
 		Scanner sc = new Scanner(System.in);
 		
@@ -22,55 +24,49 @@ public class ConsoleSequenceFinderWaitNotify {
 			if (line.isEmpty()) {
 				return;
 			}
-			// passing file name to other thread
-			synchronized (paramContainerMonitor) {
-				paramContainerMonitor.setFileName(line);
-				paramContainerMonitor.notify();
+			
+			byte[] data = null;
+			try {
+				data = readFile(line);
+			} catch (IOException e) {
+				System.out.println("Error : " + e.getMessage());
+				continue;
 			}
+			
+			// passing data to other thread and signaling to start search
+			finder.setData(data);
 
 			System.out.println("Searching....");
 
-			SearchStatusExtended prevStatus = null;
 			SearchStatusExtended curentStatus = null;
 			do {
-				synchronized (statusesQueueMonitor) {
-					do {
-						curentStatus = statusesQueueMonitor.poll();
-						if (curentStatus == null) {
-							try {
-								statusesQueueMonitor.wait(STATUS_WAIT_TIMEOUT);
-							} catch (InterruptedException e) {
-								System.out.println("Error : Main thread was interupted");
-								return;
-							}
-							continue;
-						} else if (curentStatus.isError()) {
-							System.out.println("Error in daemon thread : "
-									+ curentStatus.getErrorMessage());
-							
-							
-						} else if (!curentStatus.isFinish()) {
-							System.out.println(curentStatus);
-							prevStatus = curentStatus;
-						}
-					} while(curentStatus == null || !curentStatus.isFinish());
-					if (prevStatus != null) {
-						System.out.println("Longest sequence --> "
-							+ curentStatus);
-					} else {
-						System.out
-						.println("--longest sequence not found--");
-					}
+				try {
+					Thread.sleep(STATUS_CHECK_PERIOD);
+				} catch (InterruptedException e) {
+					System.out.println("Main thread was interrupted");
+					return;
 				}
+				//asking finder for search status
+				curentStatus = finder.getActualCurentStatus();
+				System.out.println(curentStatus);
 			} while (!curentStatus.isFinish());
+			System.out.println("Longest sequence --> " + curentStatus);
 			System.out.println();
 		}
 	}
-
-	private static void startDemon(SearchParamContainer paramContainer) {
-		Thread t = new Thread(new SequenceFinderRunnableWaitNotify(
-				paramContainer));
-		t.setDaemon(true);
-		t.start();
+	
+	private static byte[] readFile(String fileName) throws IOException {
+		File f = new File(fileName);
+		if (!f.exists()) {
+			throw new IOException("file does't exist");
+		}
+		if (f.length() == 0) {
+			throw new IOException("file is empty");
+		}
+		try (InputStream input = new FileInputStream(f)) {
+			byte[] data = new byte[input.available()];
+			input.read(data);
+			return data;
+		}
 	}
 }
