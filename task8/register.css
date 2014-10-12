@@ -1,0 +1,16 @@
+.register {
+	margin: 20px auto 0 auto;
+	width: 400px;
+}
+
+.register input {
+	height: 20px;
+}
+
+.error {
+	color:red;
+}
+.error input {
+	border: 1px solid red;
+}
+
