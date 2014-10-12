@@ -13,7 +13,7 @@ public class SimpleRequestHandlerFactory implements RequestHandlerFactory {
 	}
 
 	@Override
-	public Runnable getRequestProcessor(Socket socket) {
+	public Runnable getRequestHandler(Socket socket) {
 		return new SimpleRequestHandler(socket, prodFacade);
 	}
 

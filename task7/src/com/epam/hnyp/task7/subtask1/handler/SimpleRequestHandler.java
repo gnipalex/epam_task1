@@ -6,11 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.epam.hnyp.task7.subtask1.command.Command;
 import com.epam.hnyp.task7.subtask1.facade.ProductsFacade;
 
 public class SimpleRequestHandler implements Runnable {
@@ -82,7 +80,7 @@ public class SimpleRequestHandler implements Runnable {
 			response.append("not found");
 			return;
 		} 
-		response.append(prodInfo.getName()).append(" | ").append(prodInfo.getPrice());
+		response.append(prodInfo.getName()).append("|").append(prodInfo.getPrice());
 	}
 	
 	private void getCount(StringBuilder response) {

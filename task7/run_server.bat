@@ -1,4 +1,4 @@
 cd bin
-java com.epam.hnyp.task7.subtask1.ServerRunner
+java com.epam.hnyp.task7.ServerRunner
 pause
 

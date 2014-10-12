@@ -7,13 +7,13 @@ import java.net.Socket;
 import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
 
 public class Server implements Runnable {
-	public static final int PORT = 3000;
+	public static final int DEFAULT_PORT = 3000;
 	
 	private final int port;
 	private RequestHandlerFactory procFactory;
 	
 	public Server(RequestHandlerFactory procFactory) {
-		this(PORT, procFactory);
+		this(DEFAULT_PORT, procFactory);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class Server implements Runnable {
 			while (true) {
 				Socket clientSocket = serverSocket.accept();
 				clientSocket.setTcpNoDelay(true);
-				Thread th = new Thread(procFactory.getRequestProcessor(clientSocket));
+				Thread th = new Thread(procFactory.getRequestHandler(clientSocket));
 				th.start();
 			}
 		} catch (IOException e) {

@@ -3,19 +3,17 @@ package com.epam.hnyp.task7.subtask2.handler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HttpRequestHandler implements Runnable {
-	private Socket socket;
-	private static final String PATTERN_GET_HEADER = "^GET\\s(.+)\\sHTTP/1\\.[01]$"; 
+	protected Socket socket;
+	public static final String PATTERN_GET_HEADER = "^GET\\s(.+)\\sHTTP/1\\.[01]$"; 
 
 	public HttpRequestHandler(Socket socket) {
 		this.socket = socket;
@@ -39,7 +37,7 @@ public class HttpRequestHandler implements Runnable {
 			System.out.println("Headers for request [" + requestLine + "]");
 			System.out.println(readHeaders(br));
 
-			File requestedFile = new File(extractUrl(requestLine).substring(1));
+			File requestedFile = new File(extractUrl(requestLine));
 			if (!requestedFile.exists() || !requestedFile.isFile()) {
 				//error status 404
 				bw.write("HTTP/1.0 404 Not Found");
@@ -94,14 +92,14 @@ public class HttpRequestHandler implements Runnable {
 		return out.toString();
 	}
 	
-	private boolean isRequestOfTypeGet(String header) {
+	public boolean isRequestOfTypeGet(String header) {
 		return header.matches(PATTERN_GET_HEADER);
 	}
 	
-	private String extractUrl(String header){
+	public String extractUrl(String header){
 		Matcher matcher = Pattern.compile(PATTERN_GET_HEADER).matcher(header);
 		if (matcher.find()) {
-			return matcher.group(1);
+			return matcher.group(1).substring(1);
 		}
 		return "";
 	}
