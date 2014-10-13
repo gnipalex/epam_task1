@@ -5,6 +5,8 @@
 <meta http-equiv="content-type" content="text/html;charset=cp1251" />
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
 <link rel="stylesheet" href="register.css" type="text/css" />
+<script type="text/javascript" src="register_validator.js"></script>
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 </head>
 <body>
 	<div id="content">
@@ -56,34 +58,38 @@
 			<div class="introduction">
 				<h2>Register</h2>
 				<div class="register">
-					<table>
-						<tr>
-							<td><h4>Your name</h4></td>
-							<td><input class="text" type="text" value="" maxlength="250"
-								size="30" name="name"></input></td>
-						</tr>
-						<tr>
-							<td><h4>Your last name</h4></td>
-							<td><input class="text" type="text" value="" maxlength="250"
-								size="30" name="lastName"></input></td>
-						</tr>
-						<tr>
-							<td><h4>Your login</h4></td>
-							<td><input class="text" type="text" value="" maxlength="250"
-								size="30" name="login"></input></td>
-						</tr>
-						<tr>
-							<td><h4>Your password</h4></td>
-							<td><input class="text" type="text" value="" maxlength="250"
-								size="30" name="password"></input></td>
-						</tr>
-						<tr>
-							<td><h4>Your password again</h4></td>
-							<td><input class="text" type="text" value="" maxlength="250"
-								size="30" name="rePassword"></input></td>
-						</tr>
-					</table>
-					<br></br> <input class="txt" type="submit" value="Register"></input>
+					<form id="register_form_id">
+						<table>
+							<tr>
+								<td><h4>Your name</h4></td>
+								<td><input class="text" type="text" value="" maxlength="50"
+									size="30" name="name"></input></td>
+							</tr>
+							<tr>
+								<td><h4>Your last name</h4></td>
+								<td><input class="text" type="text" value="" maxlength="50"
+									size="30" name="lastName"></input></td>
+							</tr>
+							<tr>
+								<td><h4>Your email</h4></td>
+								<td><input class="text" type="text" value="" maxlength="50"
+									size="30" name="email"></input></td>
+							</tr>
+							<tr>
+								<td><h4>Your password</h4></td>
+								<td><input class="text" type="password" value=""
+									maxlength="50" size="30" name="password"></input></td>
+							</tr>
+							<tr>
+								<td><h4>Your password again</h4></td>
+								<td><input class="text" type="password" value=""
+									maxlength="50" size="30" name="rePassword"></input></td>
+							</tr>
+						</table>
+						<br></br>
+						<input class="txt" type="button" value="Register JS" onclick="return validateJS(this.form);"></input>&nbsp;
+						<input class="txt" type="button" value="Register jQ" onclick="validateJQ();"></input>
+					</form>
 				</div>
 			</div>
 		</div>
