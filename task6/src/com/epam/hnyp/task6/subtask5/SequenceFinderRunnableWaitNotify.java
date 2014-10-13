@@ -1,36 +1,32 @@
 package com.epam.hnyp.task6.subtask5;
 
 public class SequenceFinderRunnableWaitNotify implements Runnable {
-	private final Object SET_DATA_MONITOR = new Object();
-	private final Object GET_STATUS_MONITOR = new Object();
+	private final Object dataMonitor = new Object();
 
 	private byte[] data;
 
-	private SearchStatusExtended actualCurentStatus;
+	private volatile SearchStatusExtended actualCurentStatus;
 
 	public void setData(byte[] data) {
-		synchronized (SET_DATA_MONITOR) {
+		synchronized (dataMonitor) {
 			this.data = data;
-			SET_DATA_MONITOR.notify();
+			dataMonitor.notify();
 		}
 	}
 
 	public SearchStatusExtended getActualCurentStatus() {
-		synchronized (GET_STATUS_MONITOR) {
-			return actualCurentStatus;
-		}
+		return actualCurentStatus;
 	}
 
 	@Override
 	public void run() {
-		synchronized (SET_DATA_MONITOR) {
+		synchronized (dataMonitor) {
 			while (true) {
 				try {
-					SET_DATA_MONITOR.wait();
+					dataMonitor.wait();
 				} catch (InterruptedException e) {
 					continue;
 				}
-
 				SearchStatusExtended curentStatus = new SearchStatusExtended();
 				int offset1 = 0, offset2 = 0, len = 0;
 				for (int i = 0; i < data.length - 2; i++) {
@@ -45,20 +41,15 @@ public class SequenceFinderRunnableWaitNotify implements Runnable {
 								curentStatus.setLength(len);
 								curentStatus.setOffsetFirst(offset1);
 								curentStatus.setOffsetSecond(offset2);
-								synchronized (GET_STATUS_MONITOR) {
-									this.actualCurentStatus = new SearchStatusExtended(
-											curentStatus);
-								}
+								this.actualCurentStatus = new SearchStatusExtended(
+										curentStatus);
 								break;
 							}
 						}
 					}
 				}
 				curentStatus.setFinish(true);
-				synchronized (GET_STATUS_MONITOR) {
-					this.actualCurentStatus = new SearchStatusExtended(
-							curentStatus);
-				}
+				this.actualCurentStatus = new SearchStatusExtended(curentStatus);
 			}
 		}
 	}
