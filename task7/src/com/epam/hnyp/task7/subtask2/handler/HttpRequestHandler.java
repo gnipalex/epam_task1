@@ -11,7 +11,11 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 public class HttpRequestHandler implements Runnable {
+	private static final Logger LOG = Logger.getLogger(HttpRequestHandler.class);
+	
 	protected Socket socket;
 	public static final String PATTERN_GET_HEADER = "^GET\\s(.+)\\sHTTP/1\\.[01]$"; 
 
@@ -26,8 +30,9 @@ public class HttpRequestHandler implements Runnable {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			
 			String requestLine = br.readLine();
-			if (!isRequestOfTypeGet(requestLine)) {
-				System.out.println("bad request [" + requestLine + "]");
+			if (!isRequestOfTypeGet(requestLine)) {;
+				System.out.println("bad request header");
+				LOG.error("request header differs from HTTP GET request");
 				bw.write("HTTP/1.0 400 Bad Request");
 				bw.newLine();
 				bw.flush();
@@ -42,7 +47,13 @@ public class HttpRequestHandler implements Runnable {
 				//error status 404
 				bw.write("HTTP/1.0 404 Not Found");
 				bw.newLine();
+				bw.newLine();
+				bw.write("404 Not Found");
+				bw.newLine();
 				bw.flush();
+				
+				LOG.error("file '" + requestedFile.getName() + "' not found");
+				
 				return;
 			}
 			
@@ -50,6 +61,10 @@ public class HttpRequestHandler implements Runnable {
 			bw.newLine();
 			bw.write("Content-Type: text/html; charset=windows-1251"); //Content-Length
 			bw.newLine();
+			
+			if (LOG.isInfoEnabled()) {
+				LOG.info("all ok, file found and sending to client");
+			}
 			
 			if (requestedFile.length() == 0) {
 				bw.write("Content-Length: 0");

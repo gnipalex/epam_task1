@@ -9,9 +9,13 @@ import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.epam.hnyp.task7.subtask1.facade.ProductsFacade;
 
 public class SimpleRequestHandler implements Runnable {
+	private static final Logger log = Logger.getLogger(SimpleRequestHandler.class);
+	
 	private Socket socket;
 	private ProductsFacade prodFacade;
 	
@@ -27,13 +31,23 @@ public class SimpleRequestHandler implements Runnable {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			
 			String line = br.readLine();
+			if (log.isInfoEnabled()) {
+				log.info("starting processing simple request --> '" + line + "'");
+			}
 			String key = extractCommand(line);
 			String params = extractParams(line);
 			
 			if (!key.equals("get")) {
-				bw.write("unknown command");
+				bw.write("unknown command '" + key + "'");
+				if (log.isInfoEnabled()) {
+					log.info("unknown command '" + key + "'");
+				}
 			} else {
-				bw.write(process(params));
+				String response = process(params);
+				bw.write(response);
+				if (log.isInfoEnabled()) {
+					log.info("response --> '" + response + "'");
+				}
 			}
 			
 			bw.newLine();
@@ -58,6 +72,9 @@ public class SimpleRequestHandler implements Runnable {
 			getCount(response);
 		} else {
 			response.append("#get : bad args");
+			if (log.isInfoEnabled()) {
+				log.info("command get : bad args");
+			}
 		}		
 		return response.toString();
 	}
@@ -65,14 +82,14 @@ public class SimpleRequestHandler implements Runnable {
 	private void getItem(StringBuilder response, String params) {
 		Matcher idMatcher = Pattern.compile("item\\s*=\\s*([-\\d]+)").matcher(params);
 		if (!idMatcher.find()){
-			response.append("#get item : bad args");
+			response.append("#get item : bad format");
 			return;
 		}
 		long id = 0;
 		try {
 			id = Long.parseLong(idMatcher.group(1));
 		} catch (NumberFormatException e) {
-			response.append("#get item : bad args");
+			response.append("#get item : bad args format");
 			return;
 		}
 		ProductsFacade.ProductInfo prodInfo = prodFacade.getProductInfo(id);

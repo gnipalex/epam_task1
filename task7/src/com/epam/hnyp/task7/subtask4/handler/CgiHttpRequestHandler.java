@@ -11,12 +11,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.epam.hnyp.task7.subtask2.handler.HttpRequestHandler;
 import com.epam.hnyp.task7.subtask4.command.Command;
 
 public class CgiHttpRequestHandler extends HttpRequestHandler {
+	private static final Logger LOG = Logger.getLogger(CgiHttpRequestHandler.class);
 	private Map<String, Command> commands;
-	
 	public static final String CGI_CORRECT_URL_PATTERN = "^cgi/([A-Za-z\\d-_\\./]+)";
 	
 	public CgiHttpRequestHandler(Socket socket, Map<String, Command> commands) {
@@ -32,7 +34,8 @@ public class CgiHttpRequestHandler extends HttpRequestHandler {
 			
 			String requestLine = br.readLine();
 			if (!isRequestOfTypeGet(requestLine)) {
-				System.out.println("bad request [" + requestLine + "]");
+				System.out.println("bad request header");
+				LOG.error("request header differs from HTTP GET request");
 				bw.write("HTTP/1.0 400 Bad Request");
 				bw.newLine();
 				bw.flush();
@@ -44,6 +47,7 @@ public class CgiHttpRequestHandler extends HttpRequestHandler {
 			Command command = commands.get(cgiCommand);
 			
 			if (cgiCommand.isEmpty() || command == null) {
+				LOG.error("command '" + cgiCommand + "' not found");
 				bw.write("HTTP/1.0 404 Not Found");
 				bw.newLine();
 				bw.flush();
@@ -55,6 +59,10 @@ public class CgiHttpRequestHandler extends HttpRequestHandler {
 			bw.write("Content-Type: text/html; charset=windows-1251");
 			bw.newLine();
 			bw.newLine();
+			
+			if (LOG.isInfoEnabled()) {
+				LOG.info("all OK, processing command '" + cgiCommand + "'");
+			}
 			
 			Map<String, String> requestParams = extractParams(url);
 			

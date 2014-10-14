@@ -9,8 +9,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class ClientRunner {
+import org.apache.log4j.Logger;
 
+public class ClientRunner {
 	public static final int PORT = 3000;
 	public static final String HOST = "127.0.0.1";
 

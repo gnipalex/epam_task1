@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-public class IndexCommand implements Command {
+import org.apache.log4j.Logger;
 
+public class IndexCommand implements Command {
+	private static final Logger LOG = Logger.getLogger(IndexCommand.class);
+	
 	private String indexFileName;
 	
 	public IndexCommand(String indexFileName) {
@@ -24,6 +27,9 @@ public class IndexCommand implements Command {
 			fis = new FileInputStream(indexFileName);
 		} catch (FileNotFoundException e) {
 			out.append("oups, index page file not found");
+			
+			LOG.error("index page file '" + indexFileName + "' not found");
+			
 			return out.toString();
 		}
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(fis))) {
@@ -34,7 +40,14 @@ public class IndexCommand implements Command {
 			}
 		} catch (IOException e) {
 			out.append("oups, server error");
+			
+			LOG.error("error while reading index page file '" + indexFileName + "' not found");
+			
 			return out.toString();
+		}
+		
+		if (LOG.isInfoEnabled()) {
+			LOG.info("sent to response index page file");
 		}
 		
 		return out.toString();

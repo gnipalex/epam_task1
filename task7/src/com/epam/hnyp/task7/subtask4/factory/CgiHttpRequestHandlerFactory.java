@@ -8,7 +8,6 @@ import com.epam.hnyp.task7.subtask4.command.Command;
 import com.epam.hnyp.task7.subtask4.handler.CgiHttpRequestHandler;
 
 public class CgiHttpRequestHandlerFactory implements RequestHandlerFactory {
-
 	private Map<String, Command> commands;
 	
 	public CgiHttpRequestHandlerFactory(Map<String, Command> commands) {

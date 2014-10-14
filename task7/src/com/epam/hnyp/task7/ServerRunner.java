@@ -2,13 +2,14 @@ package com.epam.hnyp.task7;
 
 import java.util.Scanner;
 
-import com.epam.hnyp.task7.subtask1.facade.ProductsFacade;
+import org.apache.log4j.Logger;
+
 import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
-import com.epam.hnyp.task7.subtask1.factory.SimpleRequestHandlerFactory;
 import com.epam.hnyp.task7.subtask1.server.Server;
-import com.epam.hnyp.task7.subtask2.factory.HttpRequestHandlerFactory;
 
 public class ServerRunner {
+
+	private static final Logger LOG = Logger.getLogger(ServerRunner.class);
 
 	private static Scanner scanner = new Scanner(System.in);
 
@@ -22,18 +23,23 @@ public class ServerRunner {
 		System.out.print("Choise : ");
 		line = scanner.nextLine();
 		if (!line.isEmpty()) {
-			switch(line.charAt(0)) {
+			switch (line.charAt(0)) {
 			case '1':
-				chosenFactory = HandlerFactoriesFactory.newSimpleRequestHandlerFactory();
+				chosenFactory = HandlerFactoriesFactory
+						.newSimpleRequestHandlerFactory();
 				break;
 			case '2':
-				chosenFactory = HandlerFactoriesFactory.newHttpRequestHandlerFactory();
+				chosenFactory = HandlerFactoriesFactory
+						.newHttpRequestHandlerFactory();
 				break;
 			case '3':
-				chosenFactory = HandlerFactoriesFactory.newCgiHttpRequestHandlerFactory();
+				chosenFactory = HandlerFactoriesFactory
+						.newCgiHttpRequestHandlerFactory();
 				break;
-				default:
-					System.out.println("bad input, you must specify one of modes from list above");
+			default:
+				System.out
+						.println("bad input, you must specify one of modes from list above");
+				LOG.error("server work mode choose, bad args input");
 			}
 		}
 		return chosenFactory;
@@ -41,20 +47,33 @@ public class ServerRunner {
 	}
 
 	public static void main(String[] args) {
+		if (LOG.isInfoEnabled()) {
+			LOG.info("started server runner");
+		}
 		RequestHandlerFactory reqFactory = chooseFactory();
-		
+
 		if (reqFactory == null) {
+			System.out.println("abort");
+			if (LOG.isInfoEnabled()) {
+				LOG.info("RequestHandlerFactory was not specified, aborting server start");
+			}
 			return;
 		}
 
 		Thread serverThread = new Thread(new Server(reqFactory));
 		serverThread.setDaemon(true);
 		serverThread.start();
-		
+
 		System.out.println("Server started");
+		if (LOG.isInfoEnabled()) {
+			LOG.info("server daemon started at default port 3000");
+		}
 
 		Scanner sc = new Scanner(System.in);
 		System.out.println("input any key to stop server");
 		sc.nextLine();
+		if (LOG.isInfoEnabled()) {
+			LOG.info("server shutdown");
+		}
 	}
 }
