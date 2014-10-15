@@ -59,7 +59,6 @@ function validateJQ() {
 		switch(this.name) {
 		case 'name':
 			if (!this.value) {
-				//$(this.parent).append("<div class=\"error_message\">рсрн ньхайн</div>");
 				showErrorJS(this.parentNode, ' specify name');
 				valid = false;
 			}
@@ -83,7 +82,7 @@ function validateJQ() {
 			if (!this.value) {
 				showErrorJS(this.parentNode, ' specify password');
 				valid = false;
-			} else if (this.value != $("#register_form_id input[@name=rePassword]").val() ) {
+			} else if (this.value != $("#register_form_id input[name='rePassword']").val() ) {
 				showErrorJS(this.parentNode, ' passwords does not match');
 				valid = false;
 			}
@@ -95,5 +94,6 @@ function validateJQ() {
 }
 
 function resetAllErrorsJQ() {
+	$("#register_form_id .error_message").parent().removeClass();
 	$("#register_form_id .error_message").remove();
 }
