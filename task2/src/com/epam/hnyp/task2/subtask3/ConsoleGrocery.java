@@ -19,6 +19,11 @@ import com.epam.hnyp.task2.subtask3.serialize.ProductsSerializer;
 import com.epam.hnyp.task2.subtask3.service.ProductsService;
 import com.epam.hnyp.task2.subtask3.util.ConsoleIOProvider;
 import com.epam.hnyp.task2.subtask3.util.IOProvider;
+import com.epam.hnyp.task7.subtask1.facade.ProductsFacade;
+import com.epam.hnyp.task7.subtask1.facade.ProductsShopFacade;
+import com.epam.hnyp.task7.subtask1.factory.SimpleRequestHandlerFactory;
+import com.epam.hnyp.task7.subtask1.server.Server;
+import com.epam.hnyp.task7.subtask3.factory.RequestHandlerFactory;
 
 public class ConsoleGrocery {
 	public static final String SERIALIZED_PRODUCTS_FILE = "products.dat";
@@ -33,6 +38,8 @@ public class ConsoleGrocery {
 	private static ProductsSerializer ntimesSerializer = new NtimesProductsSerializer(
 			SERIALIZE_COUNT);
 	private static ProductsSerializer gzipSerializer = new GzipProductsSerializer();
+	
+	private static final int SERVER_PORT = 3000;
 
 	private static ServicesContainer initServicesContainer() {
 		ServicesInitializer initializer = new ServicesInMemoryInitializer();
@@ -117,6 +124,14 @@ public class ConsoleGrocery {
 		} while (line.isEmpty() || inputError);
 		return productCreator;
 	}
+	
+	public static void startServer(ProductsService prodService) {
+		ProductsFacade prodFacade = new ProductsShopFacade(prodService);
+		RequestHandlerFactory reqHandlerFactory = new SimpleRequestHandlerFactory(prodFacade);
+		Thread serverThread = new Thread(new Server(SERVER_PORT, reqHandlerFactory));
+		serverThread.setDaemon(true);
+		serverThread.start();
+	}
 
 	public static void main(String[] args) {
 		IOProvider ioProvider = new ConsoleIOProvider();
@@ -132,6 +147,9 @@ public class ConsoleGrocery {
 		// ProductsInitializer.fillProducts(servicesContainer.getProductsService(),
 		// 1);
 
+		startServer(servicesContainer.getProductsService());
+		ioProvider.printLine("--server started at port " + SERVER_PORT + "--");
+		
 		// CommandInitializer commandInitializer = new
 		// CommandInitializerOrdinary(
 		// servicesContainer.getShopFacade(), ioProvider);
