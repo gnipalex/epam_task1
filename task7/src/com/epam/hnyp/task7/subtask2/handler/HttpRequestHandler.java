@@ -1,8 +1,10 @@
 package com.epam.hnyp.task7.subtask2.handler;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -27,6 +29,7 @@ public class HttpRequestHandler implements Runnable {
 	public void run() {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			
 			String requestLine = br.readLine();
@@ -66,23 +69,32 @@ public class HttpRequestHandler implements Runnable {
 				LOG.info("all ok, file found and sending to client");
 			}
 			
-			if (requestedFile.length() == 0) {
-				bw.write("Content-Length: 0");
-				bw.newLine();
-			} else {
-				bw.write("Content-Length: " + requestedFile.length());
+			if (requestedFile.length() != 0) {
+				//bw.write("Content-Length: " + requestedFile.length());
 				bw.newLine();
 				bw.newLine();
-				Scanner sc = new Scanner(requestedFile);
-				while (sc.hasNext()) {
-					String line = sc.nextLine();
-					bw.write(line);
-					bw.newLine();
+//				Scanner sc = new Scanner(requestedFile);
+//				while (sc.hasNext()) {
+//					String line = sc.nextLine();
+//					bw.write(line);
+//					bw.newLine();
+//				}
+//				sc.close();
+				try (FileInputStream fis = new FileInputStream(requestedFile)){
+					final int buferSz = 1024;
+					byte[] buf = new byte[buferSz];
+					int actualRead = 0;
+					while(fis.available() > 0) {
+						actualRead = fis.read(buf);
+						bos.write(buf, 0, actualRead);
+					}
+				} catch (IOException e) {
+					
 				}
-				sc.close();
 			}
 			bw.newLine();
 			bw.flush();
+			bos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -118,5 +130,7 @@ public class HttpRequestHandler implements Runnable {
 		}
 		return "";
 	}
+	
+	
 
 }

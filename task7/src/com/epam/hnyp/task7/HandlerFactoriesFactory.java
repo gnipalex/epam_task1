@@ -2,30 +2,29 @@ package com.epam.hnyp.task7;
 
 import java.util.Map;
 
-import com.epam.hnyp.task2.subtask3.initializer.ProductsInitializer;
-import com.epam.hnyp.task2.subtask3.repo.ProductRepo;
-import com.epam.hnyp.task2.subtask3.repo.impl.ProductRepoInMemory;
-import com.epam.hnyp.task2.subtask3.service.impl.ProductsServiceImpl;
-import com.epam.hnyp.task7.subtask1.facade.ProductsShopFacade;
-import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
+import com.epam.hnyp.task7.subtask1.facade.ProductsFacade;
 import com.epam.hnyp.task7.subtask1.factory.SimpleRequestHandlerFactory;
 import com.epam.hnyp.task7.subtask2.factory.HttpRequestHandlerFactory;
+import com.epam.hnyp.task7.subtask3.factory.RequestHandlerFactory;
 import com.epam.hnyp.task7.subtask4.command.Command;
 import com.epam.hnyp.task7.subtask4.command.CommandInitializer;
 import com.epam.hnyp.task7.subtask4.factory.CgiHttpRequestHandlerFactory;
 
 public class HandlerFactoriesFactory {
 	
+	//to remove
 	public static RequestHandlerFactory newSimpleRequestHandlerFactory() {
-		ProductRepo repo = new ProductRepoInMemory();
-		ProductsServiceImpl prodService = new ProductsServiceImpl();
-		prodService.setGoodRepo(repo);
-		
-		ProductsInitializer.fillProducts(prodService, 1);
-		
-		ProductsShopFacade prodFacade = new ProductsShopFacade();
-		prodFacade.setProdService(prodService);
-		
+		ProductsFacade prodFacade = new ProductsFacade() {
+			@Override
+			public int getCount() {
+				return 2;
+			}
+
+			@Override
+			public ProductInfo getProductInfo(long id) {
+				return new ProductInfo("aaa", 321);
+			}	
+		};
 		return new SimpleRequestHandlerFactory(prodFacade);
 	}
 	

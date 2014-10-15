@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
 import com.epam.hnyp.task7.subtask1.server.Server;
+import com.epam.hnyp.task7.subtask3.factory.RequestHandlerFactory;
 
 public class ServerRunner {
 

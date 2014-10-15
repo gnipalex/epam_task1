@@ -14,8 +14,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.epam.hnyp.task7.subtask1.facade.ProductsFacade;
-import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
 import com.epam.hnyp.task7.subtask1.factory.SimpleRequestHandlerFactory;
+import com.epam.hnyp.task7.subtask3.factory.RequestHandlerFactory;
 
 public class ServerTest {
 

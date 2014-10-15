@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
+import com.epam.hnyp.task7.subtask3.factory.RequestHandlerFactory;
 
 public class Server implements Runnable {
 	public static final int DEFAULT_PORT = 3000;

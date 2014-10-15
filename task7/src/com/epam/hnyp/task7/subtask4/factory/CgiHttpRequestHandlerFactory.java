@@ -3,7 +3,7 @@ package com.epam.hnyp.task7.subtask4.factory;
 import java.net.Socket;
 import java.util.Map;
 
-import com.epam.hnyp.task7.subtask1.factory.RequestHandlerFactory;
+import com.epam.hnyp.task7.subtask3.factory.RequestHandlerFactory;
 import com.epam.hnyp.task7.subtask4.command.Command;
 import com.epam.hnyp.task7.subtask4.handler.CgiHttpRequestHandler;
 
