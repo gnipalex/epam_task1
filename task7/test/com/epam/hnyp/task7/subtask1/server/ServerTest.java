@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -28,8 +29,10 @@ public class ServerTest {
 	private static final String countRequest = "get count";
 	private static final String itemRequest = "get item = 1";
 
+	private static Server server;
+	
 	@BeforeClass 
-	public static void initServer() {
+	public static void startServer() {
 		ProductsFacade mockFacade = Mockito.mock(ProductsFacade.class);
 		Mockito.when(mockFacade.getCount()).thenReturn(prodCount);
 		Mockito.when(mockFacade.getProductInfo(Mockito.anyLong())).thenReturn(
@@ -37,14 +40,20 @@ public class ServerTest {
 
 		RequestHandlerFactory reqFactory = new SimpleRequestHandlerFactory(
 				mockFacade);
-		Thread serverThread = new Thread(new Server(port, reqFactory));
-		serverThread.setDaemon(true);
-		serverThread.start();
+		server = new Server(port, reqFactory);
+		server.start();
 
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			fail("Test was interrupted");
+		}
+	}
+	
+	@AfterClass
+	public static void stopServer() {
+		if (server != null) {
+			server.stop();
 		}
 	}
 	
