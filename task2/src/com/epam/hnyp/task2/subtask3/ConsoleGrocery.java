@@ -124,14 +124,6 @@ public class ConsoleGrocery {
 		} while (line.isEmpty() || inputError);
 		return productCreator;
 	}
-	
-	public static void startServer(ProductsService prodService) {
-		ProductsFacade prodFacade = new ProductsShopFacade(prodService);
-		RequestHandlerFactory reqHandlerFactory = new SimpleRequestHandlerFactory(prodFacade);
-		Thread serverThread = new Thread(new Server(SERVER_PORT, reqHandlerFactory));
-		serverThread.setDaemon(true);
-		serverThread.start();
-	}
 
 	public static void main(String[] args) {
 		IOProvider ioProvider = new ConsoleIOProvider();
@@ -147,7 +139,12 @@ public class ConsoleGrocery {
 		// ProductsInitializer.fillProducts(servicesContainer.getProductsService(),
 		// 1);
 
-		startServer(servicesContainer.getProductsService());
+		ProductsFacade prodFacade = new ProductsShopFacade(servicesContainer.getProductsService());
+		RequestHandlerFactory reqHandlerFactory = new SimpleRequestHandlerFactory(prodFacade);
+
+		Server server = new Server(SERVER_PORT, reqHandlerFactory);
+		server.start();
+		
 		ioProvider.printLine("--server started at port " + SERVER_PORT + "--");
 		
 		// CommandInitializer commandInitializer = new
@@ -160,6 +157,9 @@ public class ConsoleGrocery {
 		AbstractCommand shopCommand = commandInitializer.initMainCommand();
 		shopCommand.execute();
 
+		server.stop();
+		ioProvider.printLine("--server stopped --");
+		
 		serializeAllProducts(servicesContainer.getProductsService(), ioProvider);
 	}
 }
