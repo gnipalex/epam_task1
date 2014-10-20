@@ -8,6 +8,6 @@ public interface UserRepo {
 	boolean add(User user);
 	boolean remove(long id);
 	User get(long id);
-	User getByEmail(String email);
+	User getByLogin(String login);
 	Collection<User> getAll();
 }

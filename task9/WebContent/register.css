@@ -1,0 +1,23 @@
+.register {
+	margin: 50px auto; width: 400px;
+}
+
+.register input {
+	height: 20px;
+}
+
+.register table td {
+	vertical-align: top;
+}
+
+.error {
+	color:red;
+}
+.error input {
+	border: 1px solid red;
+}
+
+.error_message {
+	color: red;	font-weight: bold; text-align: right;
+}
+

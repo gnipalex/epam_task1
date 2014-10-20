@@ -8,7 +8,7 @@ public interface UserService {
 	boolean add(User user);
 	boolean remove(long id);
 	User get(long id);
-	User getByEmail(String email);
-	boolean userExists(String email);
+	User getByLogin(String email);
+	boolean userExists(String login);
 	Collection<User> getAll();
 }
