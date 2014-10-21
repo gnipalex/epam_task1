@@ -58,42 +58,61 @@
 			<div class="introduction">
 				<h2>Register</h2>
 				<div class="register">
-					<form id="register_form_id">
+					<form id="register_form_id" action="" method="post"
+						onsubmit="return validateJS(this);">
 						<table>
 							<tr>
 								<td><h4>Your name</h4></td>
 								<td><input class="text" type="text" value="" maxlength="50"
 									size="30" name="name"></input>
-								</td>
+									<div id="name_err_id" class="error_message"></div></td>
 							</tr>
 							<tr>
 								<td><h4>Your last name</h4></td>
 								<td><input class="text" type="text" value="" maxlength="50"
 									size="30" name="lastName"></input>
-								</td>
+									<div id="lastName_err_id" class="error_message"></div></td>
 							</tr>
 							<tr>
 								<td><h4>Your email</h4></td>
 								<td><input class="text" type="text" value="" maxlength="50"
 									size="30" name="email"></input>
-								</td>
+									<div id="email_err_id" class="error_message"></div></td>
 							</tr>
 							<tr>
 								<td><h4>Your password</h4></td>
 								<td><input class="text" type="password" value=""
 									maxlength="50" size="30" name="password"></input>
-								</td>
+									<div id="password_err_id" class="error_message"></div></td>
 							</tr>
 							<tr>
 								<td><h4>Your password again</h4></td>
 								<td><input class="text" type="password" value=""
-									maxlength="50" size="30" name="rePassword"></input>
+									maxlength="50" size="30" name="rePassword"></input></td>
+							</tr>
+							<tr>
+								<td><h4>
+										Receive our <br /> newsletters
+									</h4></td>
+								<td>
+									<div class="checkboxwraper">
+										<input type="checkbox" checked="checked" name="receiveLetters"></input>&nbsp;receive
+										letters
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td><h4>Robot protection</h4></td>
+								<td>
+									<div class="capchaimg"><img src="" alt="capcha" /></div>
+									<input class="text" type="text" value="" maxlength="50" size="30" name="capcha"></input>
+									<div id="capcha_err_id" class="error_message"></div> 
+									<input type="hidden" name="capchaUuid" value=""></input>
 								</td>
 							</tr>
 						</table>
 						<br></br>
-						<input class="txt" type="button" value="Register JS" onclick="return validateJS(this.form);"></input>&nbsp;
-						<input class="txt" type="button" value="Register jQ" onclick="validateJQ();"></input>
+						<input class="txt" type="submit" value="Register"></input>
 					</form>
 				</div>
 			</div>
@@ -109,5 +128,15 @@
 			</p>
 		</div>
 	</div>
+	<input type="hidden" id="res_error_name_empty" value="specify name" />
+	<input type="hidden" id="res_error_email_empty" value="specify email" />
+	<input type="hidden" id="res_error_lastName_empty"
+		value="specify last name" />
+	<input type="hidden" id="res_error_email_incorrect"
+		value="email is incorrect" />
+	<input type="hidden" id="res_error_pwd_empty" value="specify password" />
+	<input type="hidden" id="res_error_pwd_mismatch"
+		value="passwords does not match" />
+	<input type="hidden" id="res_error_capcha_empty" value="specify capcha" />
 </body>
 </html>

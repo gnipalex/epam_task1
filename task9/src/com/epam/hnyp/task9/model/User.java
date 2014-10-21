@@ -1,7 +1,5 @@
 package com.epam.hnyp.task9.model;
 
-import java.util.Collection;
-import java.util.HashSet;
 
 public class User {
 	private long id;
@@ -9,8 +7,8 @@ public class User {
 	private String lastName;
 	private String password;
 	private String login;
-	
-	private Collection<Distribution> distributions = new HashSet<>();
+	private boolean receiveLetters;
+	private Roles role;
 
 	public long getId() {
 		return id;
@@ -44,20 +42,28 @@ public class User {
 		this.password = password;
 	}
 
-	public Collection<Distribution> getDistributions() {
-		return distributions;
-	}
-
-	public void setDistributions(Collection<Distribution> distributions) {
-		this.distributions = distributions;
-	}
-
 	public String getLogin() {
 		return login;
 	}
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public boolean isReceiveLetters() {
+		return receiveLetters;
+	}
+
+	public void setReceiveLetters(boolean receiveLetters) {
+		this.receiveLetters = receiveLetters;
+	}
+
+	public Roles getRole() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
 	}
 	
 }

@@ -21,3 +21,19 @@
 	color: red;	font-weight: bold; text-align: right;
 }
 
+.checkboxwraper {
+	vertical-align: middle;
+}
+.checkboxwraper input {
+	vertical-align: middle;
+}
+
+.capchaimg {
+	width:200px;
+	height:100px;
+}
+.capchaimg img {
+	width: 100%;
+	height: 100%;
+}
+

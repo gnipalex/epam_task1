@@ -1,99 +1,58 @@
 var EMAIL_PATTERN = /^[\w\.\d-_]+@[\w\.\d-_]+\.\w{2,4}$/i;
 
-function resetErrorJS(container) {
+function resetErrorJSNew(name) {
+	errItem = document.getElementById(name + '_err_id');
+	errItem.innerHTML = '';
+	container = errItem.parentNode;
 	container.className = '';
-	if (container.lastChild.className == 'error_message') {
-		container.removeChild(container.lastChild);
-	}
 }
 
-function showErrorJS(container, errorMessage) {
+function showErrorJSNew(name, errorMessage) {
+	errItem = document.getElementById(name + '_err_id');
+	errItem.innerHTML = errorMessage;
+	container = errItem.parentNode;
 	container.className = 'error';
-	var msgElem = document.createElement('div');
-	msgElem.className = "error_message";
-	msgElem.innerHTML = errorMessage;
-	container.appendChild(msgElem);
 }
 
 function validateJS(form) {
 	var elems = form.elements;
 	var valid = true;
 
-	resetErrorJS(elems.name.parentNode);
+	resetErrorJSNew(elems.name.name);
 	if (!elems.name.value) {
-		showErrorJS(elems.name.parentNode, ' specify name');
+		showErrorJSNew(elems.name.name, document.getElementById('res_error_name_empty').value);
 		valid = false;
 	}
 	
-	resetErrorJS(elems.lastName.parentNode);
+	resetErrorJSNew(elems.lastName.name);
 	if (!elems.lastName.value) {
-		showErrorJS(elems.lastName.parentNode, ' specify last name');
+		showErrorJSNew(elems.lastName.name, document.getElementById('res_error_lastName_empty').value);
 		valid = false;
 	}
 
-	resetErrorJS(elems.email.parentNode);
+	resetErrorJSNew(elems.email.name);
 	if (!elems.email.value) {
-		showErrorJS(elems.email.parentNode, ' specify email');
+		showErrorJSNew(elems.email.name, document.getElementById('res_error_email_empty').value);
 		valid = false;
 	} else if (!EMAIL_PATTERN.test(elems.email.value)) {
-		showErrorJS(elems.email.parentNode, ' email is incorrect');
+		showErrorJSNew(elems.email.name, document.getElementById('res_error_email_incorrect').value);
 		valid = false;
 	}
 	
-	resetErrorJS(elems.password.parentNode);
+	resetErrorJSNew(elems.password.name);
 	if (!elems.password.value) {
-		showErrorJS(elems.password.parentNode, ' specify password');
+		showErrorJSNew(elems.password.name, document.getElementById('res_error_pwd_empty').value);
 		valid = false;
 	} else if (elems.password.value != elems.rePassword.value) {
-		showErrorJS(elems.password.parentNode, ' passwords does not match');
+		showErrorJSNew(elems.password.name, document.getElementById('res_error_pwd_mismatch').value);
+		valid = false;
+	}
+	
+	resetErrorJSNew(elems.capcha.name);
+	if (!elems.capcha.value) {
+		showErrorJSNew(elems.capcha.name, document.getElementById('res_error_capcha_empty').value);
 		valid = false;
 	}
 	
 	return valid;
-}
-
-function validateJQ() {
-	var valid = true;
-	resetAllErrorsJQ();
-	$('#register_form_id input').each(function(){
-		switch(this.name) {
-		case 'name':
-			if (!this.value) {
-				showErrorJS(this.parentNode, ' specify name');
-				valid = false;
-			}
-			break;
-		case 'lastName':
-			if (!this.value) {
-				showErrorJS(this.parentNode, ' specify last name');
-				valid = false;
-			}
-			break;
-		case 'email':
-			if (!this.value) {
-				showErrorJS(this.parentNode, ' specify email');
-				valid = false;
-			} else if (!EMAIL_PATTERN.test(this.value)) {
-				showErrorJS(this.parentNode, ' email is incorrect');
-				valid = false;
-			}
-			break;
-		case 'password':
-			if (!this.value) {
-				showErrorJS(this.parentNode, ' specify password');
-				valid = false;
-			} else if (this.value != $("#register_form_id input[name='rePassword']").val() ) {
-				showErrorJS(this.parentNode, ' passwords does not match');
-				valid = false;
-			}
-			break;
-			default:
-		}
-	});
-	return valid;
-}
-
-function resetAllErrorsJQ() {
-	$("#register_form_id .error_message").parent().removeClass();
-	$("#register_form_id .error_message").remove();
 }
