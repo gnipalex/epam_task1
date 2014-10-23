@@ -1,4 +1,4 @@
-package com.epam.hnyp.task9.service.impl;
+package com.epam.hnyp.task9.util;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,23 +7,31 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 
 import sun.awt.image.codec.JPEGImageEncoderImpl;
 
-import com.epam.hnyp.task9.service.CapchaService;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
-public class CapchaServiceAwtImpl implements CapchaService {
+public class CapchaAwtJpegImpl implements Capcha, Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	public static final int DEFAULT_CAPCHA_LENGTH = 4;
+	public static final Random RANDOM = new Random(System.currentTimeMillis());
+	
 	public static final String CAPCHA_CHARS = "abcdefghijkmnopqrstuvwxyz23456789";
 	public static final String JPEG_MIME_TYPE = "image/jpeg";
 	public static final int MAX_ANGLE = 40;
 
 	private String capcha;
-	private Random rand;
 	private int length;
-	private String uuid;
+	private Date createdTime = new Date();
+	
+	public CapchaAwtJpegImpl() {
+		this(DEFAULT_CAPCHA_LENGTH); 
+	}
 	
 	/**
 	 * Creates new capcha using specified random generator and specified length
@@ -31,37 +39,22 @@ public class CapchaServiceAwtImpl implements CapchaService {
 	 * @param length capcha length in symbols
 	 * @throws IllegalArgumentException if capcha length < 1
 	 */
-	public CapchaServiceAwtImpl(Random rand, int length) {
+	public CapchaAwtJpegImpl(int length) {
 		if (length < 1) {
 			throw new IllegalArgumentException("length must be >= 1");
 		}
-		this.rand = rand;
 		this.length = length;
-		
-		this.capcha = generateCapcha();
-		this.uuid = UUID.randomUUID().toString();
+		generateCapcha();
 	}
 
-	private String generateCapcha() {
+	private void generateCapcha() {
 		StringBuilder out = new StringBuilder();
 		for (int i = 0; i < length; i++) {
-			out.append(CAPCHA_CHARS.charAt(rand.nextInt(CAPCHA_CHARS.length())));
+			out.append(CAPCHA_CHARS.charAt(RANDOM.nextInt(CAPCHA_CHARS.length())));
 		}
-		return out.toString();
+		this.capcha = out.toString();
 	}
 	
-	/**
-	 * Draws picture of capcha to {@link OutputStream}. Notice that the font size 
-	 * and capcha height should be in proportion <br>
-	 * picWidth >= fontSize * N, where N - length of capcha string
-	 * @param output {@link OutputStream} to write picture of capcha
-	 * @param picHeight capcha height in px
-	 * @param picWidth capcha width in px
-	 * @param fontSize symbol height and width in px
-	 * @throws IOException if error occured while writing image to stream 
-	 * @throws IllegalArgumentException if bad picture dimensions were specified,<br>
-	 *  or font size < 1
-	 */
 	@Override
 	public void drawCapcha(OutputStream output, int picHeight, int picWidth,
 			int fontSize) throws IOException {
@@ -88,9 +81,9 @@ public class CapchaServiceAwtImpl implements CapchaService {
 
 		for (int i=0; i<text.length; i++, offsetX += fontSize) {
 			AffineTransform at = new AffineTransform();
-			at.rotate(Math.toRadians(rand.nextInt(MAX_ANGLE) - MAX_ANGLE/2));
+			at.rotate(Math.toRadians(RANDOM.nextInt(MAX_ANGLE) - MAX_ANGLE/2));
 			g.setFont(g.getFont().deriveFont(at));
-			g.setColor(colors[rand.nextInt(colors.length)]);
+			g.setColor(colors[RANDOM.nextInt(colors.length)]);
 			g.drawChars(text, i, 1, offsetX, offsetY);
 		}
 		
@@ -104,18 +97,22 @@ public class CapchaServiceAwtImpl implements CapchaService {
 	public String getCapcha() {
 		return capcha;
 	}
-
-	public int getLength() {
-		return length;
-	}
-	
-	@Override
-	public String getUuid() {
-		return uuid;
-	}
 	
 	@Override
 	public String getMimeType() {
 		return JPEG_MIME_TYPE;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	@Override
+	public Date getCreatedTime() {
+		return createdTime;
 	}
 }

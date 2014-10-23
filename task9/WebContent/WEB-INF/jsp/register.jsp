@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=cp1251"
+    pageEncoding="cp1251"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -58,32 +62,33 @@
 			<div class="introduction">
 				<h2>Register</h2>
 				<div class="register">
-					<form id="register_form_id" action="" method="post"
-						onsubmit="return validateJS(this);">
+					<c:url value="/register" var="link"></c:url>
+					<form id="register_form_id" action="${link}" method="post"
+						onsubmit=""> <!-- return validateJS(this); -->
 						<table>
 							<tr>
 								<td><h4>Your name</h4></td>
-								<td><input class="text" type="text" value="" maxlength="50"
+								<td><input class="text" type="text" value="${userFormBean.name}" maxlength="50"
 									size="30" name="name"></input>
-									<div id="name_err_id" class="error_message"></div></td>
+									<div id="name_err_id" class="error_message">${errorMessages["nameError"]}</div></td>
 							</tr>
 							<tr>
 								<td><h4>Your last name</h4></td>
-								<td><input class="text" type="text" value="" maxlength="50"
+								<td><input class="text" type="text" value="${userFormBean.lastName}" maxlength="50"
 									size="30" name="lastName"></input>
-									<div id="lastName_err_id" class="error_message"></div></td>
+									<div id="lastName_err_id" class="error_message">${errorMessages["lastNameError"]}</div></td>
 							</tr>
 							<tr>
 								<td><h4>Your login(email)</h4></td>
-								<td><input class="text" type="text" value="" maxlength="50"
+								<td><input class="text" type="text" value="${userFormBean.login}" maxlength="50"
 									size="30" name="login"></input>
-									<div id="login_err_id" class="error_message"></div></td>
+									<div id="login_err_id" class="error_message">${errorMessages["loginError"]}</div></td>
 							</tr>
 							<tr>
 								<td><h4>Your password</h4></td>
 								<td><input class="text" type="password" value=""
 									maxlength="50" size="30" name="password"></input>
-									<div id="password_err_id" class="error_message"></div></td>
+									<div id="password_err_id" class="error_message">${errorMessages["passwordError"]}</div></td>
 							</tr>
 							<tr>
 								<td><h4>Your password again</h4></td>
@@ -96,7 +101,10 @@
 									</h4></td>
 								<td>
 									<div class="checkboxwraper">
-										<input type="checkbox" checked="checked" name="receiveLetters" value="on"></input>&nbsp;receive
+										<c:if test="${not empty userFormBean.receiveLetters }">
+											<c:set var="checkbox_checked" value="checked=\"checked\""></c:set>
+										</c:if>
+										<input type="checkbox" ${checkbox_checked} name="receiveLetters" value="on"></input>&nbsp;receive
 										letters
 									</div>
 								</td>
@@ -104,9 +112,9 @@
 							<tr>
 								<td><h4>Robot protection</h4></td>
 								<td>
-									<div class="capchaimg"><img src="" alt="capcha" /></div>
+									<div class="capchaimg"><img src="capchaDrawer" alt="capcha" /></div>
 									<input class="text" type="text" value="" maxlength="50" size="30" name="capcha"></input>
-									<div id="capcha_err_id" class="error_message"></div> 
+									<div id="capcha_err_id" class="error_message">${errorMessages["capchaError"]}</div> 
 									<input type="hidden" name="capchaUuid" value=""></input>
 								</td>
 							</tr>

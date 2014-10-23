@@ -1,12 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>task9</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>task9</display-name>
+	<context-param>
+		<param-name>capchaClientMode</param-name>
+		<param-value>cookie</param-value>
+		<!-- <param-value>hidden</param-value> -->
+	</context-param>
+	<context-param>
+		<param-name>capchaUidParamName</param-name>
+		<param-value>capchaUid</param-value>
+	</context-param>
+	<context-param>
+		<param-name>capchaServerMode</param-name>
+		<param-value>session</param-value>
+		<!--  <param-value>appContext</param-value> -->
+	</context-param>
+	<context-param>
+		<param-name>capchaTTL</param-name>
+		<param-value>100</param-value>
+	</context-param>
+	<context-param>
+		<param-name>capchaLength</param-name>
+		<param-value>5</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>com.epam.hnyp.task9.listener.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<welcome-file-list>
+		<welcome-file>redirect.jsp</welcome-file>
+	</welcome-file-list>
+
+
+	<servlet>
+		<servlet-name>CapchaDrawerServlet</servlet-name>
+		<servlet-class>com.epam.hnyp.task9.servlet.CapchaDrawerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CapchaDrawerServlet</servlet-name>
+		<url-pattern>/capchaDrawer</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>RegisterServlet</servlet-name>
+		<servlet-class>com.epam.hnyp.task9.servlet.RegisterServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RegisterServlet</servlet-name>
+		<url-pattern>/register</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>MainServlet</servlet-name>
+		<servlet-class>com.epam.hnyp.task9.servlet.MainServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MainServlet</servlet-name>
+		<url-pattern>/main</url-pattern>
+	</servlet-mapping>
 </web-app>

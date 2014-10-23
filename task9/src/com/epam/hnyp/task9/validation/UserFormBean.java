@@ -1,99 +1,93 @@
 package com.epam.hnyp.task9.validation;
 
-public class UserFormBean {
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.epam.hnyp.task9.model.Roles;
+import com.epam.hnyp.task9.model.User;
+
+public class UserFormBean implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private String name;
-	private String errorName;
+	public static final String NAME_ERROR_KEY = "nameError";
 	private String lastName;
-	private String errorLastName;
-	private String pwd;
-	private String errorPwd;
-	private String rePwd;
+	public static final String LASTNAME_ERROR_KEY = "lastNameError";
+	private String password;
+	public static final String PASSWORD_ERROR_KEY = "passwordError";
+	private String rePassword;
 	private String login;
-	private String errorLogin;
+	public static final String LOGIN_ERROR_KEY = "loginError";
 	private String receiveLetters;
 	
-	public boolean validate() {
+	public Map<String, String> validate() {
+		Map<String, String> errorMap = new HashMap<String, String>();
+		if (name == null || name.isEmpty() || name.trim().isEmpty()) {
+			errorMap.put("nameError", "name must be specified");
+		}
 		
+		if (lastName == null || lastName.isEmpty() || lastName.trim().isEmpty()) {
+			errorMap.put("lastNameError", "lastName must be specified");
+		}
+		
+		if (password == null || password.isEmpty() || password.trim().isEmpty()) {
+			errorMap.put("passwordError", "password must be specified");
+		} else if (rePassword == null || rePassword.isEmpty() || !password.equals(rePassword)) {
+			errorMap.put("passwordError", "passwords don't match");
+		}
+		
+		if (login == null || login.isEmpty() || login.trim().isEmpty()) {
+			errorMap.put("loginError", "login must be specified");
+		}
+		return errorMap;
 	}
-
+	
+	public User buildUser() {
+		User u = new User();
+		u.setLastName(lastName);
+		u.setLogin(login);
+		u.setName(name);
+		u.setPassword(password);
+		u.setReceiveLetters(receiveLetters != null);
+		u.setRole(Roles.CUSTOMER);
+		return u;
+	}
+	
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getErrorName() {
-		return errorName;
-	}
-
-	public void setErrorName(String errorName) {
-		this.errorName = errorName;
-	}
-
 	public String getLastName() {
 		return lastName;
 	}
-
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
-	public String getErrorLastName() {
-		return errorLastName;
+	public String getPassword() {
+		return password;
 	}
-
-	public void setErrorLastName(String errorLastName) {
-		this.errorLastName = errorLastName;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-
-	public String getPwd() {
-		return pwd;
+	public String getRePassword() {
+		return rePassword;
 	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setRePassword(String rePassword) {
+		this.rePassword = rePassword;
 	}
-
-	public String getErrorPwd() {
-		return errorPwd;
-	}
-
-	public void setErrorPwd(String errorPwd) {
-		this.errorPwd = errorPwd;
-	}
-
-	public String getRePwd() {
-		return rePwd;
-	}
-
-	public void setRePwd(String rePwd) {
-		this.rePwd = rePwd;
-	}
-
 	public String getLogin() {
 		return login;
 	}
-
 	public void setLogin(String login) {
 		this.login = login;
 	}
-
-	public String getErrorLogin() {
-		return errorLogin;
-	}
-
-	public void setErrorLogin(String errorLogin) {
-		this.errorLogin = errorLogin;
-	}
-
 	public String getReceiveLetters() {
 		return receiveLetters;
 	}
-
 	public void setReceiveLetters(String receiveLetters) {
 		this.receiveLetters = receiveLetters;
 	}
-
 }

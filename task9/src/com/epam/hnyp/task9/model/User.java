@@ -9,6 +9,19 @@ public class User {
 	private String login;
 	private boolean receiveLetters;
 	private Roles role;
+	
+	public User() {
+	}
+	
+	public User(String name, String lastName, String password, String login,
+			boolean receiveLetters, Roles role) {
+		this.name = name;
+		this.lastName = lastName;
+		this.password = password;
+		this.login = login;
+		this.receiveLetters = receiveLetters;
+		this.role = role;
+	}
 
 	public long getId() {
 		return id;

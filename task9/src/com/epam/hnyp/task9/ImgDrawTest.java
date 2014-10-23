@@ -4,12 +4,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-import com.epam.hnyp.task9.service.impl.CapchaServiceAwtImpl;
+import com.epam.hnyp.task9.util.CapchaAwtJpegImpl;
 
 public class ImgDrawTest {
 	public static void main(String[] args) throws IOException {
-		CapchaServiceAwtImpl capServ = new CapchaServiceAwtImpl(new Random(System.currentTimeMillis()),
-				5);
+		CapchaAwtJpegImpl capServ = new CapchaAwtJpegImpl(5);
 		
 		FileOutputStream fout = new FileOutputStream("img.jpeg");
 		

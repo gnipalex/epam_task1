@@ -30,12 +30,12 @@ function validateJS(form) {
 		valid = false;
 	}
 
-	resetErrorJSNew(elems.email.name);
-	if (!elems.email.value) {
-		showErrorJSNew(elems.email.name, document.getElementById('res_error_email_empty').value);
+	resetErrorJSNew(elems.login.name);
+	if (!elems.login.value) {
+		showErrorJSNew(elems.login.name, document.getElementById('res_error_email_empty').value);
 		valid = false;
-	} else if (!EMAIL_PATTERN.test(elems.email.value)) {
-		showErrorJSNew(elems.email.name, document.getElementById('res_error_email_incorrect').value);
+	} else if (!EMAIL_PATTERN.test(elems.login.value)) {
+		showErrorJSNew(elems.login.name, document.getElementById('res_error_email_incorrect').value);
 		valid = false;
 	}
 	
