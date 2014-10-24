@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.epam.hnyp.task9.Constants;
 import com.epam.hnyp.task9.repo.UserRepo;
 import com.epam.hnyp.task9.repo.impl.UserInMemoryRepo;
 import com.epam.hnyp.task9.repo.impl.UsersInitializer;
@@ -39,7 +40,7 @@ public class ContextLoaderListener implements ServletContextListener {
     		default:
     			//error terminate
     	}
-    	context.setAttribute("init:capchaUidService", capchaUidService);
+    	context.setAttribute(Constants.INIT_CAPCHAUID_SERVICE_KEY, capchaUidService);
     	
     	AbstractCapchaService capchaService = null;
     	switch(capchaServerMode) {
@@ -52,13 +53,13 @@ public class ContextLoaderListener implements ServletContextListener {
     		default:
     			//error terminate
     	}
-    	context.setAttribute("init:capchaService", capchaService);
-    	context.setAttribute("init:capchaLength", capchaLength);
+    	context.setAttribute(Constants.INIT_CAPCHA_SERVICE_KEY, capchaService);
+    	context.setAttribute(Constants.INIT_CAPCHA_LENGTH_KEY, capchaLength);
     	
     	UserRepo userRepo = new UserInMemoryRepo();
     	UsersInitializer.initUsers(userRepo);
     	UserService userService = new UserServiceImpl(userRepo);
-    	context.setAttribute("init:userService", userService);
+    	context.setAttribute(Constants.INIT_USER_SERVICE_KEY, userService);
     }
 
     public void contextDestroyed(ServletContextEvent arg0) {

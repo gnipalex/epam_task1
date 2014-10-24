@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.epam.hnyp.task9.Constants;
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.service.AbstractCapchaService;
 import com.epam.hnyp.task9.service.CapchaUidService;
@@ -29,10 +30,10 @@ public class RegisterServlet extends HttpServlet {
 	
 	@Override
 	public void init() throws ServletException {
-		capchaUidService = (CapchaUidService)getServletContext().getAttribute("init:capchaUidService");
-		capchaService = (AbstractCapchaService)getServletContext().getAttribute("init:capchaService");
-		capchaLength = (Integer)getServletContext().getAttribute("init:capchaLength");
-		userService = (UserService)getServletContext().getAttribute("init:userService");
+		capchaUidService = (CapchaUidService)getServletContext().getAttribute(Constants.INIT_CAPCHAUID_SERVICE_KEY);
+		capchaService = (AbstractCapchaService)getServletContext().getAttribute(Constants.INIT_CAPCHA_SERVICE_KEY);
+		capchaLength = (Integer)getServletContext().getAttribute(Constants.INIT_CAPCHA_LENGTH_KEY);
+		userService = (UserService)getServletContext().getAttribute(Constants.INIT_USER_SERVICE_KEY);
 	}
 	
 	@Override
@@ -41,23 +42,23 @@ public class RegisterServlet extends HttpServlet {
 		capchaService.clearAllExpiredCapcha(request);
 		
 		Capcha capcha = new CapchaAwtJpegImpl(capchaLength);
-		session.setAttribute("currentCapcha", capcha);
+		session.setAttribute(Constants.SESSION_CURRENT_CAPCHA_KEY, capcha);
 		String capchaUid = session.getId();
 		capchaService.saveCapcha(request, capchaUid, capcha);/////exception
 		capchaUidService.setUid(request, response, capchaUid);
 		
-		Map<String, String> errors = (Map<String, String>)session.getAttribute("registerErrorMessages");
-		session.removeAttribute("registerErrorMessages");
+		Map<String, String> errors = (Map<String, String>)session.getAttribute(Constants.REGISTER_POSTREDIRECT_ERRORMESSAGES_KEY);
+		session.removeAttribute(Constants.REGISTER_POSTREDIRECT_ERRORMESSAGES_KEY);
 		if (errors == null) {
 			errors = new HashMap<String, String>();
 		}
-		request.setAttribute("errorMessages", errors);
-		UserFormBean userFormBean = (UserFormBean)session.getAttribute("registerUserFormBean");
-		session.removeAttribute("registerUserFormBean");
+		request.setAttribute(Constants.REGISTER_ERRORMESSAGES_KEY, errors);
+		UserFormBean userFormBean = (UserFormBean)session.getAttribute(Constants.REGISTER_POSTREDIRECT_USERBEAN_KEY);
+		session.removeAttribute(Constants.REGISTER_POSTREDIRECT_USERBEAN_KEY);
 		if (userFormBean == null) {
 			userFormBean = new UserFormBean();
 		}
-		request.setAttribute("userFormBean", userFormBean);
+		request.setAttribute(Constants.REGISTER_USERBEAN_KEY, userFormBean);
 		
 		request.getRequestDispatcher("WEB-INF/jsp/register.jsp").forward(request, response);
 	}
@@ -69,26 +70,26 @@ public class RegisterServlet extends HttpServlet {
 		
 		if (errorMessages.isEmpty()) {
 			if (userService.userExists(userFormBean.getLogin())) {
-				errorMessages.put(UserFormBean.LOGIN_ERROR_KEY, "this login is already in use");
+				errorMessages.put(Constants.USERBEAN_LOGIN_ERROR_KEY, "this login is already in use");
 			}
 		}
 		
-		String capchaText = request.getParameter("capcha");
+		String capchaText = request.getParameter(Constants.REGISTER_FORM_CAPCHA_PARAM);
 		String capchaUid = capchaUidService.readUid(request);
 		
 		Capcha originalCapcha = capchaService.getCapcha(request, capchaUid);
 		if (originalCapcha == null) {
-			errorMessages.put("capchaError", "capcha expired or not found, try again");
+			errorMessages.put(Constants.CAPCHA_ERROR_KEY, "capcha expired or not found, try again");
 		} else if (capchaService.isCapchaExpired(originalCapcha)) {
-			errorMessages.put("capchaError", "capcha expired, try again");
+			errorMessages.put(Constants.CAPCHA_ERROR_KEY, "capcha expired, try again");
 		} else if (!originalCapcha.getCapcha().equals(capchaText)) {
-			errorMessages.put("capchaError", "wrong capcha, try again");
+			errorMessages.put(Constants.CAPCHA_ERROR_KEY, "wrong capcha, try again");
 		}
 		
 		if (!errorMessages.isEmpty()) {
 			HttpSession session = request.getSession();
-			session.setAttribute("registerUserFormBean", userFormBean);
-			session.setAttribute("registerErrorMessages", errorMessages);
+			session.setAttribute(Constants.REGISTER_POSTREDIRECT_USERBEAN_KEY, userFormBean);
+			session.setAttribute(Constants.REGISTER_POSTREDIRECT_ERRORMESSAGES_KEY, errorMessages);
 			response.sendRedirect(getServletContext().getContextPath() + "/register");
 			return;
 		}
@@ -101,12 +102,12 @@ public class RegisterServlet extends HttpServlet {
 	
 	private UserFormBean extractRegisterForm(HttpServletRequest request) {
 		UserFormBean form = new UserFormBean();
-		form.setLastName(request.getParameter("lastName"));
-		form.setLogin(request.getParameter("login"));
-		form.setName(request.getParameter("name"));
-		form.setPassword(request.getParameter("password"));
-		form.setReceiveLetters(request.getParameter("receiveLetters"));
-		form.setRePassword(request.getParameter("rePassword"));
+		form.setLastName(request.getParameter(Constants.REGISTER_FORM_LASTNAME_PARAM));
+		form.setLogin(request.getParameter(Constants.REGISTER_FORM_LOGIN_PARAM));
+		form.setName(request.getParameter(Constants.REGISTER_FORM_NAME_PARAM));
+		form.setPassword(request.getParameter(Constants.REGISTER_FORM_PWD_PARAM));
+		form.setReceiveLetters(request.getParameter(Constants.REGISTER_FORM_RECEIVELETTERS_PARAM));
+		form.setRePassword(request.getParameter(Constants.REGISTER_FORM_REPWD_PARAM));
 		return form;
 	}
 }

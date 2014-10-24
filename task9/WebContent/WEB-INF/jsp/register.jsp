@@ -14,50 +14,8 @@
 </head>
 <body>
 	<div id="content">
-		<div id="header">
-			<div class="topong">
-				<div class="pad">
-					<img src="images/cart.gif" alt="My Cart" />
-					<h4>
-						<a href="">VIEW CART</a>
-					</h4>
-					<br /> <span class="txt">0 items</span>
-				</div>
-			</div>
-			<div class="topong">
-				<div class="pad">
-					<img src="images/account.gif" alt="Account" />
-					<h4>
-						<a href="">MY ACCOUNT</a>
-					</h4>
-					<br /> <span class="txt">Show my account</span>
-				</div>
-			</div>
-			<h1>
-				<span class="green bigl">P</span>roducts<span class="green bigl">S</span>hop
-			</h1>
-			<span class="slogan">You are happy - we are happy</span>
-		</div>
-		<div id="menu">
-			<div class="pad">
-				<div id="search">
-					<form action="" method="get">
-						<p>
-							<input type="text" name="search" size="20" maxlength="250"
-								class="text" value="" /> <input type="submit" value="Go"
-								class="txt" />
-						</p>
-					</form>
-				</div>
-				<div class="submit">
-					<ul>
-						<li><a href=""><span>HOME</span></a></li>
-						<li><a href=""><span>PRODUCTS</span></a></li>
-						<li><a href=""><span>REGISTER</span></a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+		<jsp:include page="parts/header.jsp" />
+		<jsp:include page="parts/menu.jsp" />
 		<div id="maincontent">
 			<div class="introduction">
 				<h2>Register</h2>
@@ -125,16 +83,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="footer">
-			<p class="right">
-				Copyright &copy; 2014 ProductsShop, Design: <a
-					href="http://www.free-css-templates.com">free-css-templates.com</a>
-			</p>
-			<p>
-				<a href="">Home</a> &middot; <a href="">Products</a> &middot; <a
-					href="">About</a>
-			</p>
-		</div>
+		<jsp:include page="parts/footer.jsp" />
 	</div>
 	<input type="hidden" id="res_error_name_empty" value="specify name" />
 	<input type="hidden" id="res_error_email_empty" value="specify email" />
