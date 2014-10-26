@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="windows-1251" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+  http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+  <description>Shop custom tags library</description>
+  <tlib-version>1.0</tlib-version>
+  <short-name>shtags</short-name>
+  <uri>http://hnyp.epam.com/task9/shop</uri>
+  
+  <tag>
+  	<description>Places picture of capcha</description>
+  	<name>capcha</name>
+  	<tag-class>com.epam.hnyp.task9.customtag.CapchaCustomTag</tag-class>
+  	<body-content>empty</body-content>
+  	
+  	<attribute>
+  		<description>Uid of capcha for the hidden field</description>
+  		<name>capchaId</name>
+  		<rtexprvalue>true</rtexprvalue>
+  	</attribute>
+  	<attribute>
+  		<description>Name of hidden field containing capcha uid</description>
+  		<name>name</name>
+  	</attribute>
+  	<attribute>
+  		<description>Flag defining using of hidden field for capcha uid</description>
+  		<name>useHidden</name>
+  		<required>true</required>
+  		<rtexprvalue>true</rtexprvalue>
+  		<type>java.lang.Boolean</type>
+  	</attribute>
+  	<attribute>
+  		<description>Url to capcha source (servlet) drawing capcha</description>
+  		<name>url</name>
+  		<required>true</required>
+  	</attribute>
+	
+  </tag>
+	
+</taglib>

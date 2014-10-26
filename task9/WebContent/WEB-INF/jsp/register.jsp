@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=cp1251"
     pageEncoding="cp1251"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="custom" uri="http://hnyp.epam.com/task9/shop" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -70,10 +71,18 @@
 							<tr>
 								<td><h4>Robot protection</h4></td>
 								<td>
-									<div class="capchaimg"><img src="capchaDrawer" alt="capcha" /></div>
+									<!--  <div class="capchaimg"><img src="capchaDrawer" alt="capcha" /></div>
 									<input class="text" type="text" value="" maxlength="50" size="30" name="capcha"></input>
 									<div id="capcha_err_id" class="error_message">${errorMessages["capchaError"]}</div> 
 									<input type="hidden" name="capchaUuid" value=""></input>
+									-->
+									<div class="capchaimg">
+										<custom:capcha useHidden="${not empty capchaUuid}" 
+											url="capchaDrawer" name="capchaUuid" 
+											capchaId="${capchaUuid}" />
+									</div>
+									<input class="text" type="text" value="" maxlength="50" size="30" name="capcha"></input>
+									<div id="capcha_err_id" class="error_message">${errorMessages["capchaError"]}</div> 
 								</td>
 							</tr>
 						</table>
