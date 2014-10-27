@@ -41,12 +41,6 @@ public class UserServiceImpl implements UserService{
 	public boolean userExists(String login) {
 		return userRepo.getByLogin(login) != null;
 	}
-	
-	@Override
-	public boolean checkUser(String login, String pwd) {
-		User u = getByLogin(login);
-		return u == null ? false : u.getPassword().equals(pwd);
-	}
 
 	@Override
 	public Collection<User> getAll() {

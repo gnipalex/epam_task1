@@ -10,7 +10,7 @@
   <uri>http://hnyp.epam.com/task9/shop</uri>
   
   <tag>
-  	<description>Places picture of capcha</description>
+  	<description>Places picture of capcha. Uses IMG html tag inside of DIV, input field located out of DIV</description>
   	<name>capcha</name>
   	<tag-class>com.epam.hnyp.task9.customtag.CapchaCustomTag</tag-class>
   	<body-content>empty</body-content>
@@ -22,7 +22,7 @@
   	</attribute>
   	<attribute>
   		<description>Name of hidden field containing capcha uid</description>
-  		<name>name</name>
+  		<name>hiddenName</name>
   	</attribute>
   	<attribute>
   		<description>Flag defining using of hidden field for capcha uid</description>
@@ -32,9 +32,24 @@
   		<type>java.lang.Boolean</type>
   	</attribute>
   	<attribute>
-  		<description>Url to capcha source (servlet) drawing capcha</description>
+  		<description>Url to capcha source (servlet drawing capcha)</description>
   		<name>url</name>
   		<required>true</required>
+  	</attribute>
+  	<attribute>
+  		<description>If tag should place input field for capcha</description>
+  		<name>useCapchaField</name>
+  		<required>true</required>
+  		<rtexprvalue>true</rtexprvalue>
+  		<type>java.lang.Boolean</type>
+  	</attribute>
+  	<attribute>
+  		<description>Name of the capcha input field</description>
+  		<name>capchaFieldName</name>
+  	</attribute>
+  	<attribute>
+  		<description>DIV element css class</description>
+  		<name>divCss</name>
   	</attribute>
 	
   </tag>

@@ -112,9 +112,9 @@ font : bold 1em "Tahoma", Verdana, Arial, sans-serif;
 padding-left : 2px;
 }
 #header .topong {
-background : #fafafa url(images/topaff.jpg) no-repeat bottom;
+background : #fafafa url(images/topaff_w200.jpg) no-repeat bottom;
 height : 66px;
-width : 159px;
+width : 200px;
 float : right;
 }
 #header .topong .pad {

@@ -10,6 +10,5 @@ public interface UserService {
 	User get(long id);
 	User getByLogin(String email);
 	boolean userExists(String login);
-	boolean checkUser(String login, String pwd);
 	Collection<User> getAll();
 }

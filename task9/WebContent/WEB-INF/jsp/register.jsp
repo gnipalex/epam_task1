@@ -71,17 +71,17 @@
 							<tr>
 								<td><h4>Robot protection</h4></td>
 								<td>
-									<!--  <div class="capchaimg"><img src="capchaDrawer" alt="capcha" /></div>
+									<%--  
+									<div class="capchaimg"><img src="capchaDrawer" alt="capcha" /></div>
 									<input class="text" type="text" value="" maxlength="50" size="30" name="capcha"></input>
 									<div id="capcha_err_id" class="error_message">${errorMessages["capchaError"]}</div> 
 									<input type="hidden" name="capchaUuid" value=""></input>
-									-->
-									<div class="capchaimg">
-										<custom:capcha useHidden="${not empty capchaUuid}" 
-											url="capchaDrawer" name="capchaUuid" 
-											capchaId="${capchaUuid}" />
-									</div>
-									<input class="text" type="text" value="" maxlength="50" size="30" name="capcha"></input>
+									--%>
+										<custom:capcha useHidden="${not empty capchaUid}" 
+											url="capchaDrawer" hiddenName="capchaUid"
+											capchaId="${capchaUid}" 
+											useCapchaField="true" capchaFieldName="capcha" divCss="capchaimg"/>
+									
 									<div id="capcha_err_id" class="error_message">${errorMessages["capchaError"]}</div> 
 								</td>
 							</tr>

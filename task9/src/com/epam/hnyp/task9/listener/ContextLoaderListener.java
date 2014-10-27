@@ -16,12 +16,12 @@ import com.epam.hnyp.task9.service.impl.CookieCapchaUidService;
 import com.epam.hnyp.task9.service.impl.HiddenCapchaUidService;
 import com.epam.hnyp.task9.service.impl.SessionCapchaService;
 import com.epam.hnyp.task9.service.impl.UserServiceImpl;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 public class ContextLoaderListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent arg0) {
     	ServletContext context = arg0.getServletContext();
-    	String capchaUidParamName = context.getInitParameter("capchaUidParamName");
     	String capchaClientMode = context.getInitParameter("capchaClientMode");
     	String capchaServerMode = context.getInitParameter("capchaServerMode");
     	String capchaTTLStr = context.getInitParameter("capchaTTL");
@@ -32,13 +32,13 @@ public class ContextLoaderListener implements ServletContextListener {
     	CapchaUidService capchaUidService = null;
     	switch(capchaClientMode){
     	case "cookie":
-    		capchaUidService = new CookieCapchaUidService(capchaUidParamName);
+    		capchaUidService = new CookieCapchaUidService(Constants.CAPCHA_UID_PARAM_NAME);
     		break;
     	case "hidden":
-    		capchaUidService = new HiddenCapchaUidService(capchaUidParamName);
+    		capchaUidService = new HiddenCapchaUidService(Constants.CAPCHA_UID_PARAM_NAME);
     		break;
     		default:
-    			//error terminate
+    			throw new RuntimeException("Client capcha uid store mod not specified. Use context param 'capchaClientMode' = 'cookie' | 'hidden'");
     	}
     	context.setAttribute(Constants.INIT_CAPCHAUID_SERVICE_KEY, capchaUidService);
     	
@@ -51,7 +51,7 @@ public class ContextLoaderListener implements ServletContextListener {
     		capchaService = new AppContextCapchaService(capchaTTL);
     		break;
     		default:
-    			//error terminate
+    			throw new RuntimeException("Server capcha uid store mod not specified. Use context param 'capchaServerMode' = 'session' | 'appContext'");
     	}
     	context.setAttribute(Constants.INIT_CAPCHA_SERVICE_KEY, capchaService);
     	context.setAttribute(Constants.INIT_CAPCHA_LENGTH_KEY, capchaLength);

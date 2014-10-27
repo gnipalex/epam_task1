@@ -18,8 +18,10 @@
 						<li><a href="${link_home}"><span>HOME</span></a></li>
 						<c:url value="/products" var="link_products"></c:url>
 						<li><a href="${link_products}"><span>PRODUCTS</span></a></li>
+						<%--  
 						<c:url value="/register" var="link_register"></c:url>
 						<li><a href="${link_register}"><span>REGISTER</span></a></li>
+						--%>
 					</ul>
 				</div>
 			</div>
