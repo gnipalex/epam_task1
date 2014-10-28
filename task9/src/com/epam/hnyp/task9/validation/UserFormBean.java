@@ -11,6 +11,13 @@ import com.epam.hnyp.task9.model.User;
 public class UserFormBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	public static final String USER_TEXT_PATTERN = "^[a-zA-ZР-пр-џ_\\d-]+$";
+	public static final String USER_EMAIL_PATTERN = "^[\\w\\.\\d-_]+@[\\w\\.\\d-_]+\\.\\w{2,4}$";
+	public static final String USERBEAN_NAME_ERROR_KEY = "nameError";
+	public static final String USERBEAN_LASTNAME_ERROR_KEY = "lastNameError";
+	public static final String USERBEAN_PASSWORD_ERROR_KEY = "passwordError";
+	public static final String USERBEAN_LOGIN_ERROR_KEY = "loginError";
+	
 	private String name;
 	private String lastName;
 	private String password;
@@ -21,27 +28,27 @@ public class UserFormBean implements Serializable {
 	public Map<String, String> validate() {
 		Map<String, String> errorMap = new HashMap<String, String>();
 		if (name == null || name.isEmpty()) {
-			errorMap.put(Constants.USERBEAN_NAME_ERROR_KEY, "name must be specified");
-		} else if (!name.matches(Constants.VALIDATION_USER_TEXT_PATTERN)) {
-			errorMap.put(Constants.USERBEAN_NAME_ERROR_KEY, "name should not contain whitespaces and special symbols");
+			errorMap.put(USERBEAN_NAME_ERROR_KEY, "name must be specified");
+		} else if (!name.matches(USER_TEXT_PATTERN)) {
+			errorMap.put(USERBEAN_NAME_ERROR_KEY, "name should not contain whitespaces and special symbols");
 		}
 		
 		if (lastName == null || lastName.isEmpty()) {
-			errorMap.put(Constants.USERBEAN_LASTNAME_ERROR_KEY, "lastName must be specified");
-		} else if (!lastName.matches(Constants.VALIDATION_USER_TEXT_PATTERN)) {
-			errorMap.put(Constants.USERBEAN_LASTNAME_ERROR_KEY, "last name should not contain whitespaces and special symbols");
+			errorMap.put(USERBEAN_LASTNAME_ERROR_KEY, "lastName must be specified");
+		} else if (!lastName.matches(USER_TEXT_PATTERN)) {
+			errorMap.put(USERBEAN_LASTNAME_ERROR_KEY, "last name should not contain whitespaces and special symbols");
 		}
 		
 		if (password == null || password.isEmpty()) {
-			errorMap.put(Constants.USERBEAN_PASSWORD_ERROR_KEY, "password must be specified");
+			errorMap.put(USERBEAN_PASSWORD_ERROR_KEY, "password must be specified");
 		} else if (rePassword == null || rePassword.isEmpty() || !password.equals(rePassword)) {
-			errorMap.put(Constants.USERBEAN_PASSWORD_ERROR_KEY, "passwords don't match");
+			errorMap.put(USERBEAN_PASSWORD_ERROR_KEY, "passwords don't match");
 		}
 		
 		if (login == null || login.isEmpty()) {
-			errorMap.put(Constants.USERBEAN_LOGIN_ERROR_KEY, "login must be specified");
-		} else if (!login.matches(Constants.VALIDATION_USER_EMAIL_PATTERN)) {
-			errorMap.put(Constants.USERBEAN_LOGIN_ERROR_KEY, "invalid email");
+			errorMap.put(USERBEAN_LOGIN_ERROR_KEY, "login must be specified");
+		} else if (!login.matches(USER_EMAIL_PATTERN)) {
+			errorMap.put(USERBEAN_LOGIN_ERROR_KEY, "invalid email");
 		}
 		return errorMap;
 	}

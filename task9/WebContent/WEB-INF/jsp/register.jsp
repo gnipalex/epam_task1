@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=cp1251"
     pageEncoding="cp1251"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="custom" uri="http://hnyp.epam.com/task9/shop" %>
+<%@ taglib prefix="ctag" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -77,10 +77,8 @@
 									<div id="capcha_err_id" class="error_message">${errorMessages["capchaError"]}</div> 
 									<input type="hidden" name="capchaUuid" value=""></input>
 									--%>
-										<custom:capcha useHidden="${not empty capchaUid}" 
-											url="capchaDrawer" hiddenName="capchaUid"
-											capchaId="${capchaUid}" 
-											useCapchaField="true" capchaFieldName="capcha" divCss="capchaimg"/>
+										
+									<ctag:capcha url="capchaDrawer" divCss="capchaimg"/>
 									
 									<div id="capcha_err_id" class="error_message">${errorMessages["capchaError"]}</div> 
 								</td>

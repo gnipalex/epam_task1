@@ -32,13 +32,7 @@
 			<div class="introduction">
 				<h2>Login</h2>
 				<div class="login">
-					<c:url value="/register" var="link_register"/>
-					<c:url value="/login" var="link_login"/>
-					<c:url value="/account" var="link_account"/>
-					<c:url value="/logout" var="link_logout"/>
-					<ctag:login registerUrl="${link_register}" loginFieldName="login" accountUrl="${link_account}"
-						passwordFieldName="password" logoutUrl="${link_logout}" sessionUser="${SESSION_AUT_USER}" loginUrl="${link_login}"
-						useSmallSize="false" errorColor="red" errorMessage="${loginError}" loginFieldValue="${login}"/>
+					<ctag:login useSmallSize="false" />
 				</div>
 			</div>
 		</div>

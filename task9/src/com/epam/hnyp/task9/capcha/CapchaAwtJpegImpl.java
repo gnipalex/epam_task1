@@ -1,4 +1,4 @@
-package com.epam.hnyp.task9.util;
+package com.epam.hnyp.task9.capcha;
 
 import java.awt.Color;
 import java.awt.Font;

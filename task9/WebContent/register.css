@@ -19,6 +19,7 @@
 
 .error_message {
 	color: red;	font-weight: bold; text-align: right;
+	width: 200px;
 }
 
 .checkboxwraper {
