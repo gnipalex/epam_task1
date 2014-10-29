@@ -1,72 +1,100 @@
 package com.epam.hnyp.task9.repo.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.repo.UserRepo;
 
 public class UserInMemoryRepo implements UserRepo {
-	private long lastId = -1;
-	private List<User> users = new ArrayList<>();
-	
+	private AtomicLong lastId = new AtomicLong(-1);
+	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+	private final Lock r = rwl.readLock();
+	private final Lock w = rwl.writeLock();
+
+	private Map<String, User> usersByLogin = new HashMap<String, User>();
+	private Map<Long, User> usersById = new HashMap<Long, User>();
+
 	@Override
-	public boolean add(User user) {
-		User u = getByLogin(user.getLogin());
-		if (u != null) {
-			return false;
+	public void add(User user) {
+		w.lock();
+		try {
+			User u = getUserByLogin(user.getLogin());
+			if (u != null) {
+				throw new IllegalArgumentException(
+						"duplicate: user with login '" + user.getLogin()
+								+ "' exists");
+			}
+			user.setId(lastId.incrementAndGet());
+			usersByLogin.put(user.getLogin(), user);
+			usersById.put(user.getId(), user);
+		} finally {
+			w.unlock();
 		}
-		if (user.getId() == 0) {
-			user.setId(++lastId);
-		} else if (user.getId() > lastId) {
-			lastId = user.getId();
-		} else {
-			return false;
-		}
-		users.add(user);
-		return true;
 	}
 
 	@Override
-	public boolean remove(long id) {
-		int index = -1;
-		for (int i=0; i < users.size(); i++) {
-			if (users.get(i).getId() == id) {
-				index = i;
-				break;
+	public void remove(long id) {
+		w.lock();
+		try {
+			User remUser = usersById.get(id);
+			if (remUser == null) {
+				throw new IllegalArgumentException("user not found");
 			}
+			usersById.remove(id);
+			usersByLogin.remove(remUser.getLogin());
+
+		} finally {
+			w.unlock();
 		}
-		if (index > 0) {
-			users.remove(index);
-			return true;
-		}
-		return false;
 	}
 
 	@Override
 	public User get(long id) {
-		for (User u : users) {
-			if (u.getId() == id) {
-				return u;
-			}
+		r.lock();
+		try {
+			return getUserById(id);
+		} finally {
+			r.unlock();
 		}
-		return null;
+	}
+
+	private User getUserById(long id) {
+		return usersById.get(id);
+	}
+
+	private User getUserByLogin(String login) {
+		return usersByLogin.get(login);
 	}
 
 	@Override
 	public User getByLogin(String login) {
-		for (User u : users) {
-			if (u.getLogin().equals(login)) {
-				return u;
-			}
+		r.lock();
+		try {
+			return getUserByLogin(login);
+		} finally {
+			r.unlock();
 		}
-		return null;
 	}
 
 	@Override
 	public Collection<User> getAll() {
-		return Collections.unmodifiableList(users);
+		r.lock();
+		try {
+			return Collections.unmodifiableCollection(usersById.values());
+		} finally {
+			r.unlock();
+		}
 	}
+
+	@Override
+	public void update(User user) {
+		throw new UnsupportedOperationException();
+	}
+
 }

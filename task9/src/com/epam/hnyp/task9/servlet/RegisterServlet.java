@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.epam.hnyp.task9.Constants;
 import com.epam.hnyp.task9.capcha.Capcha;
 import com.epam.hnyp.task9.capcha.CapchaAwtJpegImpl;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
@@ -24,6 +23,10 @@ import com.epam.hnyp.task9.validation.UserFormBean;
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	public static final String REGISTER_JSP_URL = "WEB-INF/jsp/register.jsp";
+	public static final String REDIRECT_REGISTER_FAIL = "/register";
+	public static final String REDIRECT_REGISTER_SUCCESS = "/main";
+	
 	public static final String POSTREDIRECT_REGISTER_CONVSCOPE_KEY = "com.epam.hnyp.task9.servlet.POSTREDIRECT_REGISTER_CONVSCOPE_KEY";
 	public static final String CONVSCOPE_USERBEAN_KEY = "postre:registerUserFormBean";
 	public static final String CONVSCOPE_ERRORMESSAGES_KEY = "postre:registerErrorMessages";
@@ -32,6 +35,7 @@ public class RegisterServlet extends HttpServlet {
 	public static final String USERBEAN_KEY = "userFormBean";
 	
 	public static final String CAPCHA_ERROR_KEY = "capchaError";
+	public static final int CAPCHA_TEXT_LENGTH = 5;
 	
 	public static final String REGISTER_FORM_NAME_PARAM = "name";
 	public static final String REGISTER_FORM_LASTNAME_PARAM = "lastName";
@@ -55,7 +59,7 @@ public class RegisterServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		capchaProvider.clearAllExpiredCapcha(request);
 		
-		Capcha capcha = new CapchaAwtJpegImpl(Constants.CAPCHA_TEXT_LENGTH);
+		Capcha capcha = new CapchaAwtJpegImpl(CAPCHA_TEXT_LENGTH);
 		capchaProvider.saveCapcha(request, response, capcha);
 		
 		Map<String, Object> conversationMap = (Map<String, Object>)session.getAttribute(POSTREDIRECT_REGISTER_CONVSCOPE_KEY);
@@ -65,7 +69,7 @@ public class RegisterServlet extends HttpServlet {
 			request.setAttribute(USERBEAN_KEY, conversationMap.get(CONVSCOPE_USERBEAN_KEY));
 		}
 		
-		request.getRequestDispatcher("WEB-INF/jsp/register.jsp").forward(request, response);
+		request.getRequestDispatcher(REGISTER_JSP_URL).forward(request, response);
 	}
 	
 	@Override
@@ -102,14 +106,16 @@ public class RegisterServlet extends HttpServlet {
 			
 			session.setAttribute(POSTREDIRECT_REGISTER_CONVSCOPE_KEY, conversationMap);
 			
-			response.sendRedirect(getServletContext().getContextPath() + "/register");
+			response.sendRedirect(request.getServletContext().getContextPath() + REDIRECT_REGISTER_FAIL);
 			return;
 		}
 		
 		User user = userFormBean.buildUser();
-		userService.add(user);
+		if (!userService.add(user)) {
+			//log
+		}
 		
-		response.sendRedirect(getServletContext().getContextPath() + "/main");
+		response.sendRedirect(request.getServletContext().getContextPath() + REDIRECT_REGISTER_SUCCESS);
 	}
 	
 	private UserFormBean extractRegisterForm(HttpServletRequest request) {
@@ -121,5 +127,21 @@ public class RegisterServlet extends HttpServlet {
 		form.setReceiveLetters(request.getParameter(REGISTER_FORM_RECEIVELETTERS_PARAM));
 		form.setRePassword(request.getParameter(REGISTER_FORM_REPWD_PARAM));
 		return form;
+	}
+
+	public AbstractCapchaProvider getCapchaProvider() {
+		return capchaProvider;
+	}
+
+	public void setCapchaProvider(AbstractCapchaProvider capchaProvider) {
+		this.capchaProvider = capchaProvider;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 }

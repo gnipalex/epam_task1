@@ -19,12 +19,22 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public boolean add(User user) {
-		return userRepo.add(user);
+		try {
+			userRepo.add(user);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean remove(long id) {
-		return userRepo.remove(id);
+		try {
+			userRepo.remove(id);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Override

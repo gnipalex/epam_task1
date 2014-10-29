@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.epam.hnyp.task9.Constants;
 import com.epam.hnyp.task9.model.Roles;
 import com.epam.hnyp.task9.model.User;
 

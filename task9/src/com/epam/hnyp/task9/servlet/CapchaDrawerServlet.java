@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.epam.hnyp.task9.Constants;
 import com.epam.hnyp.task9.capcha.Capcha;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider.CapchaUidMissedException;
@@ -16,6 +15,10 @@ import com.epam.hnyp.task9.listener.ContextInitializer;
 
 public class CapchaDrawerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	public static final int CAPCHA_PICTURE_WIDTH = 200;
+	public static final int CAPCHA_PICTURE_HEIGHT = 100;
+	public static final int CAPCHA_PICTURE_FONT_SZ = 40;
 	
 	private AbstractCapchaProvider capchaProvider;
 	
@@ -35,12 +38,20 @@ public class CapchaDrawerServlet extends HttpServlet {
 		}
 		if (capcha != null) {
 			response.setContentType(capcha.getMimeType());
-			capcha.drawCapcha(response.getOutputStream(), Constants.CAPCHA_PICTURE_HEIGHT,
-					Constants.CAPCHA_PICTURE_WIDTH, Constants.CAPCHA_PICTURE_FONT_SZ);
+			capcha.drawCapcha(response.getOutputStream(), CAPCHA_PICTURE_HEIGHT,
+					CAPCHA_PICTURE_WIDTH, CAPCHA_PICTURE_FONT_SZ);
 		} else {
 			//log
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 
+	public AbstractCapchaProvider getCapchaProvider() {
+		return capchaProvider;
+	}
+
+	public void setCapchaProvider(AbstractCapchaProvider capchaProvider) {
+		this.capchaProvider = capchaProvider;
+	}
+	
 }

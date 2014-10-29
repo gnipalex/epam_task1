@@ -1,6 +1,6 @@
 package com.epam.hnyp.task9.capcha.provider;
 
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,10 +55,10 @@ public abstract class AbstractContextCapchaProvider extends AbstractCapchaProvid
 	@Override
 	public void clearAllExpiredCapcha(HttpServletRequest req) {
 		Map<String, Capcha> capchaMap = getCapchaMap(req);
-		for (String key : new HashSet<>(capchaMap.keySet())) {
-			Capcha capcha = capchaMap.get(key);
-			if (isCapchaExpired(capcha)) {
-				capchaMap.remove(key);
+		Iterator<Capcha> capchaIterator = capchaMap.values().iterator();
+		while (capchaIterator.hasNext()) {
+			if (isCapchaExpired(capchaIterator.next())) {
+				capchaIterator.remove();
 			}
 		}
 	}

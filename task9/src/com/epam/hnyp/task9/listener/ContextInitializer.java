@@ -4,7 +4,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.epam.hnyp.task9.Constants;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.CookieCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.HiddenCapchaProvider;

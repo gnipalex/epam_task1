@@ -3,9 +3,8 @@
   <display-name>task9</display-name>
   <context-param>
     <param-name>capchaServerMode</param-name>
-    <!--  <param-value>session</param-value> -->
-    <param-value>hidden</param-value>
-    <!--  <param-value>cookie</param-value> -->
+    <!-- session | cookie | hidden -->
+    <param-value>session</param-value>
   </context-param>
   <context-param>
     <param-name>capchaTTL</param-name>
@@ -43,6 +42,7 @@
   <servlet>
     <servlet-name>MainServlet</servlet-name>
     <servlet-class>com.epam.hnyp.task9.servlet.MainServlet</servlet-class>
+    <!--  <jsp-file>/WEB-INF/jsp/main.jsp</jsp-file> -->
   </servlet>
   <servlet-mapping>
     <servlet-name>MainServlet</servlet-name>

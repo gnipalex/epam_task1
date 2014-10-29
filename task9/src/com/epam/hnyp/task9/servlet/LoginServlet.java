@@ -1,8 +1,6 @@
 package com.epam.hnyp.task9.servlet;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,12 +88,18 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute(POSTREDIRECT_LOGIN_CONVSCOPE_KEY, conversationMap);
 			response.sendRedirect(getServletContext().getContextPath()
 						+ "/login");
+			return;
 		}
 		session.setAttribute(SESSION_AUT_USER_KEY, user);
-		//response.sendRedirect(getServletContext().getContextPath() + "/main");
 		response.sendRedirect(urlReferrerParam);
 	}
-	
-	
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 }

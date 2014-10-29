@@ -57,7 +57,7 @@
 							<td><h4>Login</h4></td>
 							<td><input class="text" type="text" size="30" maxlength="50"
 								name="login" value="${login}" />
-								<div class="">${loginError}</div></td>
+								<div style="color:red;text-align:right;">${loginError}</div></td>
 						</tr>
 						<tr>
 							<td><h4>Password</h4></td>
