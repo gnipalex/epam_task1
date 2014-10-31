@@ -14,6 +14,8 @@ public abstract class AbstractContextCapchaProvider extends AbstractCapchaProvid
 	public static final String CONTEXT_CAPCHA_MAP_KEY = 
 			"com.epam.hnyp.task9.capchaservice.CONTEXT_CAPCHA_MAP_KEY";
 	
+	private final Map<String, Capcha> capchaMap = new ConcurrentHashMap<>();
+	
 	public AbstractContextCapchaProvider() {
 	}
 
@@ -25,36 +27,33 @@ public abstract class AbstractContextCapchaProvider extends AbstractCapchaProvid
 	public void saveCapcha(HttpServletRequest req, HttpServletResponse resp,
 			Capcha capcha) {
 		String uid = UUID.randomUUID().toString();
-		Map<String, Capcha> capchaMap = getCapchaMap(req);
 		capchaMap.put(uid, capcha);
 		setCapchaUidToClient(req, resp, uid);
 	}
 
-	private Map<String, Capcha> getCapchaMap(HttpServletRequest req) {
-		Object obj = req.getServletContext().getAttribute(
-				CONTEXT_CAPCHA_MAP_KEY);
-		Map<String, Capcha> resultMap = null;
-		if (obj != null && obj instanceof Map) {
-			resultMap = (Map<String, Capcha>) obj;
-		} else {
-			resultMap = new ConcurrentHashMap<>();
-			req.getServletContext().setAttribute(CONTEXT_CAPCHA_MAP_KEY,
-					resultMap);
-		}
-		return resultMap;
-	}
+//	private Map<String, Capcha> getCapchaMap(HttpServletRequest req) {
+//		Object obj = req.getServletContext().getAttribute(
+//				CONTEXT_CAPCHA_MAP_KEY);
+//		Map<String, Capcha> resultMap = null;
+//		if (obj != null && obj instanceof Map) {
+//			resultMap = (Map<String, Capcha>) obj;
+//		} else {
+//			resultMap = new ConcurrentHashMap<>();
+//			req.getServletContext().setAttribute(CONTEXT_CAPCHA_MAP_KEY,
+//					resultMap);
+//		}
+//		return resultMap;
+//	}
 
 	@Override
 	public Capcha getCapcha(HttpServletRequest req)
 			throws CapchaUidMissedException {
-		Map<String, Capcha> capchaMap = getCapchaMap(req);
 		String uid = getCapchaUidFromClient(req);
 		return capchaMap.get(uid);
 	}
 
 	@Override
 	public void clearAllExpiredCapcha(HttpServletRequest req) {
-		Map<String, Capcha> capchaMap = getCapchaMap(req);
 		Iterator<Capcha> capchaIterator = capchaMap.values().iterator();
 		while (capchaIterator.hasNext()) {
 			if (isCapchaExpired(capchaIterator.next())) {

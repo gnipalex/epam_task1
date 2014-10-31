@@ -17,24 +17,20 @@ public class UserServiceImpl implements UserService{
 		this.userRepo = userRepo;
 	}
 
+	/**
+	 * @throws IllegalArgumentException - if user with specified login already exists
+	 */
 	@Override
-	public boolean add(User user) {
-		try {
-			userRepo.add(user);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+	public void add(User user) {
+		userRepo.add(user);
 	}
 
+	/**
+	 * @throws IllegalArgumentException - if user with specified id not found
+	 */
 	@Override
-	public boolean remove(long id) {
-		try {
-			userRepo.remove(id);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+	public void remove(long id) {
+		userRepo.remove(id);
 	}
 
 	@Override

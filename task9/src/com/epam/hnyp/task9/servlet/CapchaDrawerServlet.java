@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.epam.hnyp.task9.capcha.Capcha;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider.CapchaUidMissedException;
@@ -15,7 +17,8 @@ import com.epam.hnyp.task9.listener.ContextInitializer;
 
 public class CapchaDrawerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+	private static final Logger LOG = Logger.getLogger(CapchaDrawerServlet.class);
+			
 	public static final int CAPCHA_PICTURE_WIDTH = 200;
 	public static final int CAPCHA_PICTURE_HEIGHT = 100;
 	public static final int CAPCHA_PICTURE_FONT_SZ = 40;
@@ -32,7 +35,7 @@ public class CapchaDrawerServlet extends HttpServlet {
 		try {
 			capcha = capchaProvider.getCapcha(request);
 		} catch (CapchaUidMissedException e) {
-			//log
+			LOG.error("missed capcha uid from client", e);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -40,8 +43,11 @@ public class CapchaDrawerServlet extends HttpServlet {
 			response.setContentType(capcha.getMimeType());
 			capcha.drawCapcha(response.getOutputStream(), CAPCHA_PICTURE_HEIGHT,
 					CAPCHA_PICTURE_WIDTH, CAPCHA_PICTURE_FONT_SZ);
+			if (LOG.isInfoEnabled()) {
+				LOG.info("capcha successfuly drawn");
+			}
 		} else {
-			//log
+			LOG.error("capcha to draw not found");
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}

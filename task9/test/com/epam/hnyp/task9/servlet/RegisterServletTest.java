@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -22,6 +23,8 @@ import com.epam.hnyp.task9.capcha.Capcha;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.service.UserService;
+import com.epam.hnyp.task9.util.ConversationScopeFactory;
+import com.epam.hnyp.task9.util.ConversationScopeProvider;
 import com.epam.hnyp.task9.validation.UserFormBean;
 
 public class RegisterServletTest {
@@ -35,6 +38,8 @@ public class RegisterServletTest {
 	private AbstractCapchaProvider mockCapchaProvider;
 	private UserService mockUserService;
 	private ServletContext mockServletContext;
+	private ConversationScopeFactory mockConversationScopeFactory;
+	private ConversationScopeProvider mockConvScopeProvider;
 	
 	private RegisterServlet testServlet = new RegisterServlet();
 	
@@ -51,6 +56,11 @@ public class RegisterServletTest {
 		mockResponse = Mockito.mock(HttpServletResponse.class);
 		mockCapchaProvider = Mockito.mock(AbstractCapchaProvider.class);
 		mockUserService = Mockito.mock(UserService.class);
+
+		mockConvScopeProvider = Mockito.mock(ConversationScopeProvider.class);
+		mockConversationScopeFactory = Mockito.mock(ConversationScopeFactory.class);
+		Mockito.when(mockConversationScopeFactory.newConversationScopeProvider(
+				Mockito.any(HttpServletRequest.class), Mockito.anyString())).thenReturn(mockConvScopeProvider);
 		
 		mockServletContext = Mockito.mock(ServletContext.class);
 		Mockito.when(mockServletContext.getContextPath()).thenReturn(fakeContextPath);
@@ -58,10 +68,11 @@ public class RegisterServletTest {
 		
 		testServlet.setCapchaProvider(mockCapchaProvider);
 		testServlet.setUserService(mockUserService);
+		testServlet.setConvScopeFactory(mockConversationScopeFactory);
 	}
 	
 	@Test
-	public void testDoGetClearCapcha() {
+	public void testDoGetClearAllExpiredCapcha() {
 		try {
 			testServlet.doGet(mockRequest, mockResponse);
 		} catch (Exception ex) {
@@ -79,40 +90,6 @@ public class RegisterServletTest {
 		}
 		Mockito.verify(mockCapchaProvider).saveCapcha(Mockito.any(HttpServletRequest.class),
 				Mockito.any(HttpServletResponse.class), Mockito.any(Capcha.class));
-	}
-	
-	@Test
-	public void testDoGetReadConversationScope() {
-		final Object fakeErrorMessages = new Object(); 
-		final Object fakeUserBean = new Object();
-		
-		Map<String, Object> conversationMap = new HashMap<>();
-		conversationMap.put(RegisterServlet.CONVSCOPE_ERRORMESSAGES_KEY, fakeErrorMessages);
-		conversationMap.put(RegisterServlet.CONVSCOPE_USERBEAN_KEY, fakeUserBean);
-		
-		//ArgumentCaptor<Object> argCaptor = ArgumentCaptor.forClass(Object.class);
-		//Mockito.when(mockRequest.setAttribute(RegisterServlet.ERRORMESSAGES_KEY, argCaptor.capture()))
-		
-		Mockito.when(mockSession.getAttribute(RegisterServlet.POSTREDIRECT_REGISTER_CONVSCOPE_KEY))
-			.thenReturn(conversationMap);
-		try {
-			testServlet.doGet(mockRequest, mockResponse);
-		} catch (Exception ex) {
-			fail("Unexpected exception " + ex.getClass().getName());
-		}
-		
-		Mockito.verify(mockRequest).setAttribute(RegisterServlet.ERRORMESSAGES_KEY, fakeErrorMessages);
-		Mockito.verify(mockRequest).setAttribute(RegisterServlet.USERBEAN_KEY, fakeUserBean);
-	}
-	
-	@Test
-	public void testDoGetDeleteConversationScope() {
-		try {
-			testServlet.doGet(mockRequest, mockResponse);
-		} catch (Exception ex) {
-			fail("Unexpected exception " + ex.getClass().getName());
-		}
-		Mockito.verify(mockSession).removeAttribute(RegisterServlet.POSTREDIRECT_REGISTER_CONVSCOPE_KEY);
 	}
 	
 	@Test
@@ -180,18 +157,17 @@ public class RegisterServletTest {
 		}
 		
 		ArgumentCaptor<Object> argCaptor = ArgumentCaptor.forClass(Object.class);
-		Mockito.verify(mockSession).setAttribute(Mockito.eq(RegisterServlet.POSTREDIRECT_REGISTER_CONVSCOPE_KEY),
-				argCaptor.capture());
+		Mockito.verify(mockConvScopeProvider)
+			.addAttribute(Mockito.eq(RegisterServlet.ERRORMESSAGES_KEY), argCaptor.capture());
+		Map<String, Object> errorsMap = (Map<String, Object>)argCaptor.getValue();
 		
-		Map<String, Object> conversationMap = (Map<String, Object>)argCaptor.getValue();
-		Map<String, String> errorMap = (Map<String, String>)conversationMap.
-				get(RegisterServlet.CONVSCOPE_ERRORMESSAGES_KEY);
-		
-		assertTrue("not found capcha error message" ,errorMap.containsKey(RegisterServlet.CAPCHA_ERROR_KEY));
+		assertTrue("capcha error message was not set", errorsMap.containsKey(RegisterServlet.CAPCHA_ERROR_KEY));
 		
 		try {
 			Mockito.verify(mockResponse).sendRedirect(fakeContextPath + RegisterServlet.REDIRECT_REGISTER_FAIL);
-		} catch (IOException e) {}
+		} catch (IOException e) {
+			fail("fail redirect was not send");
+		}
 	}
 	
 	@Test
@@ -222,16 +198,13 @@ public class RegisterServletTest {
 		} catch (Exception ex) {
 			fail("Unexpected exception " + ex.getClass().getName());
 		}
-		
+				
 		ArgumentCaptor<Object> argCaptor = ArgumentCaptor.forClass(Object.class);
-		Mockito.verify(mockSession).setAttribute(Mockito.eq(RegisterServlet.POSTREDIRECT_REGISTER_CONVSCOPE_KEY),
-				argCaptor.capture());
+		Mockito.verify(mockConvScopeProvider)
+			.addAttribute(Mockito.eq(RegisterServlet.ERRORMESSAGES_KEY), argCaptor.capture());
+		Map<String, Object> errorsMap = (Map<String, Object>)argCaptor.getValue();
 		
-		Map<String, Object> conversationMap = (Map<String, Object>)argCaptor.getValue();
-		Map<String, String> errorMap = (Map<String, String>)conversationMap.
-				get(RegisterServlet.CONVSCOPE_ERRORMESSAGES_KEY);
-		
-		assertTrue("not found user exist error message" ,errorMap.containsKey(UserFormBean.USERBEAN_LOGIN_ERROR_KEY));
+		assertTrue("not found user exist error message", errorsMap.containsKey(UserFormBean.USERBEAN_LOGIN_ERROR_KEY));
 		
 		try {
 			Mockito.verify(mockResponse).sendRedirect(fakeContextPath + RegisterServlet.REDIRECT_REGISTER_FAIL);

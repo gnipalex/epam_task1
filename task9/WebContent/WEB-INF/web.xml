@@ -10,10 +10,6 @@
     <param-name>capchaTTL</param-name>
     <param-value>100</param-value>
   </context-param>
-  <context-param>
-    <param-name>capchaLength</param-name>
-    <param-value>5</param-value>
-  </context-param>
   
   <listener>
     <listener-class>com.epam.hnyp.task9.listener.ContextInitializer</listener-class>
@@ -41,8 +37,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>MainServlet</servlet-name>
-    <servlet-class>com.epam.hnyp.task9.servlet.MainServlet</servlet-class>
-    <!--  <jsp-file>/WEB-INF/jsp/main.jsp</jsp-file> -->
+     <jsp-file>/WEB-INF/jsp/main.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>MainServlet</servlet-name>
@@ -50,7 +45,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ShowProductsServlet</servlet-name>
-    <servlet-class>com.epam.hnyp.task9.servlet.ShowProductsServlet</servlet-class>
+    <jsp-file>/WEB-INF/jsp/products.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>ShowProductsServlet</servlet-name>
@@ -72,4 +67,19 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>ErrorServlet</servlet-name>
+  	<servlet-class>com.epam.hnyp.task9.servlet.ErrorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ErrorServlet</servlet-name>
+  	<url-pattern>/error</url-pattern>
+  </servlet-mapping>
+  
+  <error-page>
+  	<exception-type>java.lang.RuntimeException</exception-type>
+  	<location>/error</location>
+  </error-page>
+  
 </web-app>

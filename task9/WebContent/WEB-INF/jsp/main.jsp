@@ -11,9 +11,9 @@
 </head>
 <body>
 	<div id="content">
-		<jsp:include page="parts/header.jsp" />
-		<jsp:include page="parts/menu.jsp" />
-		<jsp:include page="parts/modules.jsp" />
+		<jsp:include page="/WEB-INF/jsp/parts/header.jsp" />
+		<jsp:include page="/WEB-INF/jsp/parts/menu.jsp" />
+		<jsp:include page="/WEB-INF/jsp/parts/modules.jsp" />
 		<div id="maincontent">
 			<div id="introduction">
 				<h2>
@@ -111,7 +111,7 @@
 				</div>
 			</div>
 		</div>
-		<jsp:include page="parts/footer.jsp" />
+		<jsp:include page="/WEB-INF/jsp/parts/footer.jsp" />
 	</div>
 </body>
 </html>

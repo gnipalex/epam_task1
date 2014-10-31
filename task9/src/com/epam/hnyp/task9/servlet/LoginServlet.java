@@ -1,8 +1,6 @@
 package com.epam.hnyp.task9.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,14 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import com.epam.hnyp.task9.listener.ContextInitializer;
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.service.UserService;
+import com.epam.hnyp.task9.util.ConversationScopeFactory;
+import com.epam.hnyp.task9.util.ConversationScopeProvider;
+import com.epam.hnyp.task9.util.SessionConversationScopeProvider;
 
 
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private static final Logger LOG = Logger.getLogger(LoginServlet.class);
+	
 	public static final String SESSION_AUT_USER_KEY = "SESSION_AUT_USER";
 	
 	public static final String LOGIN_FORM_LOGIN_PARAM = "login";
@@ -28,17 +32,16 @@ public class LoginServlet extends HttpServlet {
 	public static final String LOGIN_KEY = "login";
 	public static final String URL_REFERRER_KEY = "urlReferrer";
 	
-	public static final String CONVSCOPE_LOGIN_KEY = "postre:login";
-	public static final String CONVSCOPE_ERROR_MESSAGE_KEY = "postre:loginLoginError";
-	public static final String CONVSCOPE_REFERRER_URL_KEY = "postre:urlReferrer";
-	
 	public static final String POSTREDIRECT_LOGIN_CONVSCOPE_KEY = "com.epam.hnyp.task9.servlet.POSTREDIRECT_LOGIN_CONVSCOPE_KEY";
 	
 	private UserService userService;
+	private ConversationScopeFactory convScopeFactory;
 	
 	@Override
 	public void init() throws ServletException {
 		userService = (UserService)getServletContext().getAttribute(ContextInitializer.INIT_USER_SERVICE_KEY);
+		convScopeFactory = (ConversationScopeFactory)getServletContext().getAttribute(
+				ContextInitializer.INIT_CONVERSATION_SCOPE_FACTORY_KEY);
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,19 +52,15 @@ public class LoginServlet extends HttpServlet {
 			return;
 		}
 		//postredirect errors
-		Map<String, Object> conversationMap = (Map<String, Object>)session.getAttribute(POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
-		session.removeAttribute(POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
-		if (conversationMap != null) {
-			request.setAttribute(ERROR_MESSAGE_KEY, conversationMap.get(CONVSCOPE_ERROR_MESSAGE_KEY));
-			request.setAttribute(LOGIN_KEY, conversationMap.get(CONVSCOPE_LOGIN_KEY));
-			request.setAttribute(URL_REFERRER_KEY, conversationMap.get(CONVSCOPE_REFERRER_URL_KEY));
-		} else {
-			request.setAttribute(URL_REFERRER_KEY, request.getHeader("referer"));	
+		
+		ConversationScopeProvider convScope = new SessionConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
+		convScope.restore();
+		if (request.getAttribute(URL_REFERRER_KEY) == null) {
+			request.setAttribute(URL_REFERRER_KEY, request.getHeader("referer"));
 		}
 		
 		request.getRequestDispatcher("WEB-INF/jsp/login.jsp").forward(request, response);
 	}
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
@@ -81,16 +80,27 @@ public class LoginServlet extends HttpServlet {
 			}
 		}
 		if (errorMessage != null) {
-			Map<String, Object> conversationMap = new HashMap<String, Object>();
-			conversationMap.put(CONVSCOPE_ERROR_MESSAGE_KEY, errorMessage);
-			conversationMap.put(CONVSCOPE_LOGIN_KEY, loginParam);
-			conversationMap.put(CONVSCOPE_REFERRER_URL_KEY, urlReferrerParam);
-			session.setAttribute(POSTREDIRECT_LOGIN_CONVSCOPE_KEY, conversationMap);
+			if (LOG.isInfoEnabled()) {
+				LOG.info("login failed, saving conversation scope before redirect");
+			}
+			ConversationScopeProvider convScope = new SessionConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
+			convScope.addAttribute(ERROR_MESSAGE_KEY, errorMessage);
+			convScope.addAttribute(LOGIN_KEY, loginParam);
+			convScope.addAttribute(URL_REFERRER_KEY, urlReferrerParam);
+			convScope.save();
+			
+			if (LOG.isInfoEnabled()) {
+				LOG.info("redirect to /login");
+			}
 			response.sendRedirect(getServletContext().getContextPath()
 						+ "/login");
 			return;
 		}
+		
 		session.setAttribute(SESSION_AUT_USER_KEY, user);
+		if (LOG.isInfoEnabled()) {
+			LOG.info("successful login, redirecting to '" + urlReferrerParam + "'");
+		}
 		response.sendRedirect(urlReferrerParam);
 	}
 
@@ -100,6 +110,14 @@ public class LoginServlet extends HttpServlet {
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public ConversationScopeFactory getConvScopeFactory() {
+		return convScopeFactory;
+	}
+
+	public void setConvScopeFactory(ConversationScopeFactory convScopeFactory) {
+		this.convScopeFactory = convScopeFactory;
 	}
 
 }

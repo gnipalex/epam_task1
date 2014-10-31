@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=cp1251"
 	pageEncoding="cp1251"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="ctag" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctag" tagdir="/WEB-INF/tags" %>
 <div id="header">
 	<div class="topong">
 		<div class="pad">
@@ -14,7 +14,7 @@
 	</div>
 	<div class="topong">
 		<div class="pad">
-			<ctag:login useSmallSize="true"/>
+			<ctag:login_small />
 		</div>
 	</div>
 	<h1>

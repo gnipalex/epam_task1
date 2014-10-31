@@ -15,8 +15,8 @@
 </head>
 <body>
 	<div id="content">
-		<jsp:include page="parts/header.jsp" />
-		<jsp:include page="parts/menu.jsp" />
+		<jsp:include page="/WEB-INF/jsp/parts/header.jsp" />
+		<jsp:include page="/WEB-INF/jsp/parts/menu.jsp" />
 		<div id="maincontent">
 			<div class="introduction">
 				<h2>Register</h2>
@@ -90,7 +90,7 @@
 				</div>
 			</div>
 		</div>
-		<jsp:include page="parts/footer.jsp" />
+		<jsp:include page="/WEB-INF/jsp/parts/footer.jsp" />
 	</div>
 	<input type="hidden" id="res_error_name_empty" value="specify name" />
 	<input type="hidden" id="res_error_email_empty" value="specify email" />
