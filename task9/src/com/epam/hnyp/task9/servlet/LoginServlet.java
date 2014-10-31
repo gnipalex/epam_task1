@@ -15,7 +15,6 @@ import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.service.UserService;
 import com.epam.hnyp.task9.util.ConversationScopeFactory;
 import com.epam.hnyp.task9.util.ConversationScopeProvider;
-import com.epam.hnyp.task9.util.SessionConversationScopeProvider;
 
 
 public class LoginServlet extends HttpServlet {
@@ -53,7 +52,7 @@ public class LoginServlet extends HttpServlet {
 		}
 		//postredirect errors
 		
-		ConversationScopeProvider convScope = new SessionConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
+		ConversationScopeProvider convScope = convScopeFactory.newConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
 		convScope.restore();
 		if (request.getAttribute(URL_REFERRER_KEY) == null) {
 			request.setAttribute(URL_REFERRER_KEY, request.getHeader("referer"));
@@ -83,7 +82,7 @@ public class LoginServlet extends HttpServlet {
 			if (LOG.isInfoEnabled()) {
 				LOG.info("login failed, saving conversation scope before redirect");
 			}
-			ConversationScopeProvider convScope = new SessionConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
+			ConversationScopeProvider convScope = convScopeFactory.newConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
 			convScope.addAttribute(ERROR_MESSAGE_KEY, errorMessage);
 			convScope.addAttribute(LOGIN_KEY, loginParam);
 			convScope.addAttribute(URL_REFERRER_KEY, urlReferrerParam);

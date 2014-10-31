@@ -16,9 +16,6 @@ public abstract class AbstractContextCapchaProvider extends AbstractCapchaProvid
 	
 	private final Map<String, Capcha> capchaMap = new ConcurrentHashMap<>();
 	
-	public AbstractContextCapchaProvider() {
-	}
-
 	public AbstractContextCapchaProvider(int capchaTimeToLive) {
 		super(capchaTimeToLive);
 	}
@@ -30,20 +27,6 @@ public abstract class AbstractContextCapchaProvider extends AbstractCapchaProvid
 		capchaMap.put(uid, capcha);
 		setCapchaUidToClient(req, resp, uid);
 	}
-
-//	private Map<String, Capcha> getCapchaMap(HttpServletRequest req) {
-//		Object obj = req.getServletContext().getAttribute(
-//				CONTEXT_CAPCHA_MAP_KEY);
-//		Map<String, Capcha> resultMap = null;
-//		if (obj != null && obj instanceof Map) {
-//			resultMap = (Map<String, Capcha>) obj;
-//		} else {
-//			resultMap = new ConcurrentHashMap<>();
-//			req.getServletContext().setAttribute(CONTEXT_CAPCHA_MAP_KEY,
-//					resultMap);
-//		}
-//		return resultMap;
-//	}
 
 	@Override
 	public Capcha getCapcha(HttpServletRequest req)

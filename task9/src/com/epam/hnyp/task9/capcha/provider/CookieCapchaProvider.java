@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 public class CookieCapchaProvider extends AbstractContextCapchaProvider {
 
 	public static final String COOKIE_NAME = "register_capchaUid";
-	
-	public CookieCapchaProvider() {
-	}
 
 	public CookieCapchaProvider(int capchaTimeToLive) {
 		super(capchaTimeToLive);

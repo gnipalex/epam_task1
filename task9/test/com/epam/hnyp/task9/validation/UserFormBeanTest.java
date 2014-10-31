@@ -31,54 +31,78 @@ public class UserFormBeanTest {
 	
 	@Test
 	public void testLastNameEmpty() {
-		testBean.setLastName(null);
-		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LASTNAME_ERROR_KEY));
 		testBean.setLastName("");
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LASTNAME_ERROR_KEY));
 	}
 	
 	@Test
-	public void testLastNameInvalid() {
-		testBean.setLastName(" Aaaa");
+	public void testLastNameNull() {
+		testBean.setLastName(null);
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LASTNAME_ERROR_KEY));
+	}
+	
+	@Test
+	public void testLastNameInvalidChars() {
 		testBean.setLastName("Aaaa&");
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LASTNAME_ERROR_KEY));
 	}
 	
 	@Test
+	public void testLastNameWhitespaces() {
+		testBean.setLastName(" Aaaa");
+		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LASTNAME_ERROR_KEY));
+	}
+	
+	@Test
 	public void testNameEmpty() {
-		testBean.setName(null);
-		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_NAME_ERROR_KEY));
 		testBean.setName("");
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_NAME_ERROR_KEY));
 	}
 	
 	@Test
-	public void testNameInvalid() {
+	public void testNameNull() {
+		testBean.setName(null);
+		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_NAME_ERROR_KEY));
+	}
+	
+	@Test
+	public void testNameWhitespaces() {
 		testBean.setName(" Aaaa");
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_NAME_ERROR_KEY));
+	}
+	
+	@Test
+	public void testNameInvalidChars() {
 		testBean.setName("Aaaa&");
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_NAME_ERROR_KEY));
 	}
 	
 	@Test
 	public void testLoginEmpty() {
-		testBean.setLogin(null);
-		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LOGIN_ERROR_KEY));
 		testBean.setLogin("");
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LOGIN_ERROR_KEY));
 	}
 	
 	@Test
-	public void testLoginInvalid() {
-		testBean.setLogin("Aaaa");
+	public void testLoginNull() {
+		testBean.setLogin(null);
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LOGIN_ERROR_KEY));
 	}
 	
 	@Test
-	public void testPasswordEmpty() {
+	public void testLoginInvalidEmail() {
+		testBean.setLogin("Aaaa@a");
+		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_LOGIN_ERROR_KEY));
+	}
+	
+	@Test
+	public void testPasswordNull() {
 		testBean.setPassword(null);
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_PASSWORD_ERROR_KEY));
+	}
+	
+	@Test
+	public void testPasswordEmpty() {
 		testBean.setPassword("");
 		assertTrue(testBean.validate().containsKey(UserFormBean.USERBEAN_PASSWORD_ERROR_KEY));
 	}

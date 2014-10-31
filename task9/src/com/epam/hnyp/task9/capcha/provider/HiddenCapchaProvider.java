@@ -6,9 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 public class HiddenCapchaProvider extends AbstractContextCapchaProvider {
 	public static final String HIDDEN_PARAM_NAME = "capchaUid";
 
-	public HiddenCapchaProvider() {
-	}
-
 	public HiddenCapchaProvider(int capchaTimeToLive) {
 		super(capchaTimeToLive);
 	}

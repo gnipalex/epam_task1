@@ -10,10 +10,6 @@ public class SessionCapchaProvider extends AbstractCapchaProvider {
 	public static final String SESSION_CAPCHA_KEY = 
 			"com.epam.hnyp.task9.capchaservice.SESSION_CAPCHA_KEY";
 	
-	public SessionCapchaProvider() {
-		super();
-	}
-
 	public SessionCapchaProvider(int capchaTimeToLive) {
 		super(capchaTimeToLive);
 	}
