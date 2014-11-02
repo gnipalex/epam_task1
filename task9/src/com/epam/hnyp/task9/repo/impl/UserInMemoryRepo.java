@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -12,13 +12,13 @@ import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.repo.UserRepo;
 
 public class UserInMemoryRepo implements UserRepo {
-	private AtomicLong lastId = new AtomicLong(-1);
+	private AtomicInteger lastId = new AtomicInteger(-1);
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	private final Lock r = rwl.readLock();
 	private final Lock w = rwl.writeLock();
 
 	private Map<String, User> usersByLogin = new HashMap<String, User>();
-	private Map<Long, User> usersById = new HashMap<Long, User>();
+	private Map<Integer, User> usersById = new HashMap<Integer, User>();
 
 	@Override
 	public void add(User user) {
@@ -39,7 +39,7 @@ public class UserInMemoryRepo implements UserRepo {
 	}
 
 	@Override
-	public void remove(long id) {
+	public void remove(int id) {
 		w.lock();
 		try {
 			User remUser = usersById.get(id);
@@ -55,7 +55,7 @@ public class UserInMemoryRepo implements UserRepo {
 	}
 
 	@Override
-	public User get(long id) {
+	public User get(int id) {
 		r.lock();
 		try {
 			return getUserById(id);
@@ -64,7 +64,7 @@ public class UserInMemoryRepo implements UserRepo {
 		}
 	}
 
-	private User getUserById(long id) {
+	private User getUserById(int id) {
 		return usersById.get(id);
 	}
 

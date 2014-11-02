@@ -12,9 +12,9 @@ public interface UserRepo {
 	/**
 	 * @throws IllegalArgumentException if user with specified id not found
 	 */
-	void remove(long id);
+	void remove(int id);
 	void update(User user);
-	User get(long id);
+	User get(int id);
 	User getByLogin(String login);
 	Collection<User> getAll();
 }

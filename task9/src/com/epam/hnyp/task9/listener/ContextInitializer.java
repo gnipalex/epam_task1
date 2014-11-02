@@ -14,7 +14,7 @@ import com.epam.hnyp.task9.repo.UserRepo;
 import com.epam.hnyp.task9.repo.impl.UserInMemoryRepo;
 import com.epam.hnyp.task9.repo.impl.UsersInitializer;
 import com.epam.hnyp.task9.service.UserService;
-import com.epam.hnyp.task9.service.impl.UserServiceImpl;
+import com.epam.hnyp.task9.service.impl.UserServiceInMemory;
 import com.epam.hnyp.task9.util.ConversationScopeFactory;
 import com.epam.hnyp.task9.util.SessionConversationScopeFactory;
 
@@ -66,7 +66,7 @@ public class ContextInitializer implements ServletContextListener {
     	
     	UserRepo userRepo = new UserInMemoryRepo();
     	UsersInitializer.initUsers(userRepo);
-    	UserService userService = new UserServiceImpl(userRepo);
+    	UserService userService = new UserServiceInMemory(userRepo);
     	context.setAttribute(INIT_USER_SERVICE_KEY, userService);
     	
     	if (LOG.isInfoEnabled()) {

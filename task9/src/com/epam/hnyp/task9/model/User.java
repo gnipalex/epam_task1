@@ -2,32 +2,39 @@ package com.epam.hnyp.task9.model;
 
 
 public class User {
-	private long id;
+	private int id;
 	private String name;
 	private String lastName;
 	private String password;
 	private String login;
 	private boolean receiveLetters;
 	private Roles role;
+	private String avatarFile;
 	
 	public User() {
 	}
 	
 	public User(String name, String lastName, String password, String login,
 			boolean receiveLetters, Roles role) {
+		this(name, lastName, password, login, receiveLetters, role, null);
+	}
+	
+	public User(String name, String lastName, String password,
+			String login, boolean receiveLetters, Roles role, String avatarFile) {
 		this.name = name;
 		this.lastName = lastName;
 		this.password = password;
 		this.login = login;
 		this.receiveLetters = receiveLetters;
 		this.role = role;
+		this.avatarFile = avatarFile;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -77,6 +84,14 @@ public class User {
 
 	public void setRole(Roles role) {
 		this.role = role;
+	}
+
+	public String getAvatarFile() {
+		return avatarFile;
+	}
+
+	public void setAvatarFile(String avatarFile) {
+		this.avatarFile = avatarFile;
 	}
 	
 }
