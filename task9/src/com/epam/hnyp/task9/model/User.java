@@ -8,19 +8,19 @@ public class User {
 	private String password;
 	private String login;
 	private boolean receiveLetters;
-	private Roles role;
+	private Role role;
 	private String avatarFile;
 	
 	public User() {
 	}
 	
 	public User(String name, String lastName, String password, String login,
-			boolean receiveLetters, Roles role) {
+			boolean receiveLetters, Role role) {
 		this(name, lastName, password, login, receiveLetters, role, null);
 	}
 	
 	public User(String name, String lastName, String password,
-			String login, boolean receiveLetters, Roles role, String avatarFile) {
+			String login, boolean receiveLetters, Role role, String avatarFile) {
 		this.name = name;
 		this.lastName = lastName;
 		this.password = password;
@@ -78,11 +78,11 @@ public class User {
 		this.receiveLetters = receiveLetters;
 	}
 
-	public Roles getRole() {
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(Roles role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 

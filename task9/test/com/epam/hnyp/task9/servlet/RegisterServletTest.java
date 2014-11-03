@@ -3,6 +3,7 @@ package com.epam.hnyp.task9.servlet;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -113,7 +114,9 @@ public class RegisterServletTest {
 		} catch (Exception e) {}
 		Mockito.when(mockCapchaProvider.isCapchaExpired(mockCapcha)).thenReturn(false);
 		
-		Mockito.when(mockUserService.userExists(fakeEmailParam)).thenReturn(false);
+		try {
+			Mockito.when(mockUserService.userExists(fakeEmailParam)).thenReturn(false);
+		} catch(SQLException e) {} 
 		
 		try {
 			testServlet.doPost(mockRequest, mockResponse);
@@ -121,7 +124,9 @@ public class RegisterServletTest {
 			fail("Unexpected exception " + ex.getClass().getName());
 		}
 		
-		Mockito.verify(mockUserService).add(Mockito.any(User.class));
+		try {
+			Mockito.verify(mockUserService).add(Mockito.any(User.class));
+		} catch (SQLException e1) {}
 		try {
 			Mockito.verify(mockResponse).sendRedirect(fakeContextPath + RegisterServlet.REDIRECT_REGISTER_SUCCESS);
 		} catch (IOException e) {}
@@ -148,7 +153,9 @@ public class RegisterServletTest {
 		} catch (Exception e) {}
 		Mockito.when(mockCapchaProvider.isCapchaExpired(mockCapcha)).thenReturn(true);
 		
-		Mockito.when(mockUserService.userExists(fakeEmailParam)).thenReturn(false);
+		try {
+			Mockito.when(mockUserService.userExists(fakeEmailParam)).thenReturn(false);
+		} catch (SQLException e1) {}
 		
 		try {
 			testServlet.doPost(mockRequest, mockResponse);
@@ -191,7 +198,9 @@ public class RegisterServletTest {
 		} catch (Exception e) {}
 		Mockito.when(mockCapchaProvider.isCapchaExpired(mockCapcha)).thenReturn(false);
 		
-		Mockito.when(mockUserService.userExists(fakeEmailParam)).thenReturn(true);
+		try {
+			Mockito.when(mockUserService.userExists(fakeEmailParam)).thenReturn(true);
+		} catch (SQLException e1) {}
 		
 		try {
 			testServlet.doPost(mockRequest, mockResponse);

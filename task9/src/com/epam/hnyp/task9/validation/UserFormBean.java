@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.epam.hnyp.task9.model.Roles;
+import com.epam.hnyp.task9.model.Role;
 import com.epam.hnyp.task9.model.User;
 
 public class UserFormBean implements Serializable {
@@ -59,7 +59,7 @@ public class UserFormBean implements Serializable {
 		u.setName(name);
 		u.setPassword(password);
 		u.setReceiveLetters(receiveLetters != null);
-		u.setRole(Roles.CUSTOMER);
+		u.setRole(Role.CUSTOMER);
 		return u;
 	}
 	

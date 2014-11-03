@@ -52,7 +52,6 @@ public class LoginServlet extends HttpServlet {
 			return;
 		}
 		//postredirect errors
-		
 		ConversationScopeProvider convScope = convScopeFactory.newConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
 		convScope.restore();
 		if (request.getAttribute(URL_REFERRER_KEY) == null) {
@@ -74,7 +73,12 @@ public class LoginServlet extends HttpServlet {
 		if (loginParam == null || loginParam.isEmpty()) {
 			errorMessage = "login is empty";
 		} else {
-			user = userService.getByLogin(loginParam);
+			try {
+				user = userService.getByLogin(loginParam);
+			} catch (SQLException e) {
+				LOG.error(e);
+				throw new SqlRuntimeException(e);
+			}
 			if (user == null || !user.getPassword().equals(passwordParam)) {
 				errorMessage = "bad credentials";
 			}

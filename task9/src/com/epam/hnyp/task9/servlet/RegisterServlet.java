@@ -1,6 +1,7 @@
 package com.epam.hnyp.task9.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -87,11 +88,16 @@ public class RegisterServlet extends HttpServlet {
 		Map<String, String> errorMessages = userFormBean.validate();
 		
 		if (errorMessages.isEmpty()) {
+			try {
 			if (userService.userExists(userFormBean.getLogin())) {
 				errorMessages.put(UserFormBean.USERBEAN_LOGIN_ERROR_KEY, "this login is already in use");
 				if (LOG.isInfoEnabled()) {
 					LOG.info("register(POST) user already exist");
 				}
+			}
+			} catch (SQLException e) {
+				LOG.error(e);
+				throw new SqlRuntimeException(e);
 			}
 		}
 		
@@ -135,8 +141,9 @@ public class RegisterServlet extends HttpServlet {
 		User user = userFormBean.buildUser();
 		try {
 			userService.add(user);
-		} catch (RuntimeException re) {
-			LOG.error("user is not saved", re);
+		} catch (SQLException e) {
+			LOG.error("user is not saved", e);
+			throw new SqlRuntimeException(e);
 		}
 		
 		if (LOG.isInfoEnabled()) {
