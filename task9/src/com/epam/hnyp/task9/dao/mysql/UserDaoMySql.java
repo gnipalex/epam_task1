@@ -8,12 +8,15 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
 import com.epam.hnyp.task9.dao.UserDao;
 import com.epam.hnyp.task9.model.Role;
 import com.epam.hnyp.task9.model.User;
 
 public class UserDaoMySql implements UserDao {
-
+	private static final Logger LOG = Logger.getLogger(UserDaoMySql.class);
+	
 	public static final String SQL_SELECT_ALL = "SELECT * FROM users";
 	public static final String SQL_SELECT_BY_ID = "SELECT * FROM users u WHERE u.id = ?";
 	public static final String SQL_SELECT_BY_LOGIN = "SELECT * FROM users u WHERE u.login = ?";
@@ -40,8 +43,9 @@ public class UserDaoMySql implements UserDao {
 			prst.setNull(index++, Types.NULL);
 		}
 		prst.setString(index++, user.getRole().name());
-		// http://javatrain.wordpress.com/2011/07/08/install-maven-at-eclipse-2/
-		//ResultSet rs = prst.executeQuery(); 
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(prst);
+		}
 		prst.executeUpdate();
 		ResultSet rs = prst.getGeneratedKeys();
 		if (rs.next()) {
@@ -55,7 +59,9 @@ public class UserDaoMySql implements UserDao {
 	public void remove(int id, Connection con) throws SQLException {
 		PreparedStatement prst = con.prepareStatement(SQL_REMOVE_BY_ID);
 		prst.setInt(1, id);
-		
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(prst);
+		}
 		prst.executeUpdate();
 		prst.close();
 	}
@@ -76,7 +82,9 @@ public class UserDaoMySql implements UserDao {
 		}
 		prst.setString(index++, user.getRole().name());
 		prst.setInt(index++, user.getId());
-		
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(prst);
+		}
 		prst.executeUpdate();
 		prst.close();
 	}
@@ -84,6 +92,9 @@ public class UserDaoMySql implements UserDao {
 	@Override
 	public User get(int id, Connection con) throws SQLException {
 		PreparedStatement prst = con.prepareStatement(SQL_SELECT_BY_ID);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(prst);
+		}
 		ResultSet rs = prst.executeQuery();
 		User u = null;
 		if (rs.next()) {
@@ -111,6 +122,9 @@ public class UserDaoMySql implements UserDao {
 	public User getByLogin(String login, Connection con) throws SQLException {
 		PreparedStatement prst = con.prepareStatement(SQL_SELECT_BY_LOGIN);
 		prst.setString(1, login);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(prst);
+		}
 		ResultSet rs = prst.executeQuery();
 		User u = null;
 		if (rs.next()) {
@@ -124,6 +138,9 @@ public class UserDaoMySql implements UserDao {
 	@Override
 	public Collection<User> getAll(Connection con) throws SQLException {
 		PreparedStatement prst = con.prepareStatement(SQL_SELECT_ALL);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(prst);
+		}
 		ResultSet rs = prst.executeQuery();
 		Collection<User> users = new ArrayList<>();
 		if (rs.next()) {

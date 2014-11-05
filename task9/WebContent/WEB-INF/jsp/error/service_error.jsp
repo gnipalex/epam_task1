@@ -15,7 +15,7 @@
 		<div id="maincontent">
 			<div class="introduction">
 				<h2>Error</h2>
-				<p>We are sorry, something went wrong</p>
+				<p>We are sorry, something went wrong with data base</p>
 			</div>
 		</div>
 		<jsp:include page="/WEB-INF/jsp/parts/footer.jsp" />

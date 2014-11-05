@@ -1,14 +1,16 @@
 package com.epam.hnyp.task9.servlet;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.apache.log4j.Logger;
 
@@ -18,11 +20,14 @@ import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider.CapchaUidMissedException;
 import com.epam.hnyp.task9.listener.ContextInitializer;
 import com.epam.hnyp.task9.model.User;
+import com.epam.hnyp.task9.service.ServiceLayerException;
 import com.epam.hnyp.task9.service.UserService;
-import com.epam.hnyp.task9.util.ConversationScopeFactory;
-import com.epam.hnyp.task9.util.ConversationScopeProvider;
+import com.epam.hnyp.task9.util.convscope.ConversationScopeFactory;
+import com.epam.hnyp.task9.util.convscope.ConversationScopeProvider;
+import com.epam.hnyp.task9.util.img.ImgProvider;
 import com.epam.hnyp.task9.validation.UserFormBean;
 
+@MultipartConfig(fileSizeThreshold=1024*1024*1, maxFileSize=1024*1024*2, maxRequestSize=1024*1024*3)
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = Logger.getLogger(RegisterServlet.class);
@@ -38,6 +43,7 @@ public class RegisterServlet extends HttpServlet {
 
 	public static final String CAPCHA_ERROR_KEY = "capchaError";
 	public static final int CAPCHA_TEXT_LENGTH = 5;
+	public static final String AVATAR_ERROR_KEY = "avatarError";
 
 	public static final String REGISTER_FORM_NAME_PARAM = "name";
 	public static final String REGISTER_FORM_LASTNAME_PARAM = "lastName";
@@ -50,6 +56,7 @@ public class RegisterServlet extends HttpServlet {
 	private AbstractCapchaProvider capchaProvider;
 	private UserService userService;
 	private ConversationScopeFactory convScopeFactory;
+	private ImgProvider imgProvider;
 
 	@Override
 	public void init() throws ServletException {
@@ -59,12 +66,13 @@ public class RegisterServlet extends HttpServlet {
 				ContextInitializer.INIT_USER_SERVICE_KEY);
 		convScopeFactory = (ConversationScopeFactory)getServletContext().getAttribute(
 				ContextInitializer.INIT_CONVERSATION_SCOPE_FACTORY_KEY);
+		imgProvider = (ImgProvider)getServletContext().getAttribute(
+				ContextInitializer.INIT_IMAGE_PROVIDER_KEY);
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
 		capchaProvider.clearAllExpiredCapcha(request);
 
 		Capcha capcha = new CapchaAwtJpegImpl(CAPCHA_TEXT_LENGTH);
@@ -82,23 +90,20 @@ public class RegisterServlet extends HttpServlet {
 				response);
 	}
 
+	
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		UserFormBean userFormBean = extractRegisterForm(request);
+		
 		Map<String, String> errorMessages = userFormBean.validate();
 		
 		if (errorMessages.isEmpty()) {
-			try {
 			if (userService.userExists(userFormBean.getLogin())) {
 				errorMessages.put(UserFormBean.USERBEAN_LOGIN_ERROR_KEY, "this login is already in use");
 				if (LOG.isInfoEnabled()) {
 					LOG.info("register(POST) user already exist");
 				}
-			}
-			} catch (SQLException e) {
-				LOG.error(e);
-				throw new SqlRuntimeException(e);
-			}
+			}	
 		}
 		
 		String capchaText = request.getParameter(REGISTER_FORM_CAPCHA_PARAM);		
@@ -125,6 +130,31 @@ public class RegisterServlet extends HttpServlet {
 			}
 		}
 		
+		Part part = request.getPart("avatar");
+		String fileNameToSave = UUID.randomUUID().toString() + "." + imgProvider.getFileNameSuffix();
+		if (part != null) {
+			if (!imgProvider.supportsMimeType(part.getContentType())) {
+				errorMessages.put(AVATAR_ERROR_KEY, "you can only use .jpg images");
+			} else if (errorMessages.isEmpty()) {
+				try {
+					BufferedImage originalImage = imgProvider.read(part.getInputStream());
+					if (originalImage.getHeight() > 200 || originalImage.getWidth() > 200) {
+						originalImage = imgProvider.resizeImage(originalImage, 200, 200);
+						if (LOG.isInfoEnabled()) {
+							LOG.info("avatar has big resolution, resizing to 200x200");
+						}
+					}
+					imgProvider.write(originalImage, fileNameToSave);
+					if (LOG.isInfoEnabled()) {
+						LOG.info("avatar written to storage as " + fileNameToSave);
+					}
+				} catch (IOException e) {
+					LOG.error("avatar reading failed" , e);
+					throw e;
+				}
+			}
+		}
+		
 		if (!errorMessages.isEmpty()) {
 			ConversationScopeProvider convScope = convScopeFactory
 					.newConversationScopeProvider(request, POSTREDIRECT_REGISTER_CONVSCOPE_KEY);
@@ -139,15 +169,18 @@ public class RegisterServlet extends HttpServlet {
 		}
 		
 		User user = userFormBean.buildUser();
+		user.setAvatarFile(fileNameToSave);
 		try {
 			userService.add(user);
-		} catch (SQLException e) {
-			LOG.error("user is not saved", e);
-			throw new SqlRuntimeException(e);
+		} catch (ServiceLayerException e) {
+			LOG.error("user saving failed", e);
+			LOG.error("removing saved avatar from storage");
+			imgProvider.remove(fileNameToSave);
+			throw e;
 		}
 		
 		if (LOG.isInfoEnabled()) {
-			LOG.info("register(POST) redirecting to " + REDIRECT_REGISTER_SUCCESS);
+			LOG.info("register(POST) success, redirecting to " + REDIRECT_REGISTER_SUCCESS);
 		}
 		
 		response.sendRedirect(request.getServletContext().getContextPath() + REDIRECT_REGISTER_SUCCESS);
@@ -189,4 +222,11 @@ public class RegisterServlet extends HttpServlet {
 		this.convScopeFactory = convScopeFactory;
 	}
 
+	public ImgProvider getImgProvider() {
+		return imgProvider;
+	}
+
+	public void setImgProvider(ImgProvider imgProvider) {
+		this.imgProvider = imgProvider;
+	}
 }

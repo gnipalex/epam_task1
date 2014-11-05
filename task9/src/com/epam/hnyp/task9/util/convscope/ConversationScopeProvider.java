@@ -1,4 +1,4 @@
-package com.epam.hnyp.task9.util;
+package com.epam.hnyp.task9.util.convscope;
 
 public interface ConversationScopeProvider {
 	

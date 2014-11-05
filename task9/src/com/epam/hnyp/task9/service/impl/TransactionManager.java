@@ -1,11 +1,14 @@
-package com.epam.hnyp.task9.service4dao;
+package com.epam.hnyp.task9.service.impl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
 public class TransactionManager {
+	private static final Logger LOG = Logger.getLogger(TransactionManager.class);
 	private DataSource dataSource;
 	
 	public TransactionManager() {}
@@ -25,18 +28,18 @@ public class TransactionManager {
 			con.commit();
 			return result;
 		} catch (SQLException e) {
-			//log
+			LOG.error(e);
 			try {
 				con.rollback(); 
 			} catch (SQLException se) {
-				//log warn
+				LOG.error(e);
 			}
 			throw e;
 		} finally {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				//log warn
+				LOG.error(e);
 			}
 		}
 	}

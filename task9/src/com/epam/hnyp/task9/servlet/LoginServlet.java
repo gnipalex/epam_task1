@@ -1,7 +1,6 @@
 package com.epam.hnyp.task9.servlet;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,8 +13,8 @@ import org.apache.log4j.Logger;
 import com.epam.hnyp.task9.listener.ContextInitializer;
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.service.UserService;
-import com.epam.hnyp.task9.util.ConversationScopeFactory;
-import com.epam.hnyp.task9.util.ConversationScopeProvider;
+import com.epam.hnyp.task9.util.convscope.ConversationScopeFactory;
+import com.epam.hnyp.task9.util.convscope.ConversationScopeProvider;
 
 
 public class LoginServlet extends HttpServlet {
@@ -73,12 +72,7 @@ public class LoginServlet extends HttpServlet {
 		if (loginParam == null || loginParam.isEmpty()) {
 			errorMessage = "login is empty";
 		} else {
-			try {
-				user = userService.getByLogin(loginParam);
-			} catch (SQLException e) {
-				LOG.error(e);
-				throw new SqlRuntimeException(e);
-			}
+			user = userService.getByLogin(loginParam);
 			if (user == null || !user.getPassword().equals(passwordParam)) {
 				errorMessage = "bad credentials";
 			}

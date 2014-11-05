@@ -22,8 +22,8 @@
 				<h2>Register</h2>
 				<div class="register">
 					<c:url value="/register" var="link"></c:url>
-					<form id="register_form_id" action="${link}" method="post"
-						onsubmit=""> <!-- return validateJS(this); -->
+					<form id="register_form_id" action="${link}" method="post" enctype="multipart/form-data"
+						onsubmit="return validateJS(this);"> 
 						<table>
 							<tr>
 								<td><h4>Your name</h4></td>
@@ -69,6 +69,13 @@
 								</td>
 							</tr>
 							<tr>
+								<td><h4>Your avatar</h4></td>
+								<td><input class="text" type="file" value="" accept="image/jpeg" size="0"
+									 name="avatar"></input>
+									 <div id="avatar_err_id" class="error_message">${errorMessages["avatarError"]}</div>
+								</td>
+							</tr>
+							<tr>
 								<td><h4>Robot protection</h4></td>
 								<td>
 									<%--  
@@ -102,5 +109,6 @@
 	<input type="hidden" id="res_error_pwd_mismatch"
 		value="passwords don't match" />
 	<input type="hidden" id="res_error_capcha_empty" value="specify capcha" />
+	<input type="hidden" id="res_error_avatar_bad_format" value="select a '.jpg' file instead" />
 </body>
 </html>

@@ -1,16 +1,50 @@
 package com.epam.hnyp.task9.service;
 
-import java.sql.SQLException;
 import java.util.Collection;
 
 import com.epam.hnyp.task9.model.User;
 
 public interface UserService {
-	void add(User user) throws SQLException;
-	void remove(int id) throws SQLException;
-	void update(User user) throws SQLException;
-	User get(int id) throws SQLException;
-	User getByLogin(String email) throws SQLException;
-	boolean userExists(String login) throws SQLException;
-	Collection<User> getAll() throws SQLException;
+	/**
+	 * 
+	 * @param user
+	 * @throws ServiceLayerException if error occured at data access level
+	 */
+	void add(User user);
+	/**
+	 * 
+	 * @param user
+	 * @throws ServiceLayerException if error occured at data access level
+	 */
+	void remove(int id);
+	/**
+	 * 
+	 * @param user
+	 * @throws ServiceLayerException if error occured at data access level
+	 */
+	void update(User user);
+	/**
+	 * 
+	 * @param user
+	 * @throws ServiceLayerException if error occured at data access level
+	 */
+	User get(int id);
+	/**
+	 * 
+	 * @param user
+	 * @throws ServiceLayerException if error occured at data access level
+	 */
+	User getByLogin(String email);
+	/**
+	 * 
+	 * @param user
+	 * @throws ServiceLayerException if error occured at data access level
+	 */
+	boolean userExists(String login);
+	/**
+	 * 
+	 * @param user
+	 * @throws ServiceLayerException if error occured at data access level
+	 */
+	Collection<User> getAll();
 }

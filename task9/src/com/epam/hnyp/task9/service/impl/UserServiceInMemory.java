@@ -2,12 +2,16 @@ package com.epam.hnyp.task9.service.impl;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.repo.UserRepo;
+import com.epam.hnyp.task9.service.ServiceLayerException;
 import com.epam.hnyp.task9.service.UserService;
 
 public class UserServiceInMemory implements UserService{
-
+	private static final Logger LOG = Logger.getLogger(UserServiceInMemory.class);
+	
 	private UserRepo userRepo;
 	
 	public UserServiceInMemory() {
@@ -17,20 +21,24 @@ public class UserServiceInMemory implements UserService{
 		this.userRepo = userRepo;
 	}
 
-	/**
-	 * @throws IllegalArgumentException - if user with specified login already exists
-	 */
 	@Override
 	public void add(User user) {
-		userRepo.add(user);
+		try {
+			userRepo.add(user);
+		} catch (IllegalArgumentException e) {
+			LOG.error(e);
+			throw new ServiceLayerException(e);
+		}
 	}
 
-	/**
-	 * @throws IllegalArgumentException - if user with specified id not found
-	 */
 	@Override
 	public void remove(int id) {
-		userRepo.remove(id);
+		try {
+			userRepo.remove(id);
+		} catch (IllegalArgumentException e) {
+			LOG.error(e);
+			throw new ServiceLayerException(e);
+		}
 	}
 
 	@Override
@@ -66,6 +74,4 @@ public class UserServiceInMemory implements UserService{
 		throw new UnsupportedOperationException();
 	}
 
-
-	
 }

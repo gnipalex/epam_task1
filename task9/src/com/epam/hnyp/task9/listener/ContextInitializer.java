@@ -1,5 +1,7 @@
 package com.epam.hnyp.task9.listener;
 
+import java.io.File;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
@@ -16,10 +18,12 @@ import com.epam.hnyp.task9.capcha.provider.SessionCapchaProvider;
 import com.epam.hnyp.task9.dao.UserDao;
 import com.epam.hnyp.task9.dao.mysql.UserDaoMySql;
 import com.epam.hnyp.task9.service.UserService;
-import com.epam.hnyp.task9.service4dao.TransactionManager;
-import com.epam.hnyp.task9.service4dao.UserDaoService;
-import com.epam.hnyp.task9.util.ConversationScopeFactory;
-import com.epam.hnyp.task9.util.SessionConversationScopeFactory;
+import com.epam.hnyp.task9.service.impl.TransactionManager;
+import com.epam.hnyp.task9.service.impl.UserServiceDaoImpl;
+import com.epam.hnyp.task9.util.convscope.ConversationScopeFactory;
+import com.epam.hnyp.task9.util.convscope.SessionConversationScopeFactory;
+import com.epam.hnyp.task9.util.img.ImgProvider;
+import com.epam.hnyp.task9.util.img.JpegImgProvider;
 
 public class ContextInitializer implements ServletContextListener {
 	private static final Logger LOG = Logger.getLogger(ContextInitializer.class);
@@ -27,21 +31,29 @@ public class ContextInitializer implements ServletContextListener {
 	public static final String INIT_CAPCHA_PROVIDER_KEY = "init:capchaProvider";
 	public static final String INIT_USER_SERVICE_KEY = "init:userService";
 	public static final String INIT_CONVERSATION_SCOPE_FACTORY_KEY = "init:conversationScopeFactory";
+	public static final String INIT_IMAGE_PROVIDER_KEY = "init:imageProvider";
 	
     public void contextInitialized(ServletContextEvent arg0) {
     	try {
-    		init(arg0);
+    		ServletContext context = arg0.getServletContext();
+        	initCapchaProvider(context);      	
+        	initServices(context);
+        	initConversationScope(context);       	
+        	initImageProvider(context);
     	} catch (Exception e) {
     		LOG.error(e);
     		throw e;
     	}
     }
     
-    private void init(ServletContextEvent arg0) {
-    	ServletContext context = arg0.getServletContext();
+    private void initCapchaProvider(ServletContext context) {
     	String capchaServerMode = context.getInitParameter("capchaServerMode");
     	String capchaTTLStr = context.getInitParameter("capchaTTL");
+    	
     	int capchaTTL = Integer.parseInt(capchaTTLStr);
+    	if (capchaTTL <= 0) {
+    		throw new IllegalArgumentException("parameter 'capchaTTL' must be > 0");
+    	}
     	
     	if (LOG.isInfoEnabled()) {
     		LOG.info("capcha TTL = " + capchaTTL);
@@ -59,44 +71,63 @@ public class ContextInitializer implements ServletContextListener {
     		capchaProvider = new HiddenCapchaProvider(capchaTTL);
     		break;
     		default:
-    			throw new RuntimeException("Server capcha uid store mod not specified. Use context param 'capchaServerMode' = 'session' | 'cookie' | 'hidden'");
+    			throw new IllegalArgumentException("Server capcha uid store mod not specified. Use context param 'capchaServerMode' = 'session' | 'cookie' | 'hidden'");
     	}
     	context.setAttribute(INIT_CAPCHA_PROVIDER_KEY, capchaProvider);
-    	
     	if (LOG.isInfoEnabled()) {
-    		LOG.info("capcha provider = " + capchaProvider.getClass().getName());
+    		LOG.info("capcha provider initialized = " + capchaProvider.getClass().getName());
     	}
-    	
+    }
+    
+    private void initServices(ServletContext context) {
 //    	UserRepo userRepo = new UserInMemoryRepo();
 //    	UsersInitializer.initUsers(userRepo);
 //    	UserService userService = new UserServiceInMemory(userRepo);
-    	
-    	DataSource dataSource = initDataSource();
-    	TransactionManager tranManager = new TransactionManager(dataSource);
-    	
-    	UserDao userDao = new UserDaoMySql();
-    	UserService userService = new UserDaoService(userDao, tranManager);
-    	context.setAttribute(INIT_USER_SERVICE_KEY, userService);
-    	
-    	if (LOG.isInfoEnabled()) {
-    		LOG.info("userService initialized");
+    	DataSource ds = null;
+    	try {
+    		InitialContext initialContext = new InitialContext();
+    		ds = (DataSource)initialContext.lookup("java:comp/env/jdbc/task_shop");
+    	} catch (NamingException e) {
+    		LOG.error(e);
+    		throw new IllegalArgumentException(e);
     	}
+    	TransactionManager tranManager = new TransactionManager(ds);
+    	UserDao userDao = new UserDaoMySql();
+    	UserService userService = new UserServiceDaoImpl(userDao, tranManager);
     	
+    	context.setAttribute(INIT_USER_SERVICE_KEY, userService);
+    	if (LOG.isInfoEnabled()) {
+    		LOG.info("userService initialized = " + userService.getClass().getName());
+    	}
+    }
+    
+    private void initConversationScope(ServletContext context) {
     	ConversationScopeFactory conversationScopeFactory = new SessionConversationScopeFactory();
     	context.setAttribute(INIT_CONVERSATION_SCOPE_FACTORY_KEY, conversationScopeFactory);
-    	
     	if (LOG.isInfoEnabled()) {
     		LOG.info("conversation scope factory initialized = " + conversationScopeFactory.getClass().getName());
     	}
     }
     
-    private DataSource initDataSource() {
-    	try {
-    		InitialContext initialContext = new InitialContext();
-    		return (DataSource)initialContext.lookup("java:comp/env/jdbc/task_shop");
-    	} catch (NamingException e) {
-    		LOG.error(e);
-    		throw new RuntimeException(e);
+    private void initImageProvider(ServletContext context) {
+    	String imagesFolderPath = context.getInitParameter("imagesFolder");
+    	
+    	if (imagesFolderPath == null || imagesFolderPath.isEmpty()) {
+    		throw new RuntimeException("parameter 'imagesFolder' must specify folder to contain images");
+    	}
+    	
+    	File folder = new File(imagesFolderPath);
+    	if (!folder.exists() || !folder.isDirectory()) {
+    		if (!folder.mkdirs()) {
+    			throw new IllegalArgumentException("folder specified in parameter 'imagesFolder' = [" + imagesFolderPath + "] does not exist and can not be created");
+    		}
+    	}
+    	
+    	ImgProvider imageProvider = new JpegImgProvider(imagesFolderPath);
+    	context.setAttribute(INIT_IMAGE_PROVIDER_KEY, imageProvider);
+    	
+    	if (LOG.isInfoEnabled()) {
+    		LOG.info("image provider initialized = " + imageProvider.getClass().getName() + ", images folder = " + imagesFolderPath);
     	}
     }
 
