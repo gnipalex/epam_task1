@@ -62,6 +62,8 @@ public abstract class AbstractCapchaProvider {
 	 *
 	 */
 	public static class CapchaUidMissedException extends ServletException {
+		private static final long serialVersionUID = 1L;
+
 		public CapchaUidMissedException() {
 		}
 

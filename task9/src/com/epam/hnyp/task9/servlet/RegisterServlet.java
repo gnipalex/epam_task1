@@ -43,7 +43,10 @@ public class RegisterServlet extends HttpServlet {
 
 	public static final String CAPCHA_ERROR_KEY = "capchaError";
 	public static final int CAPCHA_TEXT_LENGTH = 5;
+	
 	public static final String AVATAR_ERROR_KEY = "avatarError";
+	public static final int AVATAR_MAX_HEIGHT = 200;
+	public static final int AVATAR_MAX_WIDTH = 200;
 
 	public static final String REGISTER_FORM_NAME_PARAM = "name";
 	public static final String REGISTER_FORM_LASTNAME_PARAM = "lastName";
@@ -52,11 +55,12 @@ public class RegisterServlet extends HttpServlet {
 	public static final String REGISTER_FORM_REPWD_PARAM = "rePassword";
 	public static final String REGISTER_FORM_RECEIVELETTERS_PARAM = "receiveLetters";
 	public static final String REGISTER_FORM_CAPCHA_PARAM = "capcha";
+	public static final String REGISTER_FORM_AVATAR_PARAM = "avatar";
 
 	private AbstractCapchaProvider capchaProvider;
 	private UserService userService;
 	private ConversationScopeFactory convScopeFactory;
-	private ImgProvider imgProvider;
+	private ImgProvider avatarProvider;
 
 	@Override
 	public void init() throws ServletException {
@@ -66,15 +70,15 @@ public class RegisterServlet extends HttpServlet {
 				ContextInitializer.INIT_USER_SERVICE_KEY);
 		convScopeFactory = (ConversationScopeFactory)getServletContext().getAttribute(
 				ContextInitializer.INIT_CONVERSATION_SCOPE_FACTORY_KEY);
-		imgProvider = (ImgProvider)getServletContext().getAttribute(
-				ContextInitializer.INIT_IMAGE_PROVIDER_KEY);
+		avatarProvider = (ImgProvider)getServletContext().getAttribute(
+				ContextInitializer.INIT_AVATAR_PROVIDER_KEY);
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		capchaProvider.clearAllExpiredCapcha(request);
-
+		
 		Capcha capcha = new CapchaAwtJpegImpl(CAPCHA_TEXT_LENGTH);
 		capchaProvider.saveCapcha(request, response, capcha);
 
@@ -130,21 +134,22 @@ public class RegisterServlet extends HttpServlet {
 			}
 		}
 		
-		Part part = request.getPart("avatar");
-		String fileNameToSave = UUID.randomUUID().toString() + "." + imgProvider.getFileNameSuffix();
+		Part part = request.getPart(REGISTER_FORM_AVATAR_PARAM);
+		String fileNameToSave = UUID.randomUUID().toString() + "." + avatarProvider.getFileNameSuffix();
 		if (part != null) {
-			if (!imgProvider.supportsMimeType(part.getContentType())) {
-				errorMessages.put(AVATAR_ERROR_KEY, "you can only use .jpg images");
+			if (!avatarProvider.supportsMimeType(part.getContentType())) {
+				errorMessages.put(AVATAR_ERROR_KEY, "you can only use ." + 
+						avatarProvider.getFileNameSuffix() + " images");
 			} else if (errorMessages.isEmpty()) {
 				try {
-					BufferedImage originalImage = imgProvider.read(part.getInputStream());
-					if (originalImage.getHeight() > 200 || originalImage.getWidth() > 200) {
-						originalImage = imgProvider.resizeImage(originalImage, 200, 200);
+					BufferedImage originalImage = avatarProvider.read(part.getInputStream());
+					if (originalImage.getHeight() > AVATAR_MAX_HEIGHT || originalImage.getWidth() > AVATAR_MAX_WIDTH) {
+						originalImage = avatarProvider.resizeImage(originalImage, AVATAR_MAX_WIDTH, AVATAR_MAX_HEIGHT);
 						if (LOG.isInfoEnabled()) {
-							LOG.info("avatar has big resolution, resizing to 200x200");
+							LOG.info("avatar has big resolution, resizing to " + AVATAR_MAX_WIDTH +"x" + AVATAR_MAX_HEIGHT);
 						}
 					}
-					imgProvider.write(originalImage, fileNameToSave);
+					avatarProvider.write(originalImage, fileNameToSave);
 					if (LOG.isInfoEnabled()) {
 						LOG.info("avatar written to storage as " + fileNameToSave);
 					}
@@ -175,7 +180,7 @@ public class RegisterServlet extends HttpServlet {
 		} catch (ServiceLayerException e) {
 			LOG.error("user saving failed", e);
 			LOG.error("removing saved avatar from storage");
-			imgProvider.remove(fileNameToSave);
+			avatarProvider.remove(fileNameToSave);
 			throw e;
 		}
 		
@@ -222,11 +227,11 @@ public class RegisterServlet extends HttpServlet {
 		this.convScopeFactory = convScopeFactory;
 	}
 
-	public ImgProvider getImgProvider() {
-		return imgProvider;
+	public ImgProvider getAvatarProvider() {
+		return avatarProvider;
 	}
 
-	public void setImgProvider(ImgProvider imgProvider) {
-		this.imgProvider = imgProvider;
+	public void setAvatarProvider(ImgProvider avatarProvider) {
+		this.avatarProvider = avatarProvider;
 	}
 }

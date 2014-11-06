@@ -12,10 +12,8 @@
 			<br /> <span class="txt">0 items</span>
 		</div>
 	</div>
-	<div class="topong">
-		<div class="pad">
-			<ctag:login_small />
-		</div>
+	<div class="topong wideavablock">
+		<ctag:login_small />
 	</div>
 	<h1>
 		<span class="green bigl">P</span>roducts<span class="green bigl">S</span>hop

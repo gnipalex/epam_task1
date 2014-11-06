@@ -28,10 +28,14 @@ import com.epam.hnyp.task9.util.img.JpegImgProvider;
 public class ContextInitializer implements ServletContextListener {
 	private static final Logger LOG = Logger.getLogger(ContextInitializer.class);
 	
+	public static final String PARAM_CAPCHA_SERVER_MODE = "capchaServerMode";
+	public static final String PARAM_CAPCHA_TTL = "capchaTTL";
+	public static final String PARAM_AVATAR_FOLDER = "avatarFolder";
+	
 	public static final String INIT_CAPCHA_PROVIDER_KEY = "init:capchaProvider";
 	public static final String INIT_USER_SERVICE_KEY = "init:userService";
 	public static final String INIT_CONVERSATION_SCOPE_FACTORY_KEY = "init:conversationScopeFactory";
-	public static final String INIT_IMAGE_PROVIDER_KEY = "init:imageProvider";
+	public static final String INIT_AVATAR_PROVIDER_KEY = "init:avatarProvider";
 	
     public void contextInitialized(ServletContextEvent arg0) {
     	try {
@@ -39,7 +43,7 @@ public class ContextInitializer implements ServletContextListener {
         	initCapchaProvider(context);      	
         	initServices(context);
         	initConversationScope(context);       	
-        	initImageProvider(context);
+        	initAvatarImageProvider(context);
     	} catch (Exception e) {
     		LOG.error(e);
     		throw e;
@@ -47,8 +51,8 @@ public class ContextInitializer implements ServletContextListener {
     }
     
     private void initCapchaProvider(ServletContext context) {
-    	String capchaServerMode = context.getInitParameter("capchaServerMode");
-    	String capchaTTLStr = context.getInitParameter("capchaTTL");
+    	String capchaServerMode = context.getInitParameter(PARAM_CAPCHA_SERVER_MODE);
+    	String capchaTTLStr = context.getInitParameter(PARAM_CAPCHA_TTL);
     	
     	int capchaTTL = Integer.parseInt(capchaTTLStr);
     	if (capchaTTL <= 0) {
@@ -109,25 +113,25 @@ public class ContextInitializer implements ServletContextListener {
     	}
     }
     
-    private void initImageProvider(ServletContext context) {
-    	String imagesFolderPath = context.getInitParameter("imagesFolder");
+    private void initAvatarImageProvider(ServletContext context) {
+    	String avatarFolderPath = context.getInitParameter(PARAM_AVATAR_FOLDER);
     	
-    	if (imagesFolderPath == null || imagesFolderPath.isEmpty()) {
-    		throw new RuntimeException("parameter 'imagesFolder' must specify folder to contain images");
+    	if (avatarFolderPath == null || avatarFolderPath.isEmpty()) {
+    		throw new IllegalArgumentException("parameter '" + PARAM_AVATAR_FOLDER + "' must specify folder to contain avatar images");
     	}
     	
-    	File folder = new File(imagesFolderPath);
+    	File folder = new File(avatarFolderPath);
     	if (!folder.exists() || !folder.isDirectory()) {
     		if (!folder.mkdirs()) {
-    			throw new IllegalArgumentException("folder specified in parameter 'imagesFolder' = [" + imagesFolderPath + "] does not exist and can not be created");
+    			throw new IllegalArgumentException("folder specified in parameter '" + PARAM_AVATAR_FOLDER + "' = [" + avatarFolderPath + "] does not exist and can not be created");
     		}
     	}
     	
-    	ImgProvider imageProvider = new JpegImgProvider(imagesFolderPath);
-    	context.setAttribute(INIT_IMAGE_PROVIDER_KEY, imageProvider);
+    	ImgProvider avatarProvider = new JpegImgProvider(avatarFolderPath);
+    	context.setAttribute(INIT_AVATAR_PROVIDER_KEY, avatarProvider);
     	
     	if (LOG.isInfoEnabled()) {
-    		LOG.info("image provider initialized = " + imageProvider.getClass().getName() + ", images folder = " + imagesFolderPath);
+    		LOG.info("image provider initialized = " + avatarProvider.getClass().getName() + ", images folder = " + avatarFolderPath);
     	}
     }
 

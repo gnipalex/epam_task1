@@ -11,8 +11,8 @@
     <param-value>120</param-value>
   </context-param>
   <context-param>
-  	<param-name>imagesFolder</param-name>
-  	<param-value>d:/task_shop/images</param-value>
+  	<param-name>avatarFolder</param-name>
+  	<param-value>d:/task_shop/avatar</param-value>
   </context-param>
   
   <listener>
@@ -37,6 +37,14 @@
   <servlet-mapping>
     <servlet-name>CapchaDrawerServlet</servlet-name>
     <url-pattern>/capchaDrawer</url-pattern>
+  </servlet-mapping> 
+  <servlet>
+  	<servlet-name>AvatarDrawerServlet</servlet-name>
+  	<servlet-class>com.epam.hnyp.task9.servlet.AvatarDrawerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>AvatarDrawerServlet</servlet-name>
+  	<url-pattern>/avatar</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>RegisterServlet</servlet-name>

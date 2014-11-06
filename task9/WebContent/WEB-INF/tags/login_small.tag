@@ -11,6 +11,9 @@
 
 <c:choose>
 	<c:when test="${not empty SESSION_AUT_USER}">
+	<c:url value="/avatar" var="link_ava"/>
+		<img src="${link_ava}" alt="" class="imageAVAsmall">
+		<div class="pad">
 		<img src="images/account.gif" alt="Account" />
 		<h4>
 			<a href="${link_account}" title="View my personal account">MY
@@ -20,9 +23,10 @@
 		<span class="txt">${SESSION_AUT_USER.name}&nbsp;${SESSION_AUT_USER.lastName},&nbsp;
 			<a href="${link_logout}" title="Logout from the system">logout</a>
 		</span>
-
+		</div>
 	</c:when>
 	<c:otherwise>
+		<div class="pad">
 		<img src="images/account.gif" alt="Account" />
 		<h4>
 			<a href="${link_login}" title="View login page">LOGIN</a>
@@ -30,7 +34,7 @@
 		<br />
 		<span class="txt">You're unauthorized,&nbsp;<a
 			href="${link_login}">login</a></span>
-
+		</div>
 	</c:otherwise>
 </c:choose>
 

@@ -40,7 +40,7 @@ public class JpegImgProvider implements ImgProvider {
 
 	@Override
 	public ImageInfo read(String fileName) throws IOException {
-		try (FileInputStream fis = new FileInputStream(diskFolder + File.pathSeparator + fileName)) {
+		try (FileInputStream fis = new FileInputStream(diskFolder + File.separator + fileName)) {
 			BufferedImage image = read(fis);
 			return new ImageInfo(image, "image/jpeg");
 		} 
@@ -74,7 +74,7 @@ public class JpegImgProvider implements ImgProvider {
 
 	@Override
 	public void remove(String fileName) {
-		File file = new File(diskFolder + File.pathSeparator + fileName);
+		File file = new File(diskFolder + File.separator + fileName);
 		file.delete();
 	}
 
