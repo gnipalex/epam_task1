@@ -21,7 +21,7 @@ public class UserInMemoryRepo implements UserRepo {
 	private Map<Integer, User> usersById = new HashMap<Integer, User>();
 
 	@Override
-	public void add(User user) {
+	public int add(User user) {
 		w.lock();
 		try {
 			User u = getUserByLogin(user.getLogin());
@@ -30,9 +30,12 @@ public class UserInMemoryRepo implements UserRepo {
 						"duplicate: user with login '" + user.getLogin()
 								+ "' exists");
 			}
-			user.setId(lastId.incrementAndGet());
-			usersByLogin.put(user.getLogin(), user);
-			usersById.put(user.getId(), user);
+			User copyUser = new User(user.getName(),
+					user.getLastName(), user.getPassword(), user.getLogin(), user.isReceiveLetters(), user.getRole(), user.getAvatarFile());
+			copyUser.setId(lastId.incrementAndGet());
+			usersByLogin.put(copyUser.getLogin(), copyUser);
+			usersById.put(copyUser.getId(), copyUser);
+			return copyUser.getId();
 		} finally {
 			w.unlock();
 		}

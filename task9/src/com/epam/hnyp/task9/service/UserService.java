@@ -8,9 +8,10 @@ public interface UserService {
 	/**
 	 * 
 	 * @param user
+	 * @return generated id of added user
 	 * @throws ServiceLayerException if error occured at data access level
 	 */
-	void add(User user);
+	int add(User user);
 	/**
 	 * 
 	 * @param user

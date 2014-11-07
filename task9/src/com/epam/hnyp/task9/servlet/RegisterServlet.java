@@ -135,8 +135,9 @@ public class RegisterServlet extends HttpServlet {
 		}
 		
 		Part part = request.getPart(REGISTER_FORM_AVATAR_PARAM);
-		String fileNameToSave = UUID.randomUUID().toString() + "." + avatarProvider.getFileNameSuffix();
-		if (part != null) {
+		String fileNameToSave = null;
+		if (part != null && part.getSize() > 0) {
+			fileNameToSave = UUID.randomUUID().toString() + "." + avatarProvider.getFileNameSuffix();
 			if (!avatarProvider.supportsMimeType(part.getContentType())) {
 				errorMessages.put(AVATAR_ERROR_KEY, "you can only use ." + 
 						avatarProvider.getFileNameSuffix() + " images");
@@ -180,7 +181,9 @@ public class RegisterServlet extends HttpServlet {
 		} catch (ServiceLayerException e) {
 			LOG.error("user saving failed", e);
 			LOG.error("removing saved avatar from storage");
-			avatarProvider.remove(fileNameToSave);
+			if (fileNameToSave != null) {
+				avatarProvider.remove(fileNameToSave);
+			}
 			throw e;
 		}
 		

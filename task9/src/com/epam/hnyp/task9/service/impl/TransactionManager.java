@@ -7,17 +7,23 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
+import com.epam.hnyp.task9.service.ServiceLayerException;
+
 public class TransactionManager {
 	private static final Logger LOG = Logger.getLogger(TransactionManager.class);
 	private DataSource dataSource;
-	
-	public TransactionManager() {}
 	
 	public TransactionManager(DataSource ds) {
 		this.dataSource = ds;
 	}
 
-	public <T> T doInTransaction(ITransactedOperation<T> op) throws SQLException {
+	/**
+	 * 
+	 * @param op operation T to do in transaction
+	 * @return result T of operation
+	 * @throws ServiceLayerException if any inner {@link SQLException} occurred
+	 */
+	public <T> T doInTransaction(ITransactedOperation<T> op) {
 		Connection con = null;
 		T result = null;
 		try {
@@ -34,7 +40,7 @@ public class TransactionManager {
 			} catch (SQLException se) {
 				LOG.error(e);
 			}
-			throw e;
+			throw new ServiceLayerException(e);
 		} finally {
 			try {
 				con.close();
@@ -43,13 +49,4 @@ public class TransactionManager {
 			}
 		}
 	}
-
-	public DataSource getDataSource() {
-		return dataSource;
-	}
-
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-	
 }

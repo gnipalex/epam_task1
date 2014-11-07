@@ -6,9 +6,10 @@ import com.epam.hnyp.task9.model.User;
 
 public interface UserRepo {
 	/**
+	 * @return generated id for user 
 	 * @throws IllegalArgumentException if user with specified login already exists
 	 */
-	void add(User user);
+	int add(User user);
 	/**
 	 * @throws IllegalArgumentException if user with specified id not found
 	 */

@@ -22,9 +22,9 @@ public class UserServiceInMemory implements UserService{
 	}
 
 	@Override
-	public void add(User user) {
+	public int add(User user) {
 		try {
-			userRepo.add(user);
+			return userRepo.add(user);
 		} catch (IllegalArgumentException e) {
 			LOG.error(e);
 			throw new ServiceLayerException(e);
