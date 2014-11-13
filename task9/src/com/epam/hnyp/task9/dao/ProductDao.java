@@ -1,10 +1,11 @@
 package com.epam.hnyp.task9.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import com.epam.hnyp.task9.form.ProductFilterBean;
 import com.epam.hnyp.task9.model.Product;
-import com.mysql.jdbc.Connection;
 
 public interface ProductDao {
 	int add(Product p, Connection con) throws SQLException;
@@ -12,5 +13,6 @@ public interface ProductDao {
 	void remove(int id, Connection con) throws SQLException;
 	Product get(int id, Connection con) throws SQLException;
 	Collection<Product> getAll(Connection con) throws SQLException;
-	Collection<Product> getByCriteria(Criteria criteria, Connection con) throws SQLException;
+	Collection<Product> getByFilter(ProductFilterBean filter, Connection con) throws SQLException;
+	int getCountWithoutLimit(ProductFilterBean filter, Connection con) throws SQLException;
 }

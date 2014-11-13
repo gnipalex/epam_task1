@@ -1,4 +1,4 @@
-package com.epam.hnyp.task9.validation;
+package com.epam.hnyp.task9.form;
 
 import java.io.Serializable;
 import java.util.HashMap;

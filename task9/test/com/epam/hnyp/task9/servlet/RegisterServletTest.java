@@ -23,12 +23,12 @@ import org.mockito.Mockito;
 import com.epam.hnyp.task9.capcha.Capcha;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider.CapchaUidMissedException;
+import com.epam.hnyp.task9.form.UserFormBean;
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.service.UserService;
 import com.epam.hnyp.task9.util.convscope.ConversationScopeFactory;
 import com.epam.hnyp.task9.util.convscope.ConversationScopeProvider;
 import com.epam.hnyp.task9.util.img.ImgProvider;
-import com.epam.hnyp.task9.validation.UserFormBean;
 
 public class RegisterServletTest {
 

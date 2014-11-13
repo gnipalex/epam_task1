@@ -15,9 +15,17 @@ import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.CookieCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.HiddenCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.SessionCapchaProvider;
+import com.epam.hnyp.task9.dao.CategoryDao;
+import com.epam.hnyp.task9.dao.ManufacturerDao;
+import com.epam.hnyp.task9.dao.ProductDao;
 import com.epam.hnyp.task9.dao.UserDao;
+import com.epam.hnyp.task9.dao.mysql.CategoryDaoMySql;
+import com.epam.hnyp.task9.dao.mysql.ManufacturerDaoMySql;
+import com.epam.hnyp.task9.dao.mysql.ProductDaoMySql;
 import com.epam.hnyp.task9.dao.mysql.UserDaoMySql;
+import com.epam.hnyp.task9.service.ProductsService;
 import com.epam.hnyp.task9.service.UserService;
+import com.epam.hnyp.task9.service.impl.ProductsServiceDaoImpl;
 import com.epam.hnyp.task9.service.impl.TransactionManager;
 import com.epam.hnyp.task9.service.impl.UserServiceDaoImpl;
 import com.epam.hnyp.task9.util.convscope.ConversationScopeFactory;
@@ -36,6 +44,7 @@ public class ContextInitializer implements ServletContextListener {
 	public static final String INIT_USER_SERVICE_KEY = "init:userService";
 	public static final String INIT_CONVERSATION_SCOPE_FACTORY_KEY = "init:conversationScopeFactory";
 	public static final String INIT_AVATAR_PROVIDER_KEY = "init:avatarProvider";
+	public static final String INIT_PRODUCTS_SERVICE_KEY = "init:productService";
 	
     public void contextInitialized(ServletContextEvent arg0) {
     	try {
@@ -96,12 +105,21 @@ public class ContextInitializer implements ServletContextListener {
     		throw new IllegalArgumentException(e);
     	}
     	TransactionManager tranManager = new TransactionManager(ds);
+    	
     	UserDao userDao = new UserDaoMySql();
     	UserService userService = new UserServiceDaoImpl(userDao, tranManager);
-    	
     	context.setAttribute(INIT_USER_SERVICE_KEY, userService);
     	if (LOG.isInfoEnabled()) {
     		LOG.info("userService initialized = " + userService.getClass().getName());
+    	}
+    	
+    	ProductDao productDao = new ProductDaoMySql();
+    	CategoryDao categoryDao = new CategoryDaoMySql();
+    	ManufacturerDao manufacturerDao = new ManufacturerDaoMySql();
+    	ProductsService productService = new ProductsServiceDaoImpl(tranManager, productDao, categoryDao, manufacturerDao);
+    	context.setAttribute(INIT_PRODUCTS_SERVICE_KEY, productService);
+    	if (LOG.isInfoEnabled()) {
+    		LOG.info("productService initialized = " + productService.getClass().getName());
     	}
     }
     

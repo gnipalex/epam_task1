@@ -24,9 +24,11 @@
 
 .checkboxwraper {
 	vertical-align: middle;
+	margin-bottom: 5px;
 }
 .checkboxwraper input {
 	vertical-align: middle;
+	font-size: 10pt;
 }
 
 .capchaimg {

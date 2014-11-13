@@ -1,6 +1,6 @@
 package com.epam.hnyp.task9.model;
 
-public class Category {
+public class Manufacturer {
 	private int id;
 	private String name;
 	

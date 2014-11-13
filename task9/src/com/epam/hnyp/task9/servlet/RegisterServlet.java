@@ -18,6 +18,7 @@ import com.epam.hnyp.task9.capcha.Capcha;
 import com.epam.hnyp.task9.capcha.CapchaAwtJpegImpl;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider;
 import com.epam.hnyp.task9.capcha.provider.AbstractCapchaProvider.CapchaUidMissedException;
+import com.epam.hnyp.task9.form.UserFormBean;
 import com.epam.hnyp.task9.listener.ContextInitializer;
 import com.epam.hnyp.task9.model.User;
 import com.epam.hnyp.task9.service.ServiceLayerException;
@@ -25,7 +26,6 @@ import com.epam.hnyp.task9.service.UserService;
 import com.epam.hnyp.task9.util.convscope.ConversationScopeFactory;
 import com.epam.hnyp.task9.util.convscope.ConversationScopeProvider;
 import com.epam.hnyp.task9.util.img.ImgProvider;
-import com.epam.hnyp.task9.validation.UserFormBean;
 
 @MultipartConfig(fileSizeThreshold=1024*1024*1, maxFileSize=1024*1024*2, maxRequestSize=1024*1024*3)
 public class RegisterServlet extends HttpServlet {
@@ -133,9 +133,9 @@ public class RegisterServlet extends HttpServlet {
 				LOG.info("register(POST) capcha mismatch");
 			}
 		}
-		
-		Part part = request.getPart(REGISTER_FORM_AVATAR_PARAM);
 		String fileNameToSave = null;
+		try {
+		Part part = request.getPart(REGISTER_FORM_AVATAR_PARAM);
 		if (part != null && part.getSize() > 0) {
 			fileNameToSave = UUID.randomUUID().toString() + "." + avatarProvider.getFileNameSuffix();
 			if (!avatarProvider.supportsMimeType(part.getContentType())) {
@@ -159,6 +159,10 @@ public class RegisterServlet extends HttpServlet {
 					throw e;
 				}
 			}
+		}
+		} catch (IllegalStateException ise) {
+			LOG.error("file is greater than 2MB", ise);
+			errorMessages.put(AVATAR_ERROR_KEY, "you should choose image up to 2MB");
 		}
 		
 		if (!errorMessages.isEmpty()) {
