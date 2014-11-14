@@ -11,8 +11,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.epam.hnyp.task9.dao.ProductDao;
-import com.epam.hnyp.task9.dao.ProductSortMode;
 import com.epam.hnyp.task9.form.ProductFilterBean;
+import com.epam.hnyp.task9.form.ProductSortMode;
 import com.epam.hnyp.task9.model.Product;
 
 
@@ -120,7 +120,7 @@ public class ProductDaoMySql implements ProductDao {
 		p.setImgFile(rs.getString("imgFile"));
 		p.setName(rs.getString("name"));
 		p.setPrice(rs.getLong("price"));
-		p.setVendorId(rs.getInt("vendor_id"));
+		p.setVendorId(rs.getInt("manufacturer_id"));
 		p.setWeight(rs.getDouble("weight"));
 		return p;
 	}
@@ -195,8 +195,10 @@ public class ProductDaoMySql implements ProductDao {
 			query.addOrder(filter.getSortMode().getSqlFieldName(),
 					filter.getSortMode().isAscending());
 		}
-		if (filter.getFrom() != null && filter.getTo() != null) {
-			query.setRange(filter.getFrom(), filter.getTo());
+		if (filter.getCurrentPage() != null && filter.getItemsOnPage() != null) {
+			int from = (filter.getCurrentPage() - 1) * filter.getItemsOnPage();
+			int sz = filter.getItemsOnPage();
+			query.setRange(from, sz);
 		}
 		return query;
 	}

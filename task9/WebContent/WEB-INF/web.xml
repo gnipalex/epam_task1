@@ -63,11 +63,11 @@
     <url-pattern>/main</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>ShowProductsServlet</servlet-name>
-    <jsp-file>/WEB-INF/jsp/products.jsp</jsp-file>
+    <servlet-name>ProductsServlet</servlet-name>
+    <servlet-class>com.epam.hnyp.task9.servlet.ProductsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>ShowProductsServlet</servlet-name>
+    <servlet-name>ProductsServlet</servlet-name>
     <url-pattern>/products</url-pattern>
   </servlet-mapping>
   <servlet>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+	http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+<tlib-version>1.0</tlib-version>
+<short-name>mylib</short-name>
+<uri>http://epam.com/hnyp/shop/mylib</uri>
+<tag>
+	<description>Prints all filter parameters to url</description>
+	<name>prepareUrl</name>
+	<tag-class>com.epam.hnyp.task9.customtag.PrepareUrlTag</tag-class>
+	<body-content>empty</body-content>
+	<attribute>
+		<description>filter bean</description>
+		<name>filterBean</name>
+		<required>true</required>
+		<rtexprvalue>true</rtexprvalue>
+		<type>com.epam.hnyp.task9.form.ProductFilterBean</type>
+	</attribute>
+	<attribute>
+		<description>page number</description>
+		<name>pageNum</name>
+		<rtexprvalue>true</rtexprvalue>
+		<type>java.lang.Integer</type>
+	</attribute>
+	<attribute>
+		<description>url part</description>
+		<name>url</name>
+		<rtexprvalue>true</rtexprvalue>
+		<type>java.lang.String</type>
+	</attribute>
+</tag>
+</taglib>

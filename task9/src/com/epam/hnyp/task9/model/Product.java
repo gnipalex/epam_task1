@@ -14,8 +14,6 @@ public class Product {
 	private Category category;
 	private Manufacturer vendor;
 	
-	
-	
 	public int getId() {
 		return id;
 	}

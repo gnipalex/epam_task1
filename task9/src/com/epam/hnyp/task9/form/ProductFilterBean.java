@@ -2,29 +2,17 @@ package com.epam.hnyp.task9.form;
 
 import java.util.List;
 
-import com.epam.hnyp.task9.dao.ProductSortMode;
 
-public class ProductFilterBean {
-	private String name;
+public class ProductFilterBean {	
 	private Integer priceLow;
 	private Integer priceHigh;
-	private Integer itemsOnPage;
-	private Integer from;
-	private Integer to;
-	private Integer totalCount;
-	
 	private List<Integer> categoryIds;
 	private List<Integer> manufacturerIds;
-	
 	private ProductSortMode sortMode;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	
+	private Integer itemsOnPage;
+	private Integer currentPage;
+	private Integer pagesCount;
 
 	public Integer getPriceLow() {
 		return priceLow;
@@ -58,30 +46,6 @@ public class ProductFilterBean {
 		this.itemsOnPage = itemsOnPage;
 	}
 
-	public Integer getFrom() {
-		return from;
-	}
-
-	public void setFrom(Integer from) {
-		this.from = from;
-	}
-
-	public Integer getTo() {
-		return to;
-	}
-
-	public void setTo(Integer to) {
-		this.to = to;
-	}
-
-	public Integer getTotalCount() {
-		return totalCount;
-	}
-
-	public void setTotalCount(Integer totalCount) {
-		this.totalCount = totalCount;
-	}	
-
 	public ProductSortMode getSortMode() {
 		return sortMode;
 	}
@@ -96,5 +60,21 @@ public class ProductFilterBean {
 
 	public void setManufacturerIds(List<Integer> manufacturerIds) {
 		this.manufacturerIds = manufacturerIds;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public Integer getPagesCount() {
+		return pagesCount;
+	}
+
+	public void setPagesCount(Integer pagesCount) {
+		this.pagesCount = pagesCount;
 	}
 }

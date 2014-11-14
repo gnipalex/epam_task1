@@ -7,10 +7,10 @@ import java.util.List;
 
 public class SqlStatementBuilder {
 	public static int DEFAULT_LIMIT_FROM = 0;
-	public static int DEFAULT_LIMIT_TO = 1000;
+	public static int DEFAULT_LIMIT_SZ = 1000;
 	
 	private int from = DEFAULT_LIMIT_FROM;
-	private int to = DEFAULT_LIMIT_TO;
+	private int size = DEFAULT_LIMIT_SZ;
 
 	private List<String> selectPart = new ArrayList<>();
 	private List<String> fromPart = new ArrayList<>();
@@ -21,15 +21,15 @@ public class SqlStatementBuilder {
 	/**
 	 * Sets LIMIT part of SQL query
 	 * @param from
-	 * @param to
+	 * @param sz
 	 * @return
 	 */
-	public SqlStatementBuilder setRange(int from, int to) {
-		if (from < 0 || to - from < 0) {
+	public SqlStatementBuilder setRange(int from, int sz) {
+		if (from < 0 || sz < 0) {
 			throw new IllegalArgumentException();
 		}
 		this.from = from;
-		this.to = to;
+		this.size = sz;
 		return this;
 	}
 
@@ -116,7 +116,7 @@ public class SqlStatementBuilder {
 			query.append(" ORDER BY ");
 			printAll(query, orderPart, ",");
 		}
-		query.append(" LIMIT ").append(from).append(',').append(to);
+		query.append(" LIMIT ").append(from).append(',').append(size);
 		return query.toString();
 	}
 

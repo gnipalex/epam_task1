@@ -37,4 +37,10 @@ CREATE TABLE `products` (
 INSERT INTO `products`(`name`, `manufacturer_id`, `price`, `category_id`, `weight`, `description`, `imgFile`, `available`) VALUES
 						('artek vafles', 1, 250, 4, 0.5, 'taste from the childhood', null, true),
                         ('borodinskiy', 2, 100, 2, 0.7, 'the best bread ever', null, true),
-                        ('stolichnaya', 3, 2500, 3, 1.0, 'natural russian vodka', null, true);
+                        ('stolichnaya', 3, 2500, 3, 1.0, 'natural russian vodka', null, true),
+                        ('milk', 1, 250, 4, 0.5, 'taste from the childhood', null, true),
+                        ('butter', 2, 100, 2, 0.7, 'the best bread ever', null, true),
+                        ('fanta', 3, 2500, 3, 1.0, 'natural russian vodka', null, true),
+                        ('sardina', 1, 250, 4, 0.5, 'taste from the childhood', null, true),
+                        ('cheeze', 2, 100, 2, 0.7, 'the best bread ever', null, true),
+                        ('fdgdfgdfg', 3, 2500, 3, 1.0, 'natural russian vodka', null, true);
