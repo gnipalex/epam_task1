@@ -39,12 +39,14 @@ public class ContextInitializer implements ServletContextListener {
 	public static final String PARAM_CAPCHA_SERVER_MODE = "capchaServerMode";
 	public static final String PARAM_CAPCHA_TTL = "capchaTTL";
 	public static final String PARAM_AVATAR_FOLDER = "avatarFolder";
+	public static final String PARAM_PRODUCT_IMAGE_FOLDER = "productImagesFolder";
 	
 	public static final String INIT_CAPCHA_PROVIDER_KEY = "init:capchaProvider";
 	public static final String INIT_USER_SERVICE_KEY = "init:userService";
 	public static final String INIT_CONVERSATION_SCOPE_FACTORY_KEY = "init:conversationScopeFactory";
 	public static final String INIT_AVATAR_PROVIDER_KEY = "init:avatarProvider";
 	public static final String INIT_PRODUCTS_SERVICE_KEY = "init:productService";
+	public static final String INIT_PRODUCT_IMAGES_PROVIDER_KEY = "init:prodImagesProvider";
 	
     public void contextInitialized(ServletContextEvent arg0) {
     	try {
@@ -53,6 +55,7 @@ public class ContextInitializer implements ServletContextListener {
         	initServices(context);
         	initConversationScope(context);       	
         	initAvatarImageProvider(context);
+        	initProductImageProvider(context);
     	} catch (Exception e) {
     		LOG.error(e);
     		throw e;
@@ -100,6 +103,9 @@ public class ContextInitializer implements ServletContextListener {
     	try {
     		InitialContext initialContext = new InitialContext();
     		ds = (DataSource)initialContext.lookup("java:comp/env/jdbc/task_shop");
+    		if (ds == null) {
+    			throw new IllegalArgumentException("data source is not initialized");
+    		}
     	} catch (NamingException e) {
     		LOG.error(e);
     		throw new IllegalArgumentException(e);
@@ -149,9 +155,33 @@ public class ContextInitializer implements ServletContextListener {
     	context.setAttribute(INIT_AVATAR_PROVIDER_KEY, avatarProvider);
     	
     	if (LOG.isInfoEnabled()) {
-    		LOG.info("image provider initialized = " + avatarProvider.getClass().getName() + ", images folder = " + avatarFolderPath);
+    		LOG.info("avatar image provider initialized = " + avatarProvider.getClass().getName() + ", images folder = " + avatarFolderPath);
     	}
     }
+    
+    private void initProductImageProvider(ServletContext context) {
+    	String productImagesFolderPath = context.getInitParameter(PARAM_PRODUCT_IMAGE_FOLDER);
+    	
+    	if (productImagesFolderPath == null || productImagesFolderPath.isEmpty()) {
+    		throw new IllegalArgumentException("parameter '" + PARAM_PRODUCT_IMAGE_FOLDER + "' must specify folder to contain product images");
+    	}
+    	
+    	File folder = new File(productImagesFolderPath);
+    	if (!folder.exists() || !folder.isDirectory()) {
+    		if (!folder.mkdirs()) {
+    			throw new IllegalArgumentException("folder specified in parameter '" + PARAM_PRODUCT_IMAGE_FOLDER + "' = [" + productImagesFolderPath + "] does not exist and can not be created");
+    		}
+    	}
+    	
+    	ImgProvider prodImgProvider = new JpegImgProvider(productImagesFolderPath);
+    	context.setAttribute(INIT_PRODUCT_IMAGES_PROVIDER_KEY, prodImgProvider);
+    	
+    	if (LOG.isInfoEnabled()) {
+    		LOG.info("product image provider initialized = " + prodImgProvider.getClass().getName() + ", images folder = " + productImagesFolderPath);
+    	}
+    }
+    
+    
 
     public void contextDestroyed(ServletContextEvent arg0) {
 

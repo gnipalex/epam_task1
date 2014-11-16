@@ -87,4 +87,9 @@ public class JpegImgProvider implements ImgProvider {
 	public String getFileNameSuffix() {
 		return "jpg";
 	}
+
+	@Override
+	public String getDirectoryLocation() {
+		return diskFolder;
+	}
 }

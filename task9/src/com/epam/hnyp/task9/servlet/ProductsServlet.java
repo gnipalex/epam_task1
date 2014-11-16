@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.epam.hnyp.task9.form.ProductElementsOnPageMode;
 import com.epam.hnyp.task9.form.ProductFilterBean;
 import com.epam.hnyp.task9.form.ProductSortMode;
 import com.epam.hnyp.task9.listener.ContextInitializer;
@@ -24,7 +25,7 @@ public class ProductsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = Logger.getLogger(ProductsServlet.class);
 
-	public static final int DEFAULT_ITEMS_ON_PAGE = 2;
+	public static final ProductElementsOnPageMode DEFAULT_ELEMENTS_ON_PAGE = ProductElementsOnPageMode.FIVE;
 	public static final int DEFAULT_CURRENT_PAGE = 1;
 	public static final ProductSortMode DEFAULT_SORT_MODE = ProductSortMode.NAME_ASC;
 	
@@ -49,8 +50,11 @@ public class ProductsServlet extends HttpServlet {
 			throws ServletException, IOException {
 		ProductFilterBean filter = extractProductFilter(req);
 		int totalCount = productsService.getProductsCountWithoutLimit(filter);
-		int pagesCount = (int)Math.ceil((double)totalCount / filter.getItemsOnPage());
+		int pagesCount = (int)Math.ceil((double)totalCount / filter.getElementsOnPage().getCount());
 		filter.setPagesCount(pagesCount);
+		if (filter.getCurrentPage() > pagesCount) {
+			filter.setCurrentPage(1);
+		}
 		
 		Collection<Product> products = productsService.getProductsByFilter(filter);
 		Collection<Category> categories = productsService.getAllCategories();
@@ -60,6 +64,8 @@ public class ProductsServlet extends HttpServlet {
 		req.setAttribute("products", products);
 		req.setAttribute("categories", categories);
 		req.setAttribute("manufacturers", manufacturers);
+		req.setAttribute("sortModes", ProductSortMode.values());
+		req.setAttribute("elementsOnPageModes", ProductElementsOnPageMode.values());
 		
 		req.getRequestDispatcher("WEB-INF/jsp/products.jsp").forward(req, resp);
 	}
@@ -67,7 +73,8 @@ public class ProductsServlet extends HttpServlet {
 	private ProductFilterBean extractProductFilter(HttpServletRequest request) {
 		ProductFilterBean bean = new ProductFilterBean();
 		bean.setCurrentPage(DEFAULT_CURRENT_PAGE);
-		bean.setItemsOnPage(DEFAULT_ITEMS_ON_PAGE);
+		//bean.setItemsOnPage(DEFAULT_ITEMS_ON_PAGE);
+		bean.setElementsOnPage(DEFAULT_ELEMENTS_ON_PAGE);
 		bean.setSortMode(DEFAULT_SORT_MODE);
 		
 		String priceLow = request.getParameter(FORM_PRICE_LOW_PARAM);
@@ -86,9 +93,16 @@ public class ProductsServlet extends HttpServlet {
 		bean.setPriceHigh(readInteger(priceHigh));
 		bean.setPriceLow(readInteger(priceLow));
 		
-		Integer itemsOnPage = readInteger(elementsOnPage);
-		if (itemsOnPage != null && itemsOnPage.intValue() > 0) {
-			bean.setItemsOnPage(itemsOnPage);
+//		Integer itemsOnPage = readInteger(elementsOnPage);
+//		if (itemsOnPage != null && itemsOnPage.intValue() > 0) {
+//			bean.setItemsOnPage(itemsOnPage);
+//		}
+		if (elementsOnPage != null) {
+			try {
+				bean.setElementsOnPage(ProductElementsOnPageMode.valueOf(elementsOnPage));
+			} catch (IllegalArgumentException e) {
+				//log
+			}
 		}
 		Integer curPage = readInteger(pageNumber);
 		if (curPage != null && curPage.intValue() > 0) {
@@ -109,9 +123,7 @@ public class ProductsServlet extends HttpServlet {
 	private Integer readInteger(String val) {
 		try {
 			return Integer.parseInt(val);
-		} catch (NumberFormatException e) {
-			// log
-		}
+		} catch (NumberFormatException e) {	}
 		return null;
 	}
 
@@ -121,9 +133,7 @@ public class ProductsServlet extends HttpServlet {
 			for (String s : values) {
 				try {
 					list.add(Integer.parseInt(s));
-				} catch (NumberFormatException e) {
-					// log
-				}
+				} catch (NumberFormatException e) {	}
 			}
 		}
 		return list;

@@ -6,13 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import com.epam.hnyp.task9.dao.ProductDao;
 import com.epam.hnyp.task9.form.ProductFilterBean;
-import com.epam.hnyp.task9.form.ProductSortMode;
 import com.epam.hnyp.task9.model.Product;
 
 
@@ -30,6 +28,8 @@ public class ProductDaoMySql implements ProductDao {
 	public static final String SQL_FILTER_FROM_PRODUCTS = "products p";
 	public static final String SQL_FILTER_FROM_CATEGORIES = "categories c";
 	public static final String SQL_FILTER_FROM_MANUFACTURERS = "manufacturers m";
+	//public static final String SQL_FILTER_FROM_PART = "products p, categories c, manufacturers m";
+	
 
 	@Override
 	public int add(Product p, Connection con) throws SQLException {
@@ -170,17 +170,17 @@ public class ProductDaoMySql implements ProductDao {
 		SqlStatementBuilder query = new SqlStatementBuilder();
 		// query.addSelectField(SQL_FILTER_SELECT_PART, null);
 		query.addFrom(SQL_FILTER_FROM_PRODUCTS);
+		query.addFrom(SQL_FILTER_FROM_CATEGORIES);
+		query.addWhere("c.id = p.category_id");
+		query.addFrom(SQL_FILTER_FROM_MANUFACTURERS);
+		query.addWhere("m.id = p.manufacturer_id");
 		if (filter.getCategoryIds() != null
-				&& !filter.getCategoryIds().isEmpty()) {
-			query.addFrom(SQL_FILTER_FROM_CATEGORIES);
-			query.addWhere("c.id = p.category_id");
+				&& !filter.getCategoryIds().isEmpty()) {	
 			query.addWhere(
 					buildORExpression(filter.getCategoryIds().size(),
 							"c.id = ?"), filter.getCategoryIds().toArray());
 		}
 		if (filter.getManufacturerIds() != null && !filter.getManufacturerIds().isEmpty()) {
-			query.addFrom(SQL_FILTER_FROM_MANUFACTURERS);
-			query.addWhere("m.id = p.manufacturer_id");
 			query.addWhere(
 					buildORExpression(filter.getManufacturerIds().size(), "m.id = ?"),
 					filter.getManufacturerIds().toArray());
@@ -195,9 +195,14 @@ public class ProductDaoMySql implements ProductDao {
 			query.addOrder(filter.getSortMode().getSqlFieldName(),
 					filter.getSortMode().isAscending());
 		}
-		if (filter.getCurrentPage() != null && filter.getItemsOnPage() != null) {
-			int from = (filter.getCurrentPage() - 1) * filter.getItemsOnPage();
-			int sz = filter.getItemsOnPage();
+//		if (filter.getCurrentPage() != null && filter.getItemsOnPage() != null) {
+//			int from = (filter.getCurrentPage() - 1) * filter.getItemsOnPage();
+//			int sz = filter.getItemsOnPage();
+//			query.setRange(from, sz);
+//		}
+		if (filter.getCurrentPage() != null && filter.getElementsOnPage() != null) {
+			int from = (filter.getCurrentPage() - 1) * filter.getElementsOnPage().getCount();
+			int sz = filter.getElementsOnPage().getCount();
 			query.setRange(from, sz);
 		}
 		return query;

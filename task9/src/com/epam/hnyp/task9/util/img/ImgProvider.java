@@ -68,23 +68,9 @@ public interface ImgProvider {
 	 */
 	String getFileNameSuffix();
 	
-//	class ImageMimeTypeException extends Exception {
-//		private static final long serialVersionUID = 1L;
-//
-//		public ImageMimeTypeException() {
-//			super();
-//		}
-//
-//		public ImageMimeTypeException(String message, Throwable cause) {
-//			super(message, cause);
-//		}
-//
-//		public ImageMimeTypeException(String message) {
-//			super(message);
-//		}
-//
-//		public ImageMimeTypeException(Throwable cause) {
-//			super(cause);
-//		}
-//	}
+	/**
+	 * Gets directory with images asociated with image provider
+	 * @return
+	 */
+	String getDirectoryLocation();
 }

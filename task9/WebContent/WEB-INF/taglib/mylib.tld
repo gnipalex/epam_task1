@@ -32,4 +32,9 @@
 		<type>java.lang.String</type>
 	</attribute>
 </tag>
+<function>
+	<name>contains</name>
+	<function-class>com.epam.hnyp.task9.customtag.CustomFunctions</function-class>
+	<function-signature>boolean contains(java.util.Collection, java.lang.Object)</function-signature>
+</function>
 </taglib>

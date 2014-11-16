@@ -77,7 +77,7 @@ public class CategoryDaoMySql implements CategoryDao{
 		try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_ALL)) {
 			ResultSet rs = prst.executeQuery();
 			Collection<Category> categories = new ArrayList<>();
-			if (rs.next()) {
+			while (rs.next()) {
 				Category c = extractCategory(rs);
 				categories.add(c);
 			}

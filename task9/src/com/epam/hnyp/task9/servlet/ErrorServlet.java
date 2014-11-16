@@ -15,8 +15,9 @@ public class ErrorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		LOG.error((Exception)request.getAttribute("javax.servlet.error.exception"));
-		request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request, response);
+		Exception ex = (Exception)request.getAttribute("javax.servlet.error.exception");
+		LOG.error(ex);
+		request.getRequestDispatcher("WEB-INF/jsp/error/error.jsp").forward(request, response);
 	}
 
 }

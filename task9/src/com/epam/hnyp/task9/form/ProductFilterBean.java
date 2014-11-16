@@ -9,8 +9,9 @@ public class ProductFilterBean {
 	private List<Integer> categoryIds;
 	private List<Integer> manufacturerIds;
 	private ProductSortMode sortMode;
+	private ProductElementsOnPageMode elementsOnPage;
 	
-	private Integer itemsOnPage;
+	//private Integer itemsOnPage;
 	private Integer currentPage;
 	private Integer pagesCount;
 
@@ -38,16 +39,24 @@ public class ProductFilterBean {
 		this.categoryIds = categoryIds;
 	}
 
-	public Integer getItemsOnPage() {
-		return itemsOnPage;
-	}
-
-	public void setItemsOnPage(Integer itemsOnPage) {
-		this.itemsOnPage = itemsOnPage;
-	}
-
+//	public Integer getItemsOnPage() {
+//		return itemsOnPage;
+//	}
+//
+//	public void setItemsOnPage(Integer itemsOnPage) {
+//		this.itemsOnPage = itemsOnPage;
+//	}
+	
 	public ProductSortMode getSortMode() {
 		return sortMode;
+	}
+
+	public ProductElementsOnPageMode getElementsOnPage() {
+		return elementsOnPage;
+	}
+
+	public void setElementsOnPage(ProductElementsOnPageMode elementsOnPage) {
+		this.elementsOnPage = elementsOnPage;
 	}
 
 	public void setSortMode(ProductSortMode sortMode) {

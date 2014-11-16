@@ -77,7 +77,7 @@ public class ManufacturerDaoMySql implements ManufacturerDao {
 		try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_ALL)) {
 			ResultSet rs = prst.executeQuery();
 			Collection<Manufacturer> vendors = new ArrayList<>();
-			if (rs.next()) {
+			while (rs.next()) {
 				Manufacturer v = extractVendor(rs);
 				vendors.add(v);
 			}
