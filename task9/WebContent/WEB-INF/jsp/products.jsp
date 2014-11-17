@@ -10,12 +10,14 @@
 <meta http-equiv="content-type" content="text/html;charset=cp1251" />
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
 <link rel="stylesheet" href="products.css" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="js/products.js"></script>
 </head>
 <body>
 	<div id="content">
 		<jsp:include page="/WEB-INF/jsp/parts/header.jsp" />
 		<jsp:include page="/WEB-INF/jsp/parts/menu.jsp" />
-		<jsp:include page="/WEB-INF/jsp/parts/modules.jsp" />
+		<%--  <jsp:include page="/WEB-INF/jsp/parts/modules.jsp" /> --%>
 		<div id="maincontent">
 			<div id="introduction">
 				<h2>Products</h2>
@@ -56,17 +58,17 @@
 					<div style="clear: both;"></div>
 				</div>
 				<div id="filter">
-					<div class="f">
+					<div class="f" id="priceFilter">
 						<div class="title">
-							<span class="text">Price</span> <span class="btn">(reset)</span>
+							<span class="text">Price</span> <span class="btn" onclick="resetPrice();">(reset)</span>
 						</div>
 						<input class="price" type="text" maxlength="10" name="priceLow"
 							value="${filterBean.priceLow}" /> low <input class="price" type="text" maxlength="10"
 							name="priceHigh" value="${filterBean.priceHigh}" /> high
 					</div>
-					<div class="f">
+					<div class="f" id="categoriesFilter">
 						<div class="title">
-							<span class="text">Categories</span> <span class="btn">(reset)</span>
+							<span class="text">Categories</span> <span class="btn" onclick="resetCategories();">(reset)</span>
 						</div>
 						<ul>
 							<c:forEach items="${categories}" var="cat">
@@ -81,9 +83,9 @@
 							</c:forEach>
 						</ul>
 					</div>
-					<div class="f">
+					<div class="f" id="manufacturersFilter">
 						<div class="title">
-							<span class="text">Manufacturers</span> <span class="btn">(reset)</span>
+							<span class="text">Manufacturers</span> <span class="btn" onclick="resetManufacturers();">(reset)</span>
 						</div>
 						<ul>
 							<c:forEach items="${manufacturers}" var="man">
@@ -119,6 +121,7 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
+				<div style="clear:both;"></div>
 				<mytags:pagination filterBean="${filterBean}" />
 			</div>
 		</div>

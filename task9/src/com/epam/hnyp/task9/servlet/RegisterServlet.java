@@ -34,7 +34,7 @@ public class RegisterServlet extends HttpServlet {
 
 	public static final String REGISTER_JSP_URL = "WEB-INF/jsp/register.jsp";
 	public static final String REDIRECT_REGISTER_FAIL = "/register";
-	public static final String REDIRECT_REGISTER_SUCCESS = "/main";
+	public static final String REDIRECT_REGISTER_SUCCESS = "/login";
 
 	public static final String POSTREDIRECT_REGISTER_CONVSCOPE_KEY = "com.epam.hnyp.task9.servlet.POSTREDIRECT_REGISTER_CONVSCOPE_KEY";
 

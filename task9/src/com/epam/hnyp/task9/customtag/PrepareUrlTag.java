@@ -25,7 +25,7 @@ public class PrepareUrlTag extends SimpleTagSupport {
 			}
 		}
 		if (filterBean.getManufacturerIds() != null) {
-			for (Integer i : filterBean.getCategoryIds()) {
+			for (Integer i : filterBean.getManufacturerIds()) {
 				parts.add(ProductsServlet.FORM_MANUFACTURES_PARAM + "=" + i);
 			}
 		}

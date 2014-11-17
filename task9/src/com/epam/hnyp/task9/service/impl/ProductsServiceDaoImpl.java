@@ -66,9 +66,20 @@ public class ProductsServiceDaoImpl implements ProductsService {
 		return transactionManager.doInTransaction(new ITransactedOperation<Product>() {
 			@Override
 			public Product execute(Connection con) throws SQLException {
-				return productDao.get(id, con);
+				Product p = productDao.get(id, con);
+				initProduct(p, con);
+				return p;
 			}
 		});
+	}
+	
+	private void initProduct(Product p, Connection con) throws SQLException {
+		if (p != null) {
+			Category cat = categoryDao.get(p.getCategoryId(), con);
+			p.setCategory(cat);
+			Manufacturer m = manufacturerDao.get(p.getManufacturerId(), con);
+			p.setManufacturer(m);
+		}
 	}
 
 	@Override
@@ -77,7 +88,13 @@ public class ProductsServiceDaoImpl implements ProductsService {
 			@Override
 			public Collection<Product> execute(Connection con)
 					throws SQLException {
-				return productDao.getAll(con);
+				Collection<Product> items = productDao.getAll(con);
+				if (items != null && !items.isEmpty()){
+					for (Product p : items) {
+						initProduct(p, con);
+					}
+				}
+				return items;
 			}
 		});
 	}
@@ -88,7 +105,13 @@ public class ProductsServiceDaoImpl implements ProductsService {
 			@Override
 			public Collection<Product> execute(Connection con)
 					throws SQLException {
-				return productDao.getByFilter(filter, con);
+				Collection<Product> items = productDao.getByFilter(filter, con);
+				if (items != null && !items.isEmpty()){
+					for (Product p : items) {
+						initProduct(p, con);
+					}
+				}
+				return items;
 			}
 		});
 	}

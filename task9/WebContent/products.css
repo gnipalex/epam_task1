@@ -16,6 +16,7 @@
  
 .products_holder ul {
   list-style-type: none;
+  display:block;
   position: relative;
 }
 
@@ -58,6 +59,7 @@
 .products_holder li p {
   /*font: 200 12px/1.5 Georgia, Times New Roman, serif;*/
   font-size: 12px;
+  margin: 5px 0 0 0 !important;
 }
 
 .products_holder li {

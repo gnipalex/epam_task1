@@ -37,7 +37,7 @@ public class ProductDaoMySql implements ProductDao {
 				PreparedStatement.RETURN_GENERATED_KEYS)) {
 			int index = 1;
 			prst.setString(index++, p.getName());
-			prst.setInt(index++, p.getVendorId());
+			prst.setInt(index++, p.getManufacturerId());
 			prst.setLong(index++, p.getPrice());
 			prst.setInt(index++, p.getCategoryId());
 			prst.setDouble(index++, p.getWeight());
@@ -68,7 +68,7 @@ public class ProductDaoMySql implements ProductDao {
 		try (PreparedStatement prst = con.prepareStatement(SQL_UPDATE_BY_ID)) {
 			int index = 1;
 			prst.setString(index++, p.getName());
-			prst.setInt(index++, p.getVendorId());
+			prst.setInt(index++, p.getManufacturerId());
 			prst.setLong(index++, p.getPrice());
 			prst.setInt(index++, p.getCategoryId());
 			prst.setDouble(index++, p.getWeight());
@@ -120,7 +120,7 @@ public class ProductDaoMySql implements ProductDao {
 		p.setImgFile(rs.getString("imgFile"));
 		p.setName(rs.getString("name"));
 		p.setPrice(rs.getLong("price"));
-		p.setVendorId(rs.getInt("manufacturer_id"));
+		p.setManufacturerId(rs.getInt("manufacturer_id"));
 		p.setWeight(rs.getDouble("weight"));
 		return p;
 	}

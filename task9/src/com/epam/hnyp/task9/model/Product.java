@@ -5,14 +5,14 @@ public class Product {
 	private int id;
 	private int categoryId;
 	private String name;
-	private int vendorId;
+	private int manufacturerId;
 	private long price;
 	private double weight;
 	private String description;
 	private String imgFile;
 	private boolean available;
 	private Category category;
-	private Manufacturer vendor;
+	private Manufacturer manufacturer;
 	
 	public int getId() {
 		return id;
@@ -32,17 +32,17 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getVendorId() {
-		return vendorId;
+	public int getManufacturerId() {
+		return manufacturerId;
 	}
-	public void setVendorId(int vendorId) {
-		this.vendorId = vendorId;
+	public void setManufacturerId(int manufacturerId) {
+		this.manufacturerId = manufacturerId;
 	}
-	public Manufacturer getVendor() {
-		return vendor;
+	public Manufacturer getManufacturer() {
+		return manufacturer;
 	}
-	public void setVendor(Manufacturer vendor) {
-		this.vendor = vendor;
+	public void setManufacturer(Manufacturer manufacturer) {
+		this.manufacturer = manufacturer;
 	}
 	public long getPrice() {
 		return price;
