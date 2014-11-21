@@ -186,26 +186,25 @@ public class ProductDaoMySql implements ProductDao {
 					filter.getManufacturerIds().toArray());
 		}
 		if (filter.getPriceHigh() != null) {
-			query.addWhere("p.price <= ?", filter.getPriceHigh());
+			query.addWhere("p.price <= ?", convertPriceToCents(filter.getPriceHigh()));
 		}
 		if (filter.getPriceLow() != null) {
-			query.addWhere("p.price >= ?", filter.getPriceLow());
+			query.addWhere("p.price >= ?", convertPriceToCents(filter.getPriceLow()));
 		}
 		if (filter.getSortMode() != null) {
 			query.addOrder(filter.getSortMode().getSqlFieldName(),
 					filter.getSortMode().isAscending());
 		}
-//		if (filter.getCurrentPage() != null && filter.getItemsOnPage() != null) {
-//			int from = (filter.getCurrentPage() - 1) * filter.getItemsOnPage();
-//			int sz = filter.getItemsOnPage();
-//			query.setRange(from, sz);
-//		}
 		if (filter.getCurrentPage() != null && filter.getElementsOnPage() != null) {
 			int from = (filter.getCurrentPage() - 1) * filter.getElementsOnPage().getCount();
 			int sz = filter.getElementsOnPage().getCount();
 			query.setRange(from, sz);
 		}
 		return query;
+	}
+	
+	private Integer convertPriceToCents(Double val) {
+		return (int)Math.floor(val * 100);
 	}
 
 	private SqlStatementBuilder buildCompleteStatement(ProductFilterBean filter) {

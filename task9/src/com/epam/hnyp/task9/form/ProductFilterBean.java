@@ -4,30 +4,30 @@ import java.util.List;
 
 
 public class ProductFilterBean {	
-	private Integer priceLow;
-	private Integer priceHigh;
+	private Double priceLow;
+	private Double priceHigh;
+	
 	private List<Integer> categoryIds;
 	private List<Integer> manufacturerIds;
 	private ProductSortMode sortMode;
 	private ProductElementsOnPageMode elementsOnPage;
 	
-	//private Integer itemsOnPage;
 	private Integer currentPage;
 	private Integer pagesCount;
 
-	public Integer getPriceLow() {
+	public Double getPriceLow() {
 		return priceLow;
 	}
 
-	public void setPriceLow(Integer priceLow) {
+	public void setPriceLow(Double priceLow) {
 		this.priceLow = priceLow;
 	}
 
-	public Integer getPriceHigh() {
+	public Double getPriceHigh() {
 		return priceHigh;
 	}
 
-	public void setPriceHigh(Integer priceHigh) {
+	public void setPriceHigh(Double priceHigh) {
 		this.priceHigh = priceHigh;
 	}
 
@@ -38,14 +38,6 @@ public class ProductFilterBean {
 	public void setCategoryIds(List<Integer> categoryIds) {
 		this.categoryIds = categoryIds;
 	}
-
-//	public Integer getItemsOnPage() {
-//		return itemsOnPage;
-//	}
-//
-//	public void setItemsOnPage(Integer itemsOnPage) {
-//		this.itemsOnPage = itemsOnPage;
-//	}
 	
 	public ProductSortMode getSortMode() {
 		return sortMode;

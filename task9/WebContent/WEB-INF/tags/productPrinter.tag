@@ -1,10 +1,11 @@
 <%@ tag language="java" pageEncoding="ISO-8859-1" body-content="empty" description="Prints single product entity as list item"%>
 <%@ attribute name="prod" description="Product entity" required="true"
 	type="com.epam.hnyp.task9.model.Product"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:url var="link_prodImageServlet" value="/productImage"/>
 
-<li><img src="" />
+<li><img src="${link_prodImageServlet}?prodId=${prod.id}" />
 	<h3>${prod.name}</h3>
 	<p>
 		<span class="price">Price : ${prod.price / 100}$</span>

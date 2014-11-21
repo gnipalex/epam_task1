@@ -73,7 +73,6 @@ public class ProductsServlet extends HttpServlet {
 	private ProductFilterBean extractProductFilter(HttpServletRequest request) {
 		ProductFilterBean bean = new ProductFilterBean();
 		bean.setCurrentPage(DEFAULT_CURRENT_PAGE);
-		//bean.setItemsOnPage(DEFAULT_ITEMS_ON_PAGE);
 		bean.setElementsOnPage(DEFAULT_ELEMENTS_ON_PAGE);
 		bean.setSortMode(DEFAULT_SORT_MODE);
 		
@@ -90,19 +89,13 @@ public class ProductsServlet extends HttpServlet {
 		bean.setCategoryIds(readIntegers(categories));
 		bean.setManufacturerIds(readIntegers(manufacturers));
 		
-		bean.setPriceHigh(readInteger(priceHigh));
-		bean.setPriceLow(readInteger(priceLow));
+		bean.setPriceHigh(readDouble(priceHigh));
+		bean.setPriceLow(readDouble(priceLow));
 		
-//		Integer itemsOnPage = readInteger(elementsOnPage);
-//		if (itemsOnPage != null && itemsOnPage.intValue() > 0) {
-//			bean.setItemsOnPage(itemsOnPage);
-//		}
 		if (elementsOnPage != null) {
 			try {
 				bean.setElementsOnPage(ProductElementsOnPageMode.valueOf(elementsOnPage));
-			} catch (IllegalArgumentException e) {
-				//log
-			}
+			} catch (IllegalArgumentException e) {}
 		}
 		Integer curPage = readInteger(pageNumber);
 		if (curPage != null && curPage.intValue() > 0) {
@@ -111,15 +104,19 @@ public class ProductsServlet extends HttpServlet {
 		if (sortBy != null) {
 			try {
 				bean.setSortMode(ProductSortMode.valueOf(sortBy));
-			} catch (IllegalArgumentException e) {
-				//log
-			}
+			} catch (IllegalArgumentException e) {}
 		}
 		
 		return bean;
-
 	}
-
+	
+	private Double readDouble(String val) {
+		try {
+			return Double.parseDouble(val);
+		} catch (NumberFormatException | NullPointerException e) {	}
+		return null;
+	}
+	
 	private Integer readInteger(String val) {
 		try {
 			return Integer.parseInt(val);
