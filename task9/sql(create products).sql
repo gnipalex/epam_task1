@@ -1,5 +1,6 @@
 USE `task_shop`;
 
+DROP TABLE IF EXISTS `orderitems`;
 DROP TABLE IF EXISTS `orders`;
 DROP TABLE IF EXISTS `products`;
 DROP TABLE IF EXISTS `categories`;
@@ -48,7 +49,7 @@ INSERT INTO `products`(`name`, `manufacturer_id`, `price`, `category_id`, `weigh
 
 CREATE TABLE `orders` (
 	`id` int not null primary key auto_increment,
-	`status` enum ('accepted', 'confirmed', 'forming', 'sent', 'complete', 'canceled') not null,
+	`status` enum ('accepted', 'confirmed', 'forming', 'sent', 'completed', 'canceled') not null,
 	`description` varchar(500),
 	`date` datetime not null,
 	`user_id` int not null,
