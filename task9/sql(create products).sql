@@ -1,5 +1,6 @@
 USE `task_shop`;
 
+DROP TABLE IF EXISTS `orders`;
 DROP TABLE IF EXISTS `products`;
 DROP TABLE IF EXISTS `categories`;
 DROP TABLE IF EXISTS `manufacturers`;
@@ -44,3 +45,22 @@ INSERT INTO `products`(`name`, `manufacturer_id`, `price`, `category_id`, `weigh
                         ('sardina', 3, 250, 6, 0.5, 'taste from sea', 'sardina.jpg', true),
                         ('cheeze', 3, 100, 5, 0.7, 'the best cheeze from russia', null, true),
                         ('fdgdfgdfg', 3, 2500, 3, 1.0, 'ggdfgdgdg', null, true);
+
+CREATE TABLE `orders` (
+	`id` int not null primary key auto_increment,
+	`status` enum ('accepted', 'confirmed', 'forming', 'sent', 'complete', 'canceled') not null,
+	`description` varchar(500),
+	`date` datetime not null,
+	`user_id` int not null,
+	constraint `orderuser_fk` foreign key (`user_id`) references `users`(`id`) on update cascade on delete cascade
+);
+
+CREATE TABLE `orderitems` (
+	`order_id` int not null,
+	`product_id` int not null,
+	`actual_price` long not null,
+	`count` int not null default 1 check (`count` > 0),
+	constraint `orderitemOrder_fk` foreign key (`order_id`) references `orders`(`id`) on update cascade on delete cascade,
+	constraint `orderitemProduct_fk` foreign key (`product_id`) references `products`(`id`) on update cascade on delete no action
+
+);
