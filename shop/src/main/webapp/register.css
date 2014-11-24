@@ -1,0 +1,42 @@
+.register {
+	margin: 50px auto; width: 400px;
+}
+
+.register input {
+	height: 20px;
+}
+
+.register table td {
+	vertical-align: top;
+}
+
+.error {
+	color:red;
+}
+.error input {
+	border: 1px solid red;
+}
+
+.error_message {
+	color: red;	font-weight: bold; text-align: right;
+	width: 200px;
+}
+
+.checkboxwraper {
+	vertical-align: middle;
+	margin-bottom: 5px;
+}
+.checkboxwraper input {
+	vertical-align: middle;
+	font-size: 10pt;
+}
+
+.capchaimg {
+	width:200px;
+	height:100px;
+}
+.capchaimg img {
+	width: 100%;
+	height: 100%;
+}
+
