@@ -49,7 +49,7 @@ INSERT INTO `products`(`name`, `manufacturer_id`, `price`, `category_id`, `weigh
 
 CREATE TABLE `orders` (
 	`id` int not null primary key auto_increment,
-	`status` enum ('accepted', 'confirmed', 'forming', 'sent', 'completed', 'canceled') default 'forming' not null,
+	`status` enum ('ACCEPTED', 'CONFIRMED', 'FORMING', 'SENT', 'COMPLETED', 'CANCELED') default 'FORMING' not null,
 	`description` varchar(500),
 	`date` datetime not null,
 	`user_id` int not null,

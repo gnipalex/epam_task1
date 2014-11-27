@@ -11,6 +11,7 @@ public class Order {
 	private int userId;
 	private PayType payType;
 	private DeliveryType deliveryType;
+	private String address;
 
 	private Collection<OrderItem> items;
 
@@ -77,4 +78,13 @@ public class Order {
 	public void setDeliveryType(DeliveryType deliveryType) {
 		this.deliveryType = deliveryType;
 	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
 }

@@ -127,15 +127,6 @@ public class ProductDaoMySql implements ProductDao {
 
 	@Override
 	public Collection<Product> getAll(Connection con) throws SQLException {
-		// try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_ALL)) {
-		// ResultSet rs = prst.executeQuery();
-		// Collection<Product> products = new ArrayList<>();
-		// while (rs.next()) {
-		// products.add(extractProduct(rs));
-		// }
-		// rs.close();
-		// return products;
-		// }
 		return getAllByQuery(SQL_SELECT_ALL, null, con);
 	}
 
@@ -245,21 +236,4 @@ public class ProductDaoMySql implements ProductDao {
 			return count;
 		}
 	}
-
-//	public static void main(String[] args) {
-//		ProductFilterBean bean = new ProductFilterBean();
-//		//bean.setAscending(false);
-//		bean.setSortMode(ProductSortMode.PRICE_ASC);
-//		bean.setCategoryIds(Arrays.asList(5, 3, 8, 4));
-//		bean.setPriceLow(100);
-//		bean.setManufacturerIds(Arrays.asList(1, 7, 80, 11));
-//		ProductDaoMySql prodDao = new ProductDaoMySql();
-//		SqlStatementBuilder builder = prodDao.buildCompleteStatement(bean);
-//		String query = builder.buildSql();
-//		System.out.println(query);
-//		for (Object o : builder.getArgs()) {
-//			System.out.println(o);
-//		}
-//	}
-
 }
