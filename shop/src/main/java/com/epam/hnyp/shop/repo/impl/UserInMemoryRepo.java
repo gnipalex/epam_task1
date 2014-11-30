@@ -1,8 +1,8 @@
 package com.epam.hnyp.shop.repo.impl;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -86,10 +86,10 @@ public class UserInMemoryRepo implements UserRepo {
 	}
 
 	@Override
-	public Collection<User> getAll() {
+	public List<User> getAll() {
 		r.lock();
 		try {
-			return Collections.unmodifiableCollection(usersById.values());
+			return new ArrayList<User>(usersById.values());
 		} finally {
 			r.unlock();
 		}

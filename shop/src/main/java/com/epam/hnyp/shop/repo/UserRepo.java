@@ -1,6 +1,6 @@
 package com.epam.hnyp.shop.repo;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.model.User;
 
@@ -17,5 +17,5 @@ public interface UserRepo {
 	void update(User user);
 	User get(int id);
 	User getByLogin(String login);
-	Collection<User> getAll();
+	List<User> getAll();
 }

@@ -2,7 +2,7 @@ package com.epam.hnyp.shop.service.impl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.dao.UserDao;
 import com.epam.hnyp.shop.model.User;
@@ -78,11 +78,11 @@ public class UserServiceDaoImpl implements UserService {
 	}
 
 	@Override
-	public Collection<User> getAll() {
+	public List<User> getAll() {
 		return transactionManager
-				.doInTransaction(new ITransactedOperation<Collection<User>>() {
+				.doInTransaction(new ITransactedOperation<List<User>>() {
 					@Override
-					public Collection<User> execute(Connection con)
+					public List<User> execute(Connection con)
 							throws SQLException {
 						return userDao.getAll(con);
 					}

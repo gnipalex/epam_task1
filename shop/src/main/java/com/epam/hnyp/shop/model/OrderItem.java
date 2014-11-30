@@ -7,6 +7,7 @@ public class OrderItem {
 	private long actualPrice;
 	private int count;
 	
+	//not persistent
 	private Product product;
 	
 	public OrderItem(int id, int orderId, int productId, long actualPrice,

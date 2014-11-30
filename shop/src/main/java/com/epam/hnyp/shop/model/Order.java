@@ -1,7 +1,7 @@
 package com.epam.hnyp.shop.model;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public class Order {
 	private int id;
@@ -13,8 +13,11 @@ public class Order {
 	private DeliveryType deliveryType;
 	private String address;
 
-	private Collection<OrderItem> items;
-
+	//not persistent
+	private List<OrderItem> items;
+	private int itemCount;
+	private long totalPrice;
+	
 	public int getId() {
 		return id;
 	}
@@ -55,11 +58,11 @@ public class Order {
 		this.userId = userId;
 	}
 
-	public Collection<OrderItem> getItems() {
+	public List<OrderItem> getItems() {
 		return items;
 	}
 
-	public void setItems(final Collection<OrderItem> items) {
+	public void setItems(List<OrderItem> items) {
 		this.items = items;
 	}
 
@@ -85,6 +88,22 @@ public class Order {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public int getItemCount() {
+		return itemCount;
+	}
+
+	public void setItemCount(int itemCount) {
+		this.itemCount = itemCount;
+	}
+
+	public long getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(long totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 	
 }

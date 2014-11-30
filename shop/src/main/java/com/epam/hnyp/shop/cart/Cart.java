@@ -1,15 +1,11 @@
 package com.epam.hnyp.shop.cart;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.epam.hnyp.shop.model.Order;
-import com.epam.hnyp.shop.model.OrderItem;
 import com.epam.hnyp.shop.model.Product;
 
 public class Cart implements Serializable {
@@ -18,23 +14,27 @@ public class Cart implements Serializable {
 
 	private Map<Integer, CartItem<Product>> items = new LinkedHashMap<>();
 
-	public void add(Product p) {
+	public int add(Product p) {
 		CartItem<Product> item = items.get(p.getId());
 		if (item != null) {
 			item.increment();
 		} else {
-			items.put(p.getId(), new CartItem<Product>(p));
+			item = new CartItem<Product>(p);
+			items.put(p.getId(), item);
 		}
+		return item.getCount();
 	}
 
-	public void remove(int id) {
+	public int remove(int id) {
 		CartItem<Product> item = items.get(id);
 		if (item != null) {
 			item.decrement();
 			if (item.getCount() < 1) {
 				items.remove(id);
 			}
+			return item.getCount();
 		}
+		return 0;
 	}
 
 	public int getTotalCount() {
@@ -77,6 +77,8 @@ public class Cart implements Serializable {
 	}
 
 	public static class CartStateException extends Exception {
+		private static final long serialVersionUID = 1L;
+
 		public CartStateException() {
 			super();
 		}

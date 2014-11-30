@@ -19,7 +19,7 @@ import com.epam.hnyp.shop.listener.ContextInitializer;
 import com.epam.hnyp.shop.model.Category;
 import com.epam.hnyp.shop.model.Manufacturer;
 import com.epam.hnyp.shop.model.Product;
-import com.epam.hnyp.shop.service.ProductsService;
+import com.epam.hnyp.shop.service.ProductService;
 
 public class ProductsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -37,11 +37,11 @@ public class ProductsServlet extends HttpServlet {
 	public static final String FORM_MANUFACTURES_PARAM = "manuf";
 	public static final String FORM_PAGE_NUMBER_PARAM = "pageNumber";
 
-	private ProductsService productsService;
+	private ProductService productsService;
 
 	@Override
 	public void init() throws ServletException {
-		this.productsService = (ProductsService) getServletContext()
+		this.productsService = (ProductService) getServletContext()
 				.getAttribute(ContextInitializer.INIT_PRODUCTS_SERVICE_KEY);
 	}
 

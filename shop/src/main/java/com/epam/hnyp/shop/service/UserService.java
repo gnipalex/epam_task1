@@ -1,6 +1,6 @@
 package com.epam.hnyp.shop.service;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.model.User;
 
@@ -47,5 +47,5 @@ public interface UserService {
 	 * @param user
 	 * @throws ServiceLayerException if error occured at data access level
 	 */
-	Collection<User> getAll();
+	List<User> getAll();
 }

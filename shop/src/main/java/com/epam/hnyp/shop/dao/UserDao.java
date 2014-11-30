@@ -2,7 +2,7 @@ package com.epam.hnyp.shop.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.model.User;
 
@@ -12,5 +12,5 @@ public interface UserDao {
 	void update(User user, Connection con) throws SQLException;
 	User get(int id, Connection con) throws SQLException;
 	User getByLogin(String login, Connection con) throws SQLException;
-	Collection<User> getAll(Connection con) throws SQLException;
+	List<User> getAll(Connection con) throws SQLException;
 }

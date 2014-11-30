@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.dao.CategoryDao;
 import com.epam.hnyp.shop.model.Category;
@@ -73,10 +73,10 @@ public class CategoryDaoMySql implements CategoryDao{
 	}
 
 	@Override
-	public Collection<Category> getAll(Connection con) throws SQLException {
+	public List<Category> getAll(Connection con) throws SQLException {
 		try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_ALL)) {
 			ResultSet rs = prst.executeQuery();
-			Collection<Category> categories = new ArrayList<>();
+			List<Category> categories = new ArrayList<>();
 			while (rs.next()) {
 				Category c = extractCategory(rs);
 				categories.add(c);

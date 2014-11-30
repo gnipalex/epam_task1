@@ -61,10 +61,6 @@ function validateJS(form) {
 		valid = false;
 	}
 
-	/*
-	 * if (!validateAvatar(elems.avatar)) { alert("Please select a .jpg file
-	 * instead!"); valid = false; }
-	 */
 	resetErrorJSNew(elems.avatar.name);
 	if (elems.avatar.value.length > 0) {
 		var ext = elems.avatar.value;
@@ -78,4 +74,24 @@ function validateJS(form) {
 	}
 
 	return valid;
+}
+
+function checkLogin(loginElement) {
+	if (!loginElement.value) {
+		return;
+	}
+	resetErrorJSNew(loginElement.name);
+	$.ajax({
+		url : document.getElementById('login_check_url').value,
+		data : {'login' : loginElement.value}
+	}).done(function(resp) {
+		if (resp.empty) {
+			showErrorJSNew(loginElement.name, document.getElementById('res_error_email_empty').value);
+		} else if (resp.exist) {
+			showErrorJSNew(loginElement.name, document.getElementById('res_error_email_already_in_use').value);
+		}
+	}).fail(function () {
+		showErrorJSNew(loginElement.name, document.getElementById('res_error_email_check_fail').value);
+	});
+	
 }

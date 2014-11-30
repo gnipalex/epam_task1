@@ -2,7 +2,7 @@ package com.epam.hnyp.shop.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.model.Category;
 
@@ -11,5 +11,5 @@ public interface CategoryDao {
 	Category get(int id, Connection con) throws SQLException;
 	void update(Category c, Connection con) throws SQLException;
 	void remove(int id, Connection con) throws SQLException;
-	Collection<Category> getAll(Connection con) throws SQLException;
+	List<Category> getAll(Connection con) throws SQLException;
 }

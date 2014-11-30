@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.dao.ManufacturerDao;
 import com.epam.hnyp.shop.model.Manufacturer;
@@ -73,10 +73,10 @@ public class ManufacturerDaoMySql implements ManufacturerDao {
 	}
 
 	@Override
-	public Collection<Manufacturer> getAll(Connection con) throws SQLException {
+	public List<Manufacturer> getAll(Connection con) throws SQLException {
 		try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_ALL)) {
 			ResultSet rs = prst.executeQuery();
-			Collection<Manufacturer> vendors = new ArrayList<>();
+			List<Manufacturer> vendors = new ArrayList<>();
 			while (rs.next()) {
 				Manufacturer v = extractVendor(rs);
 				vendors.add(v);

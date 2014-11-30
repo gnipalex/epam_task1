@@ -3,6 +3,7 @@ package com.epam.hnyp.shop.service.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 
 import com.epam.hnyp.shop.dao.CategoryDao;
 import com.epam.hnyp.shop.dao.ManufacturerDao;
@@ -11,15 +12,15 @@ import com.epam.hnyp.shop.form.ProductFilterBean;
 import com.epam.hnyp.shop.model.Category;
 import com.epam.hnyp.shop.model.Manufacturer;
 import com.epam.hnyp.shop.model.Product;
-import com.epam.hnyp.shop.service.ProductsService;
+import com.epam.hnyp.shop.service.ProductService;
 
-public class ProductsServiceDaoImpl implements ProductsService {
+public class ProductServiceDaoImpl implements ProductService {
 	private TransactionManager transactionManager;
 	private ProductDao productDao;
 	private CategoryDao categoryDao;
 	private ManufacturerDao manufacturerDao;
 	
-	public ProductsServiceDaoImpl(TransactionManager transactionManager,
+	public ProductServiceDaoImpl(TransactionManager transactionManager,
 			ProductDao productDao, CategoryDao categoryDao,
 			ManufacturerDao manufacturerDao) {
 		this.transactionManager = transactionManager;
@@ -83,12 +84,12 @@ public class ProductsServiceDaoImpl implements ProductsService {
 	}
 
 	@Override
-	public Collection<Product> getAllProducts() {
-		return transactionManager.doInTransaction(new ITransactedOperation<Collection<Product>>() {
+	public List<Product> getAllProducts() {
+		return transactionManager.doInTransaction(new ITransactedOperation<List<Product>>() {
 			@Override
-			public Collection<Product> execute(Connection con)
+			public List<Product> execute(Connection con)
 					throws SQLException {
-				Collection<Product> items = productDao.getAll(con);
+				List<Product> items = productDao.getAll(con);
 				if (items != null && !items.isEmpty()){
 					for (Product p : items) {
 						initProduct(p, con);
@@ -100,12 +101,12 @@ public class ProductsServiceDaoImpl implements ProductsService {
 	}
 
 	@Override
-	public Collection<Product> getProductsByFilter(final ProductFilterBean filter) {
-		return transactionManager.doInTransaction(new ITransactedOperation<Collection<Product>>() {
+	public List<Product> getProductsByFilter(final ProductFilterBean filter) {
+		return transactionManager.doInTransaction(new ITransactedOperation<List<Product>>() {
 			@Override
-			public Collection<Product> execute(Connection con)
+			public List<Product> execute(Connection con)
 					throws SQLException {
-				Collection<Product> items = productDao.getByFilter(filter, con);
+				List<Product> items = productDao.getByFilter(filter, con);
 				if (items != null && !items.isEmpty()){
 					for (Product p : items) {
 						initProduct(p, con);
@@ -128,10 +129,10 @@ public class ProductsServiceDaoImpl implements ProductsService {
 	}
 
 	@Override
-	public Collection<Manufacturer> getAllManufacturers() {
-		return transactionManager.doInTransaction(new ITransactedOperation<Collection<Manufacturer>>() {
+	public List<Manufacturer> getAllManufacturers() {
+		return transactionManager.doInTransaction(new ITransactedOperation<List<Manufacturer>>() {
 			@Override
-			public Collection<Manufacturer> execute(Connection con)
+			public List<Manufacturer> execute(Connection con)
 					throws SQLException {
 				return manufacturerDao.getAll(con);
 			}
@@ -139,10 +140,10 @@ public class ProductsServiceDaoImpl implements ProductsService {
 	}
 
 	@Override
-	public Collection<Category> getAllCategories() {
-		return transactionManager.doInTransaction(new ITransactedOperation<Collection<Category>>() {
+	public List<Category> getAllCategories() {
+		return transactionManager.doInTransaction(new ITransactedOperation<List<Category>>() {
 			@Override
-			public Collection<Category> execute(Connection con)
+			public List<Category> execute(Connection con)
 					throws SQLException {
 				return categoryDao.getAll(con);
 			}

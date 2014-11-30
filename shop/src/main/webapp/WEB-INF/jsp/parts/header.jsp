@@ -9,7 +9,7 @@
 			<h4>
 				<a href="">VIEW CART</a>
 			</h4>
-			<br /> <span class="txt">0 items</span>
+			<br/><span class="txt"><span id="cart_count_id">0</span> items, total price <span id="cart_price_id">10</span> $</span>
 		</div>
 	</div>
 	<div class="topong wideavablock">

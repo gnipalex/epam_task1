@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.epam.hnyp.shop.dao.ProductDao;
@@ -126,11 +125,11 @@ public class ProductDaoMySql implements ProductDao {
 	}
 
 	@Override
-	public Collection<Product> getAll(Connection con) throws SQLException {
+	public List<Product> getAll(Connection con) throws SQLException {
 		return getAllByQuery(SQL_SELECT_ALL, null, con);
 	}
 
-	private Collection<Product> getAllByQuery(String query, List<Object> args,
+	private List<Product> getAllByQuery(String query, List<Object> args,
 			Connection con) throws SQLException {
 		try (PreparedStatement prst = con.prepareStatement(query)) {
 			if (args != null) {
@@ -140,7 +139,7 @@ public class ProductDaoMySql implements ProductDao {
 				}
 			}
 			ResultSet rs = prst.executeQuery();
-			Collection<Product> products = new ArrayList<>();
+			List<Product> products = new ArrayList<>();
 			while (rs.next()) {
 				products.add(extractProduct(rs));
 			}
@@ -150,7 +149,7 @@ public class ProductDaoMySql implements ProductDao {
 	}
 
 	@Override
-	public Collection<Product> getByFilter(ProductFilterBean filter,
+	public List<Product> getByFilter(ProductFilterBean filter,
 			Connection con) throws SQLException {
 		SqlStatementBuilder builder = buildCompleteStatement(filter);
 		return getAllByQuery(builder.buildSql(), builder.getArgs(), con);

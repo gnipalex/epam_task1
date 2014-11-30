@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.epam.hnyp.shop.dao.OrderDao;
@@ -23,6 +24,9 @@ public class OrderDaoMySql implements OrderDao {
 	public static final String SQL_UPDATE_BY_ID = "UPDATE orders SET status=?, description=?, date=?, user_id=?, "
 			+ "delivery=?, pay_type=?, address=? WHERE id=?";
 	public static final String SQL_REMOVE_BY_ID = "DELETE FROM orders o WHERE o.id=?";
+	public static final String SQL_SELECT_BY_USER_ID = "SELECT * FROM orders o WHERE o.user_id = ?";
+	public static final String SQL_UPDATE_STATUS_BY_ID = "UPDATE orders SET status=? WHERE id = ?";
+	public static final String SQL_SELECT_BY_PERIOD = "SELECT * FROM orders o WHERE o.date >= ? AND o.date <= ?";
 
 	@Override
 	public List<Order> getAll(Connection con) throws SQLException {
@@ -117,6 +121,48 @@ public class OrderDaoMySql implements OrderDao {
 		try (PreparedStatement prst = con.prepareStatement(SQL_REMOVE_BY_ID)) {
 			prst.setInt(1, id);
 			prst.executeUpdate();
+		}
+	}
+
+	@Override
+	public List<Order> getByUserId(int id, Connection con) throws SQLException {
+		try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_BY_USER_ID)) {
+			ResultSet rs = prst.executeQuery();
+			List<Order> orders = new ArrayList<Order>();
+			while (rs.next()) {
+				orders.add(extractOrder(rs));
+			}
+			rs.close();
+			return orders;
+		}
+	}
+
+	@Override
+	public void updateStatus(int id, OrderStatus status, Connection con)
+			throws SQLException {
+		try (PreparedStatement prst = con.prepareStatement(SQL_UPDATE_STATUS_BY_ID)) {
+			int index = 1;
+			prst.setString(index++, status.toString());
+			prst.setInt(index++, id);
+			prst.executeUpdate();
+		}
+		
+	}
+
+	@Override
+	public List<Order> getByPeriod(Date from, Date to, Connection con)
+			throws SQLException {
+		try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_BY_PERIOD)) {
+			int index = 1;
+			prst.setTimestamp(index++, new Timestamp(from.getTime()));
+			prst.setTimestamp(index++, new Timestamp(to.getTime()));
+			ResultSet rs = prst.executeQuery();
+			List<Order> orders = new ArrayList<Order>();
+			while (rs.next()) {
+				orders.add(extractOrder(rs));
+			}
+			rs.close();
+			return orders;
 		}
 	}
 

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -128,11 +128,11 @@ public class UserDaoMySql implements UserDao {
 	}
 
 	@Override
-	public Collection<User> getAll(Connection con) throws SQLException {
+	public List<User> getAll(Connection con) throws SQLException {
 		try (PreparedStatement prst = con.prepareStatement(SQL_SELECT_ALL)) {
 			LOG.debug(prst);
 			ResultSet rs = prst.executeQuery();
-			Collection<User> users = new ArrayList<>();
+			List<User> users = new ArrayList<>();
 			if (rs.next()) {
 				User u = extractUser(rs);
 				users.add(u);

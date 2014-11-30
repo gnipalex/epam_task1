@@ -23,9 +23,9 @@ import com.epam.hnyp.shop.dao.mysql.CategoryDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.ManufacturerDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.ProductDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.UserDaoMySql;
-import com.epam.hnyp.shop.service.ProductsService;
+import com.epam.hnyp.shop.service.ProductService;
 import com.epam.hnyp.shop.service.UserService;
-import com.epam.hnyp.shop.service.impl.ProductsServiceDaoImpl;
+import com.epam.hnyp.shop.service.impl.ProductServiceDaoImpl;
 import com.epam.hnyp.shop.service.impl.TransactionManager;
 import com.epam.hnyp.shop.service.impl.UserServiceDaoImpl;
 import com.epam.hnyp.shop.util.convscope.ConversationScopeFactory;
@@ -122,7 +122,7 @@ public class ContextInitializer implements ServletContextListener {
     	ProductDao productDao = new ProductDaoMySql();
     	CategoryDao categoryDao = new CategoryDaoMySql();
     	ManufacturerDao manufacturerDao = new ManufacturerDaoMySql();
-    	ProductsService productService = new ProductsServiceDaoImpl(tranManager, productDao, categoryDao, manufacturerDao);
+    	ProductService productService = new ProductServiceDaoImpl(tranManager, productDao, categoryDao, manufacturerDao);
     	context.setAttribute(INIT_PRODUCTS_SERVICE_KEY, productService);
     	if (LOG.isInfoEnabled()) {
     		LOG.info("productService initialized = " + productService.getClass().getName());

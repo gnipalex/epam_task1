@@ -1,6 +1,7 @@
 package com.epam.hnyp.shop.service.impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +58,7 @@ public class UserServiceInMemory implements UserService{
 	}
 
 	@Override
-	public Collection<User> getAll() {
+	public List<User> getAll() {
 		return userRepo.getAll();
 	}
 
