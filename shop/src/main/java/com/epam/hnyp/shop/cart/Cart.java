@@ -1,11 +1,15 @@
 package com.epam.hnyp.shop.cart;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.epam.hnyp.shop.model.Order;
+import com.epam.hnyp.shop.model.OrderItem;
 import com.epam.hnyp.shop.model.Product;
 
 public class Cart implements Serializable {
@@ -14,6 +18,10 @@ public class Cart implements Serializable {
 
 	private Map<Integer, CartItem<Product>> items = new LinkedHashMap<>();
 
+	/**
+	 * @param p
+	 * @return incremented count of item in cart
+	 */
 	public int add(Product p) {
 		CartItem<Product> item = items.get(p.getId());
 		if (item != null) {
@@ -24,7 +32,11 @@ public class Cart implements Serializable {
 		}
 		return item.getCount();
 	}
-
+	
+	/**
+	 * @param id
+	 * @return decremented count of item in cart, if element not found returns -1
+	 */
 	public int remove(int id) {
 		CartItem<Product> item = items.get(id);
 		if (item != null) {
@@ -34,9 +46,21 @@ public class Cart implements Serializable {
 			}
 			return item.getCount();
 		}
-		return 0;
+		return -1;
+	}
+	
+	/**
+	 * removes all occurrences of item
+	 * @param id
+	 */
+	public void removeAll(int id) {
+		items.remove(id);
 	}
 
+	/**
+	 * 
+	 * @return total count of items in cart
+	 */
 	public int getTotalCount() {
 		int count = 0;
 		for (CartItem<Product> item : items.values()) {
@@ -45,10 +69,17 @@ public class Cart implements Serializable {
 		return count;
 	}
 
+	/**
+	 * clears cart
+	 */
 	public void clear() {
 		items.clear();
 	}
 
+	/**
+	 * 
+	 * @return total price of all items in cart
+	 */
 	public long getTotalPrice() {
 		long price = 0;
 		for (CartItem<Product> item : items.values()) {
@@ -57,20 +88,24 @@ public class Cart implements Serializable {
 		return price;
 	}
 
-//	public Order createOrder() throws CartStateException {
-//		if (items.isEmpty()) {
-//			throw new CartStateException("cart is empty");
-//		}
-//		Order order = new Order();
-//		List<OrderItem> orderItems = new ArrayList<>();
-//		for (CartItem<Product> cItem : items.values()) {
-//			
-//			orderItems.add(new OrderItem(0, 0, cItem.getItem().getId(), cItem
-//					.getItem().getPrice(), cItem.getCount()));
-//		}
-//		order.setItems(orderItems);
-//		
-//	}
+	/**
+	 * Prepares order model
+	 * @return
+	 * @throws CartStateException
+	 */
+	public Order prepareOrder() throws CartStateException {
+		if (items.isEmpty()) {
+			throw new CartStateException("cart is empty");
+		}
+		Order order = new Order();
+		List<OrderItem> orderItems = new ArrayList<>();
+		for (CartItem<Product> cItem : items.values()) {
+			orderItems.add(new OrderItem(0, 0, cItem.getItem().getId(), cItem
+					.getItem().getPrice(), cItem.getCount()));
+		}
+		order.setItems(orderItems);
+		return order;
+	}
 
 	public Collection<CartItem<Product>> getAllItems() {
 		return Collections.unmodifiableCollection(items.values());
@@ -88,6 +123,12 @@ public class Cart implements Serializable {
 		}
 	}
 
+	/**
+	 * Represents element of cart
+	 * @author Alex
+	 *
+	 * @param <E>
+	 */
 	public static class CartItem<E> {
 		private int count = 1;
 		private E item;
@@ -102,6 +143,10 @@ public class Cart implements Serializable {
 
 		public E getItem() {
 			return item;
+		}
+		
+		public void setItem(E item) {
+			this.item = item;
 		}
 
 		private void increment() {
