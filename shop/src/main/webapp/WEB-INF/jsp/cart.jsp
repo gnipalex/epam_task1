@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Shop - Main</title>
+<title>Shop - Cart</title>
 <meta http-equiv="content-type" content="text/html;charset=cp1251" />
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
 <link rel="stylesheet" href="products.css" type="text/css" />
@@ -73,14 +73,13 @@
 		<%--  <jsp:include page="/WEB-INF/jsp/parts/modules.jsp" /> --%>
 		<div id="maincontent">
 			<div id="introduction">
-				<h2>Products in cart</h2>
+				<h2>Cart</h2>
 			</div>
 			<div style="margin-bottom: 50px;">
 				<c:choose>
 					<c:when test="${not empty SESSION_CART.items}">
 						<table id="cart_table" cellspacing="0">
 							<tr>
-								
 								<th>Product</th>
 								<th>Unit price</th>
 								<th>Count</th>

@@ -32,7 +32,20 @@ function addToCart(id) {
 	})
 }
 
-function increaseItem(id) {
+function incrementItem(row, id) {
+	$.ajax({
+		url : $('#add_to_cart_url').value(),
+		data : { addMode : 'APPEND_ONE', productId : id }
+	}).done(function(resp){
+		if (resp.success) {
+			$(row).children('')
+		}
+	}).fail(function() {
+		alert('ajax fail');
+	});
+}
+
+function decrementItem(id) {
 	
 }
 
