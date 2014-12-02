@@ -50,6 +50,20 @@ public class Cart implements Serializable {
 	}
 	
 	/**
+	 * Gets price for separate item (for all occurrences)
+	 * @param id item id
+	 * @return
+	 */
+	public long getItemPrice(int id) {
+		long price = 0;
+		CartItem<Product> item = items.get(id);
+		if (item != null) {
+			price = item.getCount() * item.getItem().getPrice();
+		}
+		return price;
+	}
+	
+	/**
 	 * removes all occurrences of item
 	 * @param id
 	 */
@@ -91,7 +105,7 @@ public class Cart implements Serializable {
 	/**
 	 * Prepares order model
 	 * @return
-	 * @throws CartStateException
+	 * @throws CartStateException if cart is empty
 	 */
 	public Order prepareOrder() throws CartStateException {
 		if (items.isEmpty()) {
@@ -106,8 +120,12 @@ public class Cart implements Serializable {
 		order.setItems(orderItems);
 		return order;
 	}
-
-	public Collection<CartItem<Product>> getAllItems() {
+	
+	/**
+	 * Collection of all items in cart
+	 * @return
+	 */
+	public Collection<CartItem<Product>> getItems() {
 		return Collections.unmodifiableCollection(items.values());
 	}
 
@@ -129,7 +147,9 @@ public class Cart implements Serializable {
 	 *
 	 * @param <E>
 	 */
-	public static class CartItem<E> {
+	public static class CartItem<E> implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		private int count = 1;
 		private E item;
 

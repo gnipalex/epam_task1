@@ -1,6 +1,8 @@
 package com.epam.hnyp.shop.listener;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -36,30 +38,42 @@ import com.epam.hnyp.shop.util.img.JpegImgProvider;
 public class ContextInitializer implements ServletContextListener {
 	private static final Logger LOG = Logger.getLogger(ContextInitializer.class);
 	
+	public static final String CONF_CONFIG_PROPS = "config.properties";
+	public static final String CONF_AVATAR_FOLDER = "com.epam.hnyp.shop.util.img.ImgProvider.avatarFolder";
+	public static final String CONF_PRODUCT_IMAGE_FOLDER = "com.epam.hnyp.shop.util.img.ImgProvider.productImagesFolder";
+	
 	public static final String PARAM_CAPCHA_SERVER_MODE = "capchaServerMode";
 	public static final String PARAM_CAPCHA_TTL = "capchaTTL";
-	public static final String PARAM_AVATAR_FOLDER = "avatarFolder";
-	public static final String PARAM_PRODUCT_IMAGE_FOLDER = "productImagesFolder";
 	
 	public static final String INIT_CAPCHA_PROVIDER_KEY = "init:capchaProvider";
+	
 	public static final String INIT_USER_SERVICE_KEY = "init:userService";
+	public static final String INIT_PRODUCTS_SERVICE_KEY = "init:productService";
+
 	public static final String INIT_CONVERSATION_SCOPE_FACTORY_KEY = "init:conversationScopeFactory";
 	public static final String INIT_AVATAR_PROVIDER_KEY = "init:avatarProvider";
-	public static final String INIT_PRODUCTS_SERVICE_KEY = "init:productService";
 	public static final String INIT_PRODUCT_IMAGES_PROVIDER_KEY = "init:prodImagesProvider";
 	
     public void contextInitialized(ServletContextEvent arg0) {
     	try {
     		ServletContext context = arg0.getServletContext();
-        	initCapchaProvider(context);      	
+        	initCapchaProvider(context);
         	initServices(context);
-        	initConversationScope(context);       	
-        	initAvatarImageProvider(context);
-        	initProductImageProvider(context);
+        	initConversationScope(context);
+        	
+        	Properties config = readConfigProperties();
+        	initImageProvider(context, config.getProperty(CONF_AVATAR_FOLDER), INIT_AVATAR_PROVIDER_KEY);
+        	initImageProvider(context, config.getProperty(CONF_PRODUCT_IMAGE_FOLDER), INIT_PRODUCT_IMAGES_PROVIDER_KEY);
     	} catch (Exception e) {
-    		LOG.error(e);
-    		throw e;
+    		LOG.error(e.getMessage(), e);
+    		throw new IllegalArgumentException("error initializing context", e);
     	}
+    }
+    
+    public Properties readConfigProperties() throws IOException {
+    	Properties conf = new Properties();
+    	conf.load(ContextInitializer.class.getClassLoader().getResourceAsStream(CONF_CONFIG_PROPS));
+    	return conf;
     }
     
     private void initCapchaProvider(ServletContext context) {
@@ -96,9 +110,6 @@ public class ContextInitializer implements ServletContextListener {
     }
     
     private void initServices(ServletContext context) {
-//    	UserRepo userRepo = new UserInMemoryRepo();
-//    	UsersInitializer.initUsers(userRepo);
-//    	UserService userService = new UserServiceInMemory(userRepo);
     	DataSource ds = null;
     	try {
     		InitialContext initialContext = new InitialContext();
@@ -137,52 +148,23 @@ public class ContextInitializer implements ServletContextListener {
     	}
     }
     
-    private void initAvatarImageProvider(ServletContext context) {
-    	String avatarFolderPath = context.getInitParameter(PARAM_AVATAR_FOLDER);
-    	
-    	if (avatarFolderPath == null || avatarFolderPath.isEmpty()) {
-    		throw new IllegalArgumentException("parameter '" + PARAM_AVATAR_FOLDER + "' must specify folder to contain avatar images");
-    	}
-    	
-    	File folder = new File(avatarFolderPath);
-    	if (!folder.exists() || !folder.isDirectory()) {
-    		if (!folder.mkdirs()) {
-    			throw new IllegalArgumentException("folder specified in parameter '" + PARAM_AVATAR_FOLDER + "' = [" + avatarFolderPath + "] does not exist and can not be created");
-    		}
-    	}
-    	
-    	ImgProvider avatarProvider = new JpegImgProvider(avatarFolderPath);
-    	context.setAttribute(INIT_AVATAR_PROVIDER_KEY, avatarProvider);
-    	
-    	if (LOG.isInfoEnabled()) {
-    		LOG.info("avatar image provider initialized = " + avatarProvider.getClass().getName() + ", images folder = " + avatarFolderPath);
-    	}
-    }
-    
-    private void initProductImageProvider(ServletContext context) {
-    	String productImagesFolderPath = context.getInitParameter(PARAM_PRODUCT_IMAGE_FOLDER);
-    	
-    	if (productImagesFolderPath == null || productImagesFolderPath.isEmpty()) {
-    		throw new IllegalArgumentException("parameter '" + PARAM_PRODUCT_IMAGE_FOLDER + "' must specify folder to contain product images");
-    	}
-    	
-    	File folder = new File(productImagesFolderPath);
-    	if (!folder.exists() || !folder.isDirectory()) {
-    		if (!folder.mkdirs()) {
-    			throw new IllegalArgumentException("folder specified in parameter '" + PARAM_PRODUCT_IMAGE_FOLDER + "' = [" + productImagesFolderPath + "] does not exist and can not be created");
-    		}
-    	}
-    	
-    	ImgProvider prodImgProvider = new JpegImgProvider(productImagesFolderPath);
-    	context.setAttribute(INIT_PRODUCT_IMAGES_PROVIDER_KEY, prodImgProvider);
-    	
-    	if (LOG.isInfoEnabled()) {
-    		LOG.info("product image provider initialized = " + prodImgProvider.getClass().getName() + ", images folder = " + productImagesFolderPath);
-    	}
-    }
-    
-    
+    private void initImageProvider(ServletContext context, String folder, String initKey) {
 
+    	File dir = new File(folder);
+    	if (!dir.exists() || !dir.isDirectory()) {
+    		if (!dir.mkdirs()) {
+    			throw new IllegalArgumentException("folder [" + folder + "] does not exist and can not be created");
+    		}
+    	}
+    	
+    	ImgProvider avatarProvider = new JpegImgProvider(folder);
+    	context.setAttribute(initKey, avatarProvider);
+    	
+    	if (LOG.isInfoEnabled()) {
+    		LOG.info("image provider initialized = " + avatarProvider.getClass().getName() + ", images folder = " + folder);
+    	}
+    }
+    
     public void contextDestroyed(ServletContextEvent arg0) {
 
     }

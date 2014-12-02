@@ -7,9 +7,11 @@
 		<div class="pad">
 			<img src="images/cart.gif" alt="My Cart" />
 			<h4>
-				<a href="">VIEW CART</a>
+				<c:url value="/cart" var="link_cart" />
+				<a href="${link_cart}">VIEW CART</a>
 			</h4>
-			<br/><span class="txt"><span id="cart_count_id">0</span> items, total price <span id="cart_price_id">10</span> $</span>
+			<br/><span class="txt">
+				<span id="cart_count_id">${SESSION_CART.totalCount}</span> items, total price <span id="cart_price_id">${SESSION_CART.totalPrice / 100}</span> $</span>
 		</div>
 	</div>
 	<div class="topong wideavablock">

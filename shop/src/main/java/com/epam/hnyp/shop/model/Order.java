@@ -1,9 +1,14 @@
 package com.epam.hnyp.shop.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable {
+	
+	private static final long serialVersionUID = 1691415738115382419L;
+	
+	
 	private int id;
 	private OrderStatus status;
 	private String description;

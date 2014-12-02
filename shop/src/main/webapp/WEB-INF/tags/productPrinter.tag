@@ -2,6 +2,7 @@
 <%@ attribute name="prod" description="Product entity" required="true"
 	type="com.epam.hnyp.shop.model.Product"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
 
 <c:url var="link_prodImageServlet" value="/productImage"/>
 
@@ -13,5 +14,8 @@
 	<p>Category : ${prod.category.name}</p>
 	<p>Manufacturer : ${prod.manufacturer.name}</p>
 	<p>Description : ${prod.description}</p>
-	<button title="add to cart"></button>
+	<!--  
+	<button class="addToCartButton" title="add to cart"></button>
+	-->
+	<mytags:buyButton cssClass="addToCartButton" productId="${prod.id}" />
 </li>

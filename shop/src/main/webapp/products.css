@@ -26,7 +26,7 @@
 	font-weight: bold;
 }
 
-.products_holder li button {
+.addToCartButton {
 	width: 25px;
 	height: 25px;
 	background: #FFFFFF url(images/cart.gif) no-repeat center;
@@ -36,10 +36,9 @@
 	top: 10px;
 }
 
-.products_holder li button:HOVER {
+.addToCartButton:HOVER {
 	border-bottom: 2px solid red;
 	cursor: pointer;
-	
 }
  
 .products_holder h3 {

@@ -1,7 +1,13 @@
 package com.epam.hnyp.shop.model;
 
+import java.io.Serializable;
 
-public class Product {
+
+public class Product implements Serializable {
+	
+	private static final long serialVersionUID = 163293855381109658L;
+	
+	
 	private int id;
 	private int categoryId;
 	private String name;
@@ -11,6 +17,7 @@ public class Product {
 	private String description;
 	private String imgFile;
 	private boolean available;
+	
 	private Category category;
 	private Manufacturer manufacturer;
 	

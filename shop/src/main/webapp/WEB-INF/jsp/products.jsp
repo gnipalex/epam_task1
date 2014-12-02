@@ -127,5 +127,7 @@
 		</div>
 		<jsp:include page="/WEB-INF/jsp/parts/footer.jsp" />
 	</div>
+	<c:url value="/cartManipulate" var="link_cart_manipulate" />
+	<input type="hidden" id="add_to_cart_url" value="${link_cart_manipulate}" />
 </body>
 </html>

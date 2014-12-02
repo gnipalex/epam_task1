@@ -1,7 +1,13 @@
 package com.epam.hnyp.shop.model;
 
+import java.io.Serializable;
 
-public class User {
+
+public class User implements Serializable {
+	
+	private static final long serialVersionUID = -8842781594869876509L;
+	
+	
 	private int id;
 	private String name;
 	private String lastName;

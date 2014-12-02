@@ -9,14 +9,6 @@
     <param-name>capchaTTL</param-name>
     <param-value>120</param-value>
   </context-param>
-  <context-param>
-    <param-name>avatarFolder</param-name>
-    <param-value>d:/task_shop/avatar</param-value>
-  </context-param>
-  <context-param>
-    <param-name>productImagesFolder</param-name>
-    <param-value>d:/task_shop/product_images</param-value>
-  </context-param>
   <listener>
     <listener-class>com.epam.hnyp.shop.listener.ContextInitializer</listener-class>
   </listener>
@@ -26,12 +18,16 @@
   <welcome-file-list>
     <welcome-file>redirect.jsp</welcome-file>
   </welcome-file-list>
-  <resource-ref>
+ 
+  <!--  <resource-ref>
     <description>data base mysql connection pool config</description>
     <res-ref-name>jdbc/task_shop</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
+  -->
+  
+  <!-- servlet mappings -->
   <servlet>
     <servlet-name>CapchaDrawerServlet</servlet-name>
     <servlet-class>com.epam.hnyp.shop.servlet.CapchaDrawerServlet</servlet-class>
@@ -65,11 +61,11 @@
     <url-pattern>/loginCheck</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>MainServlet</servlet-name>
+    <servlet-name>MainJSP</servlet-name>
     <jsp-file>/WEB-INF/jsp/main.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
-    <servlet-name>MainServlet</servlet-name>
+    <servlet-name>MainJSP</servlet-name>
     <url-pattern>/main</url-pattern>
   </servlet-mapping>
   <servlet>
@@ -104,6 +100,24 @@
     <servlet-name>ProductImageServlet</servlet-name>
     <url-pattern>/productImage</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>CartManipulateServlet</servlet-name>
+  	<servlet-class>com.epam.hnyp.shop.servlet.CartManipulateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>CartManipulateServlet</servlet-name>
+  	<url-pattern>/cartManipulate</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>ShowCartJSP</servlet-name>
+  	<jsp-file>/WEB-INF/jsp/cart.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ShowCartJSP</servlet-name>
+  	<url-pattern>/cart</url-pattern>
+  </servlet-mapping>
+  
+  <!-- error mappings -->
   <servlet>
     <servlet-name>ServiceErrorServlet</servlet-name>
     <jsp-file>/WEB-INF/jsp/error/service_error.jsp</jsp-file>

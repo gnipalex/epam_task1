@@ -1,5 +1,6 @@
 package com.epam.hnyp.shop.model;
 
+
 public enum DeliveryType {
 	SELFDELIVERY("self delivery"), HOMEDELIVERY("home delivery");
 	

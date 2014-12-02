@@ -28,6 +28,7 @@ public class CartManipulateServlet extends HttpServlet {
 	public static final String JSON_TOTAL_COUNT = "totalCount";
 	public static final String JSON_TOTAL_PRICE = "totalPrice";
 	public static final String JSON_ITEM_COUNT = "itemCount";
+	public static final String JSON_ITEM_PRICE = "itemPrice";
 	public static final String JSON_SUCCESS = "success";
 
 	private ProductService productService;
@@ -63,7 +64,7 @@ public class CartManipulateServlet extends HttpServlet {
 			}
 		}
 		int totalCount = 0, itemCount = 0;
-		long totalPrice = 0;
+		long totalPrice = 0, itemPrice = 0;
 		boolean success = true;
 		switch (addMode) {
 		case APPEND_ONE:
@@ -72,6 +73,7 @@ public class CartManipulateServlet extends HttpServlet {
 				success = false;
 			} else {
 				itemCount = cart.add(product);
+				itemPrice = cart.getItemPrice(prodId);
 			}
 			break;
 		case REMOVE_ONE:
@@ -79,6 +81,7 @@ public class CartManipulateServlet extends HttpServlet {
 				success = false;
 			} else {
 				itemCount = cart.remove(prodId);
+				itemPrice = cart.getItemPrice(prodId);
 			}
 			break;
 		case CLEAR_CART:
@@ -86,20 +89,23 @@ public class CartManipulateServlet extends HttpServlet {
 			break;
 		case REMOVE_ALL:
 			cart.removeAll(prodId);
-			totalCount = cart.getTotalCount();
-			totalPrice = cart.getTotalPrice();
 			break;
 		}
+		totalCount = cart.getTotalCount();
+		totalPrice = cart.getTotalPrice();
+		
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
-		writer.write(prepareJsonAnswer(totalCount, totalPrice, itemCount, success));
+		writer.write(prepareJsonAnswer(totalCount, totalPrice, itemCount, itemPrice, success));
 	}
 
 	private String prepareJsonAnswer(int totalCount, long totalPrice,
-			int itemCount, boolean success) {
+			int itemCount, long itemPrice, boolean success) {
 		StringBuilder result = new StringBuilder();
 		result.append("{ \"").append(JSON_ITEM_COUNT).append("\" : ")
 				.append(itemCount).append(", ");
+		result.append("\"").append(JSON_ITEM_PRICE).append("\" : ")
+				.append(itemPrice).append(", ");
 		result.append("\"").append(JSON_TOTAL_PRICE).append("\" : ")
 				.append(totalPrice).append(", ");
 		result.append("\"").append(JSON_TOTAL_COUNT).append("\" : ")
