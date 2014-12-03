@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="products.css" type="text/css" />
 <link rel="stylesheet" href="cart.css" type="text/css" />
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="js/cartViewer.js"></script>
+<script type="text/javascript" src="js/products.js"></script>
+
 </head>
 <body>
 	<div id="content">
@@ -21,14 +22,15 @@
 		<%--  <jsp:include page="/WEB-INF/jsp/parts/modules.jsp" /> --%>
 		<div id="maincontent">
 			<div id="introduction">
-				<h2>Cart</h2>
+				<h2>Order preparing</h2>
 			</div>
 			<div id="cart_wraper">
-				<mytags:cartViewer cart="${SESSION_CART}" showButtons="true" />
 				<p>
-					<button onclick="clearCart();">Clear cart</button>
-					<c:url value="/prepareOrder" var="link_prepare_order" />
-					<a href="${link_prepare_order}"><button>Prepare order</button></a>
+					<mytags:cartViewer cart="${SESSION_CART}" showButtons="false"/>
+				</p>
+				<hr />
+				<p>
+					
 				</p>
 			</div>
 		</div>

@@ -25,6 +25,9 @@ import com.sun.imageio.plugins.jpeg.JPEGImageWriterSpi;
  *
  */
 public class JpegImgProvider implements ImgProvider {
+	public static final String MIME_TYPE = "image/jpeg";
+	public static final String FILE_EXT = "jpg";
+	
 	private String diskFolder;
 
 	public JpegImgProvider(String diskFolder) {
@@ -35,14 +38,16 @@ public class JpegImgProvider implements ImgProvider {
 	public BufferedImage read(InputStream is) throws IOException {
 		ImageReader reader = new JPEGImageReader(new JPEGImageReaderSpi());
 		reader.setInput(ImageIO.createImageInputStream(is));
-		return reader.read(0);
+		BufferedImage bufImg = reader.read(0);
+		reader.dispose();
+		return bufImg;
 	}
 
 	@Override
 	public ImageInfo read(String fileName) throws IOException {
 		try (FileInputStream fis = new FileInputStream(diskFolder + File.separator + fileName)) {
 			BufferedImage image = read(fis);
-			return new ImageInfo(image, "image/jpeg");
+			return new ImageInfo(image, MIME_TYPE);
 		} 
 	}
 
@@ -63,6 +68,7 @@ public class JpegImgProvider implements ImgProvider {
 		ImageWriter writer = new JPEGImageWriter(new JPEGImageWriterSpi());
 		writer.setOutput(ImageIO.createImageOutputStream(os));
 		writer.write(img);
+		writer.dispose();
 	}
 
 	@Override
@@ -80,12 +86,12 @@ public class JpegImgProvider implements ImgProvider {
 
 	@Override
 	public boolean supportsMimeType(String mimeType) {
-		return mimeType.equals("image/jpeg");
+		return mimeType.equals(MIME_TYPE);
 	}
 	
 	@Override
 	public String getFileNameSuffix() {
-		return "jpg";
+		return FILE_EXT;
 	}
 
 	@Override

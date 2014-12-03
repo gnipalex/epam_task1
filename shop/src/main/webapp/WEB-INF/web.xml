@@ -18,16 +18,12 @@
   <welcome-file-list>
     <welcome-file>redirect.jsp</welcome-file>
   </welcome-file-list>
- 
-  <!--  <resource-ref>
-    <description>data base mysql connection pool config</description>
-    <res-ref-name>jdbc/task_shop</res-ref-name>
-    <res-type>javax.sql.DataSource</res-type>
-    <res-auth>Container</res-auth>
-  </resource-ref>
-  -->
   
-  <!-- servlet mappings -->
+  <filter>
+  	<filter-name>MakingOrderFilter</filter-name>
+  	<filter-class></filter-class>
+  </filter>
+  
   <servlet>
     <servlet-name>CapchaDrawerServlet</servlet-name>
     <servlet-class>com.epam.hnyp.shop.servlet.CapchaDrawerServlet</servlet-class>
@@ -101,23 +97,29 @@
     <url-pattern>/productImage</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>CartManipulateServlet</servlet-name>
-  	<servlet-class>com.epam.hnyp.shop.servlet.CartManipulateServlet</servlet-class>
+    <servlet-name>CartManipulateServlet</servlet-name>
+    <servlet-class>com.epam.hnyp.shop.servlet.CartManipulateServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>CartManipulateServlet</servlet-name>
-  	<url-pattern>/cartManipulate</url-pattern>
+    <servlet-name>CartManipulateServlet</servlet-name>
+    <url-pattern>/cartManipulate</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>ShowCartJSP</servlet-name>
-  	<jsp-file>/WEB-INF/jsp/cart.jsp</jsp-file>
+    <servlet-name>ShowCartJSP</servlet-name>
+    <jsp-file>/WEB-INF/jsp/cart.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>ShowCartJSP</servlet-name>
-  	<url-pattern>/cart</url-pattern>
+    <servlet-name>ShowCartJSP</servlet-name>
+    <url-pattern>/cart</url-pattern>
   </servlet-mapping>
-  
-  <!-- error mappings -->
+  <servlet>
+    <servlet-name>PrepareOrderServlet</servlet-name>
+    <servlet-class>com.epam.hnyp.shop.servlet.PrepareOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PrepareOrderServlet</servlet-name>
+    <url-pattern>/prepareOrder</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>ServiceErrorServlet</servlet-name>
     <jsp-file>/WEB-INF/jsp/error/service_error.jsp</jsp-file>

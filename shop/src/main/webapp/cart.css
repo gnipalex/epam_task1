@@ -1,0 +1,50 @@
+#cart_wraper {
+	width:600px;
+	margin: 0 auto 50px;
+}
+#cart_table {
+	font-size: 10pt;
+	border-radius: 4px;
+	text-align: right;
+}
+
+#cart_table th, td {
+	padding: 10px;
+}
+
+#cart_table thead tr {
+	height: 50px;
+	background-color: #92AFC8;
+}
+#cart_table tbody tr {
+	height: 50px;
+	background-color: #E2E8DE;
+}
+
+#cart_table th {
+	width: 150px;
+}
+
+#cart_table th+th {
+	width: 50px;
+}
+
+#cart_table th+th+th {
+	width: 200px;
+}
+
+#cart_table th+th+th+th {
+	width: 50px;
+}
+
+#cart_table th+th+th+th+th {
+	width: 30px;
+}
+
+.table_button {
+	font-weight: bold;
+	font-size: 11pt;
+	color: red;
+	width: 25px;
+	height: 25px;
+}

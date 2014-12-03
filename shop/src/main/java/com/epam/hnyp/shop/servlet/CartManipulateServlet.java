@@ -41,6 +41,16 @@ public class CartManipulateServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		process(request, response);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		process(req, resp);
+	}
+	
+	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Cart cart = (Cart) request.getSession().getAttribute(
 				SessionListener.SESSION_CART_KEY);
 
@@ -89,12 +99,14 @@ public class CartManipulateServlet extends HttpServlet {
 			break;
 		case REMOVE_ALL:
 			cart.removeAll(prodId);
+			itemCount = -1;
 			break;
 		}
 		totalCount = cart.getTotalCount();
 		totalPrice = cart.getTotalPrice();
 		
 		response.setContentType("application/json");
+		response.setHeader("Cache-Control", "public, no-cache");
 		PrintWriter writer = response.getWriter();
 		writer.write(prepareJsonAnswer(totalCount, totalPrice, itemCount, itemPrice, success));
 	}

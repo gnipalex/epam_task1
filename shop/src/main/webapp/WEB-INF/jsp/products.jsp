@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="products.css" type="text/css" />
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/products.js"></script>
+<script type="text/javascript" src="js/cartViewer.js"></script>
 </head>
 <body>
 	<div id="content">
