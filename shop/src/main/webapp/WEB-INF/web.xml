@@ -18,17 +18,15 @@
   <welcome-file-list>
     <welcome-file>redirect.jsp</welcome-file>
   </welcome-file-list>
-   
   <filter>
-  	<filter-name>MakingOrderFilter</filter-name>
-  	<filter-class>com.epam.hnyp.shop.filter.MakingOrderFilter</filter-class>
+    <filter-name>MakingOrderFilter</filter-name>
+    <filter-class>com.epam.hnyp.shop.filter.MakingOrderFilter</filter-class>
   </filter>
   <filter-mapping>
-  	<filter-name>MakingOrderFilter</filter-name>
-  	<url-pattern>/prepareOrder</url-pattern>
-  	<url-pattern>/createOrder</url-pattern>
+    <filter-name>MakingOrderFilter</filter-name>
+    <url-pattern>/prepareOrder</url-pattern>
+    <url-pattern>/createOrder</url-pattern>
   </filter-mapping>
-  
   <servlet>
     <servlet-name>CapchaDrawerServlet</servlet-name>
     <servlet-class>com.epam.hnyp.shop.servlet.CapchaDrawerServlet</servlet-class>
@@ -116,6 +114,14 @@
   <servlet-mapping>
     <servlet-name>ShowCartJSP</servlet-name>
     <url-pattern>/cart</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>MessageViewServlet</servlet-name>
+    <servlet-class>com.epam.hnyp.shop.servlet.MessageViewerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MessageViewServlet</servlet-name>
+    <url-pattern>/message</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>PrepareOrderServlet</servlet-name>

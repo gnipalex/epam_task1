@@ -6,7 +6,6 @@ public class OrderItem implements Serializable {
 
 	private static final long serialVersionUID = 4879181342214775490L;
 	
-	
 	private int id;
 	private int orderId;
 	private int productId;

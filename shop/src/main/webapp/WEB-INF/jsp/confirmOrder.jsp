@@ -6,18 +6,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-<title>Shop - Cart</title>
+<title>Shop - Confirm order</title>
 <meta http-equiv="content-type" content="text/html;charset=cp1251" />
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
 <link rel="stylesheet" href="products.css" type="text/css" />
 <link rel="stylesheet" href="cart.css" type="text/css" />
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/products.js"></script>
-<style type="text/css">
-.errmessage {
-	color: red;
-}
-</style>
 </head>
 <body>
 	<div id="content">
@@ -30,7 +25,7 @@
 			</div>
 			<div id="cart_wraper">
 				<p>
-					<mytags:cartViewer cart="${PREPARED_CART_KEY}" showButtons="false" />
+					<mytags:orderViewer order="${}"/>
 				</p>
 				<hr />
 				<c:url value="/prepareOrder" var="link_prepareOrder" />

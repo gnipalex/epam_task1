@@ -20,8 +20,6 @@ public class Order implements Serializable {
 
 	//not persistent
 	private List<OrderItem> items;
-	
-	//????
 	private int itemCount;
 	private long totalPrice;
 	

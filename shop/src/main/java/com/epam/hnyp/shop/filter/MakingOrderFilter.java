@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.epam.hnyp.shop.cart.Cart;
-import com.epam.hnyp.shop.listener.SessionListener;
 import com.epam.hnyp.shop.model.User;
 import com.epam.hnyp.shop.servlet.LoginServlet;
 

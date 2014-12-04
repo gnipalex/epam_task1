@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.epam.hnyp.shop.model.Order;
 import com.epam.hnyp.shop.model.OrderItem;
@@ -17,6 +18,24 @@ public class Cart implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Map<Integer, CartItem<Product>> items = new LinkedHashMap<>();
+
+	/**
+	 * Creates empty cart
+	 */
+	public Cart() {
+	}
+	
+	/**
+	 * Creates copy of existing cart
+	 * @param cart
+	 */
+	public Cart(Cart cart) {
+		for (Entry<Integer, CartItem<Product>> e : cart.items.entrySet()) {
+			CartItem<Product> ci = new CartItem<Product>(e.getValue().item);
+			ci.count = e.getValue().count;
+			this.items.put(e.getKey(), ci);
+		}
+	}
 
 	/**
 	 * @param p
@@ -114,10 +133,13 @@ public class Cart implements Serializable {
 		Order order = new Order();
 		List<OrderItem> orderItems = new ArrayList<>();
 		for (CartItem<Product> cItem : items.values()) {
-			orderItems.add(new OrderItem(0, 0, cItem.getItem().getId(), cItem
-					.getItem().getPrice(), cItem.getCount()));
+			OrderItem oi = new OrderItem(0, 0, cItem.getItem().getId(), cItem.getItem().getPrice(), cItem.getCount());
+			oi.setProduct(cItem.getItem());
+			orderItems.add(oi);
 		}
 		order.setItems(orderItems);
+		order.setItemCount(getTotalCount());
+		order.setTotalPrice(getTotalPrice());
 		return order;
 	}
 	
