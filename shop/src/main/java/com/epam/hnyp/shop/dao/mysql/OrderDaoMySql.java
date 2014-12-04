@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,10 +20,10 @@ public class OrderDaoMySql implements OrderDao {
 
 	public static final String SQL_SELECT_ALL = "SELECT * FROM orders";
 	public static final String SQL_SELECT_BY_ID = "SELECT * FROM orders o WHERE o.id = ?";
-	public static final String SQL_INSERT = "INSERT INTO orders(status,description,date,user_id,delivery,pay_type,address) "
-			+ "VALUES(?,?,?,?,?,?,?)";
+	public static final String SQL_INSERT = "INSERT INTO orders(status,description,date,user_id,delivery,pay_type,address,credit_card_code) "
+			+ "VALUES(?,?,?,?,?,?,?,?)";
 	public static final String SQL_UPDATE_BY_ID = "UPDATE orders SET status=?, description=?, date=?, user_id=?, "
-			+ "delivery=?, pay_type=?, address=? WHERE id=?";
+			+ "delivery=?, pay_type=?, address=?,credit_card_code=? WHERE id=?";
 	public static final String SQL_REMOVE_BY_ID = "DELETE FROM orders o WHERE o.id=?";
 	public static final String SQL_SELECT_BY_USER_ID = "SELECT * FROM orders o WHERE o.user_id = ?";
 	public static final String SQL_UPDATE_STATUS_BY_ID = "UPDATE orders SET status=? WHERE id = ?";
@@ -59,6 +60,7 @@ public class OrderDaoMySql implements OrderDao {
 			order.setPayType(PayType.valueOf(rs.getString("pay_type")));
 		} catch (Exception ex) {
 		}
+		order.setCreditCardCode(rs.getString("credit_card_code"));
 		return order;
 	}
 
@@ -81,12 +83,25 @@ public class OrderDaoMySql implements OrderDao {
 		try (PreparedStatement prst = con.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			int index = 1;
 			prst.setString(index++, order.getStatus().toString());
-			prst.setString(index++, order.getDescription());
+			if (order.getDescription() != null) {
+				prst.setString(index++, order.getDescription());
+			} else {
+				prst.setNull(index++, Types.NULL);
+			}
 			prst.setTimestamp(index++, new Timestamp(order.getDate().getTime()));
 			prst.setInt(index++, order.getUserId());
 			prst.setString(index++, order.getDeliveryType().toString());
 			prst.setString(index++, order.getPayType().toString());
-			prst.setString(index++, order.getAddress());
+			if (order.getAddress() != null) {
+				prst.setString(index++, order.getAddress());
+			} else {
+				prst.setNull(index++, Types.NULL);
+			}
+			if (order.getCreditCardCode() != null){
+				prst.setString(index++, order.getCreditCardCode());
+			} else {
+				prst.setNull(index++, Types.NULL);
+			}
 			prst.executeUpdate();
 			ResultSet rs = prst.getGeneratedKeys();
 			int generatedId = 0;
@@ -96,7 +111,6 @@ public class OrderDaoMySql implements OrderDao {
 			rs.close();
 			return generatedId;
 		}
-
 	}
 
 	@Override
@@ -104,16 +118,28 @@ public class OrderDaoMySql implements OrderDao {
 		try (PreparedStatement prst = con.prepareStatement(SQL_UPDATE_BY_ID)) {
 			int index = 1;
 			prst.setString(index++, order.getStatus().toString());
-			prst.setString(index++, order.getDescription());
+			if (order.getDescription() != null) {
+				prst.setString(index++, order.getDescription());
+			} else {
+				prst.setNull(index++, Types.NULL);
+			}
 			prst.setTimestamp(index++, new Timestamp(order.getDate().getTime()));
 			prst.setInt(index++, order.getUserId());
 			prst.setString(index++, order.getDeliveryType().toString());
 			prst.setString(index++, order.getPayType().toString());
-			prst.setString(index++, order.getAddress());
+			if (order.getAddress() != null) {
+				prst.setString(index++, order.getAddress());
+			} else {
+				prst.setNull(index++, Types.NULL);
+			}
+			if (order.getCreditCardCode() != null){
+				prst.setString(index++, order.getCreditCardCode());
+			} else {
+				prst.setNull(index++, Types.NULL);
+			}
 			prst.setInt(index++, order.getId());
 			prst.executeUpdate();
 		}
-
 	}
 
 	@Override

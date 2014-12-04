@@ -8,18 +8,20 @@ public class Order implements Serializable {
 	
 	private static final long serialVersionUID = 1691415738115382419L;
 	
-	
 	private int id;
 	private OrderStatus status;
 	private String description;
 	private Date date;
 	private int userId;
 	private PayType payType;
+	private String creditCardCode;
 	private DeliveryType deliveryType;
 	private String address;
 
 	//not persistent
 	private List<OrderItem> items;
+	
+	//????
 	private int itemCount;
 	private long totalPrice;
 	
@@ -109,6 +111,14 @@ public class Order implements Serializable {
 
 	public void setTotalPrice(long totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public String getCreditCardCode() {
+		return creditCardCode;
+	}
+
+	public void setCreditCardCode(String creditCardCode) {
+		this.creditCardCode = creditCardCode;
 	}
 	
 }

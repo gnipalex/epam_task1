@@ -53,6 +53,10 @@ public class LoginServlet extends HttpServlet {
 		//postredirect errors
 		ConversationScopeProvider convScope = convScopeFactory.newConversationScopeProvider(request, POSTREDIRECT_LOGIN_CONVSCOPE_KEY);
 		convScope.restore();
+		//to be possible urlReferrer retrieved from GET parameter
+		if (request.getAttribute(URL_REFERRER_KEY) == null) {
+			request.setAttribute(URL_REFERRER_KEY, request.getParameter(LOGIN_FORM_URL_REFERRER_PARAM));
+		}
 		if (request.getAttribute(URL_REFERRER_KEY) == null) {
 			request.setAttribute(URL_REFERRER_KEY, request.getHeader("referer"));
 		}

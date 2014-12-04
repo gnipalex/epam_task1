@@ -50,12 +50,13 @@ INSERT INTO `products`(`name`, `manufacturer_id`, `price`, `category_id`, `weigh
 CREATE TABLE `orders` (
 	`id` int not null primary key auto_increment,
 	`status` enum ('ACCEPTED', 'CONFIRMED', 'FORMING', 'SENT', 'COMPLETED', 'CANCELED') default 'FORMING' not null,
-	`description` varchar(500),
+	`description` varchar(200),
 	`date` datetime not null,
 	`user_id` int not null,
     `delivery` enum ('SELFDELIVERY', 'HOMEDELIVERY') not null,
     `pay_type` enum ('CREDIT', 'CASH') not null,
-    `address` varchar(200) not null,
+	`credit_card_code` varchar(20),
+    `address` varchar(200),
 	constraint `orderuser_fk` foreign key (`user_id`) references `users`(`id`) on update cascade on delete cascade
 );
 

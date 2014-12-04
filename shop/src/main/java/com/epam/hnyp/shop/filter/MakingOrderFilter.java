@@ -8,30 +8,46 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.epam.hnyp.shop.cart.Cart;
+import com.epam.hnyp.shop.listener.SessionListener;
 import com.epam.hnyp.shop.model.User;
 import com.epam.hnyp.shop.servlet.LoginServlet;
 
 public class MakingOrderFilter implements Filter {
 
-	public void destroy() {
-		
-	}
-
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpSession session = ((HttpServletRequest)request).getSession();
-		User user = (User)session.getAttribute(LoginServlet.SESSION_AUT_USER_KEY);
+	public void doFilter(ServletRequest request, ServletResponse response,
+			FilterChain chain) throws IOException, ServletException {
+		HttpServletRequest httpReq = (HttpServletRequest) request;
+		HttpSession session = httpReq.getSession();
+		User user = (User) session
+				.getAttribute(LoginServlet.SESSION_AUT_USER_KEY);
 		if (user == null) {
-			
+			HttpServletResponse httpResp = (HttpServletResponse) response;
+			StringBuilder strBuilder = new StringBuilder();
+			strBuilder.append(httpReq.getServletContext().getContextPath())
+					.append("/login?");
+			strBuilder.append(LoginServlet.LOGIN_FORM_URL_REFERRER_PARAM)
+					.append("=").append(httpReq.getRequestURI());
+			httpResp.sendRedirect(strBuilder.toString());
+			return;
 		}
+		//Cart cart = (Cart)session.getAttribute(SessionListener.SESSION_CART_KEY);
 		chain.doFilter(request, response);
+		//написан этот фильтр
+		//логин сервлет переписан чтобы он мог referrerUrl читать из параметра запроса
+		//нужно продумать как отображать корзину на страницах подтверждения заказа
+		//возможно копировать корзину
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
-		
-	}
 
+	}
+	
+	public void destroy() {
+
+	}
 }
