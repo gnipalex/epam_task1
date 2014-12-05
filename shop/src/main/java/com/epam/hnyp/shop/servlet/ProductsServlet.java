@@ -57,6 +57,9 @@ public class ProductsServlet extends HttpServlet {
 		}
 		
 		Collection<Product> products = productsService.getProductsByFilter(filter);
+		if (LOG.isInfoEnabled()) {
+			LOG.info("found " + products.size() + " products");
+		}
 		Collection<Category> categories = productsService.getAllCategories();
 		Collection<Manufacturer> manufacturers = productsService.getAllManufacturers();
 		
@@ -72,9 +75,6 @@ public class ProductsServlet extends HttpServlet {
 
 	private ProductFilterBean extractProductFilter(HttpServletRequest request) {
 		ProductFilterBean bean = new ProductFilterBean();
-		bean.setCurrentPage(DEFAULT_CURRENT_PAGE);
-		bean.setElementsOnPage(DEFAULT_ELEMENTS_ON_PAGE);
-		bean.setSortMode(DEFAULT_SORT_MODE);
 		
 		String priceLow = request.getParameter(FORM_PRICE_LOW_PARAM);
 		String priceHigh = request.getParameter(FORM_PRICE_HIGH_PARAM);
@@ -95,16 +95,28 @@ public class ProductsServlet extends HttpServlet {
 		if (elementsOnPage != null) {
 			try {
 				bean.setElementsOnPage(ProductElementsOnPageMode.valueOf(elementsOnPage));
-			} catch (IllegalArgumentException e) {}
+			} catch (IllegalArgumentException e) {
+				bean.setElementsOnPage(DEFAULT_ELEMENTS_ON_PAGE);
+			}
+		} else {
+			bean.setElementsOnPage(DEFAULT_ELEMENTS_ON_PAGE);
 		}
+		
 		Integer curPage = readInteger(pageNumber);
 		if (curPage != null && curPage.intValue() > 0) {
 			bean.setCurrentPage(curPage);
+		} else {
+			bean.setCurrentPage(DEFAULT_CURRENT_PAGE);
 		}
+		
 		if (sortBy != null) {
 			try {
 				bean.setSortMode(ProductSortMode.valueOf(sortBy));
-			} catch (IllegalArgumentException e) {}
+			} catch (IllegalArgumentException e) {
+				bean.setSortMode(DEFAULT_SORT_MODE);
+			}
+		} else {
+			bean.setSortMode(DEFAULT_SORT_MODE);
 		}
 		
 		return bean;

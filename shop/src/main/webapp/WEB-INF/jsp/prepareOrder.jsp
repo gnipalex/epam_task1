@@ -76,10 +76,10 @@
 								<div class="errmessage">${errorMessages['addressError']}</div></td>
 						</tr>
 					</table>
-					<c:url value="/cart" var="link_cart" />
-					<a href="${link_cart}"><button>back to cart</button></a> <input
-						type="submit" value="continue" />
+					<input	type="submit" value="Confirm order" />
 				</form>
+				<c:url value="/cart" var="link_cart" />
+				<a href="${link_cart}"><button>back to cart</button></a>
 
 			</div>
 		</div>

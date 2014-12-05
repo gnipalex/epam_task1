@@ -28,14 +28,13 @@
 				</p>
 				<hr />
 				<p>
-					<c:url value="/prepareOrder" var="link_prepareOrder"/>
-					<a href="${link_prepareOrder}"><button>back to prepare</button></a>
 					<c:url value="/confirmOrder" var="link_confirmOrder" />
 					<form action="${link_confirmOrder}" method="post">
-						<input type="submit" value="confirm order" />
+						<input type="submit" value="Confirm order" />
 					</form>
+					<c:url value="/prepareOrder" var="link_prepareOrder"/>
+					<a href="${link_prepareOrder}"><button>back to prepare</button></a>
 				</p>
-				
 			</div>
 		</div>
 		<jsp:include page="/WEB-INF/jsp/parts/footer.jsp" />

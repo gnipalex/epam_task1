@@ -149,17 +149,4 @@ public class SqlStatementBuilder {
 	public List<Object> getArgs() {
 		return Collections.unmodifiableList(this.arguments);
 	}
-
-//	public static void main(String[] args) {
-////		SqlStatementBuilder c = new SqlStatementBuilder();
-////		c.setRange(0, 20).addSelectField("p.name", "NaMe")
-////				.addFrom("products p").addFrom("categories c")
-////				.addWhere("p.weight < ?", 2).addWhere("c.id = p.category_id")
-////				.addOrder("p.weight", false).setRange(3, 5);
-////		System.out.println(c.buildSql());
-////		System.out.println(c.getArgs().size());
-////		SqlStatementBuilder s = new SqlStatementBuilder();
-////		s.addSelectField("*", null).setRange(0, 3).addFrom("users u").addWhere("u.id > ?", 4);
-////		System.out.println(s.buildSql());
-//	}
 }

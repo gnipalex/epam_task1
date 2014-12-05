@@ -26,8 +26,7 @@ public class SessionListener implements HttpSessionListener {
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+
 	}
 	
 }
