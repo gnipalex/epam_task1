@@ -61,11 +61,11 @@ CREATE TABLE `orders` (
 );
 
 CREATE TABLE `orderitems` (
-	`id` int not null primary key auto_increment,
 	`order_id` int not null,
 	`product_id` int not null,
 	`actual_price` long not null,
 	`count` int not null default 1 check (`count` > 0),
+	constraint `orderProduct_unique` unique(`order_id`, `product_id`),
 	constraint `orderitemOrder_fk` foreign key (`order_id`) references `orders`(`id`) on update cascade on delete cascade,
 	constraint `orderitemProduct_fk` foreign key (`product_id`) references `products`(`id`) on update cascade on delete no action
 );

@@ -19,14 +19,20 @@ import com.epam.hnyp.shop.capcha.provider.HiddenCapchaProvider;
 import com.epam.hnyp.shop.capcha.provider.SessionCapchaProvider;
 import com.epam.hnyp.shop.dao.CategoryDao;
 import com.epam.hnyp.shop.dao.ManufacturerDao;
+import com.epam.hnyp.shop.dao.OrderDao;
+import com.epam.hnyp.shop.dao.OrderItemDao;
 import com.epam.hnyp.shop.dao.ProductDao;
 import com.epam.hnyp.shop.dao.UserDao;
 import com.epam.hnyp.shop.dao.mysql.CategoryDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.ManufacturerDaoMySql;
+import com.epam.hnyp.shop.dao.mysql.OrderDaoMySql;
+import com.epam.hnyp.shop.dao.mysql.OrderItemDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.ProductDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.UserDaoMySql;
+import com.epam.hnyp.shop.service.OrderService;
 import com.epam.hnyp.shop.service.ProductService;
 import com.epam.hnyp.shop.service.UserService;
+import com.epam.hnyp.shop.service.impl.OrderServiceDaoImpl;
 import com.epam.hnyp.shop.service.impl.ProductServiceDaoImpl;
 import com.epam.hnyp.shop.service.impl.TransactionManager;
 import com.epam.hnyp.shop.service.impl.UserServiceDaoImpl;
@@ -49,6 +55,7 @@ public class ContextInitializer implements ServletContextListener {
 	
 	public static final String INIT_USER_SERVICE_KEY = "init:userService";
 	public static final String INIT_PRODUCTS_SERVICE_KEY = "init:productService";
+	public static final String INIT_ORDER_SERVIVE_KEY = "init:orderService";
 
 	public static final String INIT_CONVERSATION_SCOPE_FACTORY_KEY = "init:conversationScopeFactory";
 	public static final String INIT_AVATAR_PROVIDER_KEY = "init:avatarProvider";
@@ -137,6 +144,14 @@ public class ContextInitializer implements ServletContextListener {
     	context.setAttribute(INIT_PRODUCTS_SERVICE_KEY, productService);
     	if (LOG.isInfoEnabled()) {
     		LOG.info("productService initialized = " + productService.getClass().getName());
+    	}
+    	
+    	OrderDao orderDao = new OrderDaoMySql();
+    	OrderItemDao orderItemDao = new OrderItemDaoMySql();
+    	OrderService orderService = new OrderServiceDaoImpl(orderDao, orderItemDao, productDao, tranManager);
+    	context.setAttribute(INIT_ORDER_SERVIVE_KEY, orderService);
+    	if (LOG.isInfoEnabled()) {
+    		LOG.info("orderService initialized = " + orderService.getClass().getName());
     	}
     }
     

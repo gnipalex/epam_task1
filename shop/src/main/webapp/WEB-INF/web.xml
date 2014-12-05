@@ -25,7 +25,8 @@
   <filter-mapping>
     <filter-name>MakingOrderFilter</filter-name>
     <url-pattern>/prepareOrder</url-pattern>
-    <url-pattern>/createOrder</url-pattern>
+    <url-pattern>/prepareCart</url-pattern>
+    <url-pattern>/confirmOrder</url-pattern>
   </filter-mapping>
   <servlet>
     <servlet-name>CapchaDrawerServlet</servlet-name>
@@ -124,12 +125,28 @@
     <url-pattern>/message</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>PrepareCartServlet</servlet-name>
+    <servlet-class>com.epam.hnyp.shop.servlet.PrepareCartServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PrepareCartServlet</servlet-name>
+    <url-pattern>/prepareCart</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>PrepareOrderServlet</servlet-name>
     <servlet-class>com.epam.hnyp.shop.servlet.PrepareOrderServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>PrepareOrderServlet</servlet-name>
     <url-pattern>/prepareOrder</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ConfirmOrderServlet</servlet-name>
+    <servlet-class>com.epam.hnyp.shop.servlet.ConfirmOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ConfirmOrderServlet</servlet-name>
+    <url-pattern>/confirmOrder</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>ServiceErrorServlet</servlet-name>

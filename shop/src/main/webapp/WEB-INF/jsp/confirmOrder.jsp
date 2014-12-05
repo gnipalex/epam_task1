@@ -9,7 +9,6 @@
 <title>Shop - Confirm order</title>
 <meta http-equiv="content-type" content="text/html;charset=cp1251" />
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
-<link rel="stylesheet" href="products.css" type="text/css" />
 <link rel="stylesheet" href="cart.css" type="text/css" />
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/products.js"></script>
@@ -25,57 +24,18 @@
 			</div>
 			<div id="cart_wraper">
 				<p>
-					<mytags:orderViewer order="${}"/>
+					<mytags:orderViewer order="${PREPARED_ORDER_KEY}" />
 				</p>
 				<hr />
-				<c:url value="/prepareOrder" var="link_prepareOrder" />
-				<form action="${link_prepareOrder}" method="post">
-					<table>
-						<tr>
-							<td>Payment type</td>
-							<td><select name="payType">
-									<c:forEach items="${payTypes}" var="ps">
-										<c:set value="" var="tmp" />
-										<c:if test="${ps == orderBean.payTypeParam}">
-											<c:set value="selected=\"selected\"" var="tmp" />
-										</c:if>
-										<option ${tmp} value="${ps}">${ps.type}</option>
-									</c:forEach>
-							</select>
-								<div class="errmessage">${errorMessages['payTypeError']}</div></td>
-						</tr>
-						<tr>
-							<td>Credit card code</td>
-							<td><input type="text" name="creditCard"
-								value="${orderBean.creditCardParam}" />
-								<div class="errmessage">${errorMessages['creditCardError']}</div>
-							</td>
-						</tr>
-						<tr>
-							<td>Delivery type</td>
-							<td><select name="deliveryType">
-									<c:forEach items="${deliveryTypes}" var="ds">
-										<c:set value="" var="tmp" />
-										<c:if test="${ds == orderBean.deliveryTypeParam}">
-											<c:set value="selected=\"selected\"" var="tmp" />
-										</c:if>
-										<option ${tmp} value="${ds}">${ds.delivery}</option>
-									</c:forEach>
-							</select>
-								<div class="errmessage">${errorMessages['deliveryTypeError']}</div>
-							</td>
-						</tr>
-						<tr>
-							<td>Address</td>
-							<td><input type="text" name="address" value="${orderBean.addressParam}" />
-								<div class="errmessage">${errorMessages['addressError']}</div></td>
-						</tr>
-					</table>
-					<c:url value="/cart" var="link_cart" />
-					<a href="${link_cart}"><button>back to cart</button></a> <input
-						type="submit" value="continue" />
-				</form>
-
+				<p>
+					<c:url value="/prepareOrder" var="link_prepareOrder"/>
+					<a href="${link_prepareOrder}"><button>back to prepare</button></a>
+					<c:url value="/confirmOrder" var="link_confirmOrder" />
+					<form action="${link_confirmOrder}" method="post">
+						<input type="submit" value="confirm order" />
+					</form>
+				</p>
+				
 			</div>
 		</div>
 		<jsp:include page="/WEB-INF/jsp/parts/footer.jsp" />

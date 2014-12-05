@@ -33,12 +33,7 @@ public class MakingOrderFilter implements Filter {
 			httpResp.sendRedirect(strBuilder.toString());
 			return;
 		}
-		//Cart cart = (Cart)session.getAttribute(SessionListener.SESSION_CART_KEY);
 		chain.doFilter(request, response);
-		//написан этот фильтр
-		//логин сервлет переписан чтобы он мог referrerUrl читать из параметра запроса
-		//нужно продумать как отображать корзину на страницах подтверждения заказа
-		//возможно копировать корзину
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {

@@ -15,7 +15,6 @@ import com.epam.hnyp.shop.cart.Cart;
 import com.epam.hnyp.shop.cart.Cart.CartStateException;
 import com.epam.hnyp.shop.form.OrderFormBean;
 import com.epam.hnyp.shop.listener.ContextInitializer;
-import com.epam.hnyp.shop.listener.SessionListener;
 import com.epam.hnyp.shop.model.DeliveryType;
 import com.epam.hnyp.shop.model.Order;
 import com.epam.hnyp.shop.model.PayType;
@@ -39,7 +38,6 @@ public class PrepareOrderServlet extends HttpServlet {
 	public static final String PARAM_DELIVERY_TYPE = "deliveryType";
 	public static final String PARAM_ADDRESS = "address";
 
-	public static final String PREPARED_CART_KEY = "PREPARED_CART_KEY";
 	public static final String PREPARED_ORDER_KEY = "PREPARED_ORDER_KEY";
 
 	public static final String ERROR_MESSAGES_MAP_KEY = "errorMessages";
@@ -65,13 +63,6 @@ public class PrepareOrderServlet extends HttpServlet {
 						POSTREDIRECT_PREPARE_CONVSCOPE_KEY);
 		convScope.restore();
 
-		Cart cart = (Cart) session
-				.getAttribute(SessionListener.SESSION_CART_KEY);
-		if (req.getAttribute(ERROR_MESSAGES_MAP_KEY) == null
-				|| session.getAttribute(PREPARED_CART_KEY) == null) {
-			session.setAttribute(PREPARED_CART_KEY, new Cart(cart));
-		}
-
 		req.setAttribute(PAY_TYPES_KEY, PayType.values());
 		req.setAttribute(DELIVERY_TYPES_KEY, DeliveryType.values());
 		req.getRequestDispatcher(ORDER_JSP).forward(req, resp);
@@ -95,7 +86,12 @@ public class PrepareOrderServlet extends HttpServlet {
 		}
 
 		HttpSession session = req.getSession();
-		Cart preparedCart = (Cart) session.getAttribute(PREPARED_CART_KEY);
+		Cart preparedCart = (Cart) session.getAttribute(PrepareCartServlet.PREPARED_CART_KEY);
+		if (preparedCart == null || preparedCart.getTotalCount() == 0) {
+			LOG.error("prepared cart is not found or empty");
+			resp.sendRedirect(getServletContext().getContextPath() + "/cart");
+			return;
+		}
 		try {
 			Order preparedOrder = preparedCart.prepareOrder();
 			preparedOrder.setAddress(bean.getAddressParam());

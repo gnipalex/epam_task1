@@ -27,8 +27,8 @@
 				<mytags:cartViewer cart="${SESSION_CART}" showButtons="true" />
 				<p>
 					<button onclick="clearCart();">Clear cart</button>
-					<c:url value="/prepareOrder" var="link_prepare_order" />
-					<a href="${link_prepare_order}"><button>Prepare order</button></a>
+					<c:url value="/prepareCart" var="link_prepare_cart" />
+					<a href="${link_prepare_cart}"><button>Prepare order</button></a>
 				</p>
 			</div>
 		</div>
