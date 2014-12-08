@@ -28,7 +28,7 @@
   </filter-mapping>
   <filter>
     <filter-name>GzipResponseFilter</filter-name>
-    <filter-class>com.epam.hnyp.shop.filter.New_GzipResponseFilter</filter-class>
+    <filter-class>com.epam.hnyp.shop.filter.GzipResponseFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>GzipResponseFilter</filter-name>

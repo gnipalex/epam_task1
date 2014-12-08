@@ -57,7 +57,6 @@ public class PrepareOrderServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		HttpSession session = req.getSession();
 		ConversationScopeProvider convScope = convScopeFactory
 				.newConversationScopeProvider(req,
 						POSTREDIRECT_PREPARE_CONVSCOPE_KEY);
@@ -104,7 +103,6 @@ public class PrepareOrderServlet extends HttpServlet {
 			resp.sendRedirect(getServletContext().getContextPath() + "/message" + prepareMessageUrlArgs("Order create status", "Order is not prepared, cart is empty"));
 			return;
 		}
-		//resp.sendRedirect(getServletContext().getContextPath() + SUCCESS_URL);
 		req.getRequestDispatcher(CONFIRM_ORDER_JSP).forward(req, resp);
 	}
 	

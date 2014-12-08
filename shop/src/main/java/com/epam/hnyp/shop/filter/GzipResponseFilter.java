@@ -1,5 +1,6 @@
 package com.epam.hnyp.shop.filter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -17,9 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.apache.log4j.Logger;
+
 public class GzipResponseFilter implements Filter {
 
-	public static final String CONTENT_TYPE_PART = "text/html";
+	private static final Logger LOG = Logger.getLogger(GzipResponseFilter.class);
+
+	public static final String ACCEPT_ENCODING_HEADER = "Accept-encoding";
+	public static final String CONTENT_TYPE_PART = "text/";
 
 	public void init(FilterConfig fConfig) throws ServletException {
 	}
@@ -30,6 +36,7 @@ public class GzipResponseFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpReq = (HttpServletRequest) request;
+		LOG.debug(httpReq.getRequestURI());
 		HttpServletResponse httpResp = (HttpServletResponse) response;
 		if (supportsGzip(httpReq)) {
 			GzipResponseWraper responseWraper = new GzipResponseWraper(httpResp);
@@ -49,7 +56,7 @@ public class GzipResponseFilter implements Filter {
 	}
 
 	private class GzipResponseWraper extends HttpServletResponseWrapper {
-		private GZIPOutputStream gzipStream;
+		private ByteArrayOutputStream byteArrayOutputStream;
 		private ServletOutputStream servletOutputStream;
 		private PrintWriter printWriter;
 		private boolean writerCreated;
@@ -58,16 +65,7 @@ public class GzipResponseFilter implements Filter {
 
 		public GzipResponseWraper(HttpServletResponse response) {
 			super(response);
-		}
-		
-		private void initServletOutputStream() throws IOException {
-			if (useGzip) {
-				setHeader("Content-Encoding", "gzip");
-				gzipStream = new GZIPOutputStream(getResponse().getOutputStream());
-				servletOutputStream = new ServletOutputStreamWraper(gzipStream);
-			} else {
-				servletOutputStream = new ServletOutputStreamWraper(getResponse().getOutputStream());
-			}
+			this.byteArrayOutputStream = new ByteArrayOutputStream();
 		}
 
 		@Override
@@ -76,8 +74,9 @@ public class GzipResponseFilter implements Filter {
 				throw new IllegalStateException(
 						"getOutputStream() method already called");
 			}
+			LOG.debug("writer created");
 			if (!writerCreated) {
-				initServletOutputStream();
+				servletOutputStream = new GzipWiseServletOutputStreamWraper(byteArrayOutputStream);
 				printWriter = new PrintWriter(new OutputStreamWriter(
 						servletOutputStream, getCharacterEncoding()));
 				writerCreated = true;
@@ -86,26 +85,19 @@ public class GzipResponseFilter implements Filter {
 		}
 
 		@Override
-		public void setContentType(String type) {
-			super.setContentType(type);
-			if (type.contains("text/")) {
-				useGzip = true;
-			}
-		}
-		
-		@Override
 		public ServletOutputStream getOutputStream() throws IOException {
 			if (writerCreated) {
 				throw new IllegalStateException(
 						"getWriter() method already called");
 			}
+			LOG.debug("outputstream created");
 			if (!streamCreated) {
-				initServletOutputStream();
+				servletOutputStream = new GzipWiseServletOutputStreamWraper(byteArrayOutputStream);
 				streamCreated = true;
 			}
 			return servletOutputStream;
 		}
-		
+
 		@Override
 		public void flushBuffer() throws IOException {
 			if (printWriter != null) {
@@ -113,34 +105,61 @@ public class GzipResponseFilter implements Filter {
 			}
 			if (servletOutputStream != null) {
 				servletOutputStream.flush();
+				servletOutputStream.close();
 			}
-			if (gzipStream != null) {
-				gzipStream.finish();
-				gzipStream.flush();
+			this.getResponse().setContentLength(byteArrayOutputStream.size());
+			if (useGzip) {
+				this.setHeader("Content-Encoding", "gzip");
 			}
+			byteArrayOutputStream.writeTo(this.getResponse().getOutputStream());
+			byteArrayOutputStream.reset();
 			super.flushBuffer();
 		}
 
-		private class ServletOutputStreamWraper extends ServletOutputStream {
-			private OutputStream realOutput;
+		private class GzipWiseServletOutputStreamWraper extends
+				ServletOutputStream {
+			private GZIPOutputStream gzipOutputStream;
+			private OutputStream outputStream;
+			private OutputStream realOutputStream;
+			private boolean writeAlreadyCalled = false;
 
-			public ServletOutputStreamWraper(OutputStream realOutput) {
-				this.realOutput = realOutput;
+			public GzipWiseServletOutputStreamWraper(OutputStream realOutput) {
+				this.realOutputStream = realOutput;
 			}
 
 			@Override
 			public void write(int b) throws IOException {
-				realOutput.write(b);
+				if (!writeAlreadyCalled) {
+					createUnderStream();
+					writeAlreadyCalled = true;
+					LOG.debug("output started");
+				}
+				this.outputStream.write(b);
 			}
-			
+
+			private void createUnderStream() throws IOException {
+				if (GzipResponseWraper.this.getContentType().contains(CONTENT_TYPE_PART)) {
+					this.gzipOutputStream = new GZIPOutputStream(
+							realOutputStream, true);
+					this.outputStream = this.gzipOutputStream;
+					GzipResponseWraper.this.useGzip = true;
+				} else {
+					this.outputStream = realOutputStream;
+				}
+			}
+
 			@Override
 			public void flush() throws IOException {
-				realOutput.flush();
+				if (gzipOutputStream != null) {
+					gzipOutputStream.flush();
+				}
 			}
-			
+
 			@Override
 			public void close() throws IOException {
-				realOutput.close();
+				if (gzipOutputStream != null) {
+					gzipOutputStream.close();
+				}
 			}
 		}
 	}
