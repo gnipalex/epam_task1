@@ -1,3 +1,2 @@
-<%@ page language="java" contentType="text/html; charset=cp1251"
-    pageEncoding="cp1251"%>
+<%@ page language="java" %>
 <% response.sendRedirect("main"); %>

@@ -1,4 +1,4 @@
-<%@ tag language="java" pageEncoding="ISO-8859-1" body-content="empty" description="Prints single product entity as list item"%>
+<%@ tag language="java" body-content="empty" description="Prints single product entity as list item"%>
 <%@ attribute name="prod" description="Product entity" required="true"
 	type="com.epam.hnyp.shop.model.Product"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>

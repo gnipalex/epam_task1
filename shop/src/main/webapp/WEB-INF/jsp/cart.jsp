@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=cp1251"
-	pageEncoding="cp1251"%>
+<%@ page language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mytags" %>
 

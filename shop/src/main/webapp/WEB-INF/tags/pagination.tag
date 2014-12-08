@@ -1,4 +1,4 @@
-<%@ tag language="java" pageEncoding="cp1251"%>
+<%@ tag language="java" %>
 <%@ attribute name="filterBean"
 	type="com.epam.hnyp.shop.form.ProductFilterBean" required="true"%>
 

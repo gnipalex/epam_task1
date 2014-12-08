@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=cp1251"
-	pageEncoding="cp1251"%>
+<%@ page language="java" pageEncoding="cp1251"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div id="footer">
 	<p class="right">

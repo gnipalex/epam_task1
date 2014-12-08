@@ -1,5 +1,4 @@
-<%@ tag language="java" pageEncoding="cp1251"
- 	body-content="empty"
+<%@ tag language="java"	body-content="empty"
  	description="Shows small login block on the page. Uses SESSION_AUT_USER scope var to access authorizes user"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>

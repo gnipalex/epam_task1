@@ -1,5 +1,4 @@
-<%@ tag language="java" pageEncoding="cp1251"%>
-<%@ tag body-content="empty"
+<%@ tag language="java" body-content="empty"
 	description="Places picture of capcha. Uses IMG html tag inside of DIV, input field located out of DIV"%>
 
 <%@ attribute name="url"

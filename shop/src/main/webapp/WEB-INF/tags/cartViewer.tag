@@ -1,5 +1,5 @@
-<%@ tag language="java" pageEncoding="cp1251" body-content="empty"
-	description="Displays cart content as table"%>
+<%@ tag language="java" body-content="empty"
+	description="Displays cart content as table" %>
 
 <%@ attribute name="showButtons" type="java.lang.Boolean"
 	required="true"%>
