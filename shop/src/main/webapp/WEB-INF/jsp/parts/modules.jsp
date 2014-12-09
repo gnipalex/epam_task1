@@ -1,4 +1,4 @@
-<%@ page language="java" pageEncoding="cp1251"%>
+<%@ page language="java" %>
 <div id="modules">
 	<div id="mod3">
 		<div class="padding">

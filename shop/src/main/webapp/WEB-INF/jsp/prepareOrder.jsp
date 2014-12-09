@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <title>Shop - Cart</title>
-<meta http-equiv="content-type" content="text/html;charset=cp1251" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
 <link rel="stylesheet" href="products.css" type="text/css" />
 <link rel="stylesheet" href="cart.css" type="text/css" />

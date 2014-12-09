@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>Shop - Register</title>
-<meta http-equiv="content-type" content="text/html;charset=cp1251" />
+<meta http-equiv="content-type" content="text/html;charset=utf8" />
 <link rel="stylesheet" href="stylesheet.css" type="text/css" />
 <link rel="stylesheet" href="login.css" type="text/css" />
 </head>
