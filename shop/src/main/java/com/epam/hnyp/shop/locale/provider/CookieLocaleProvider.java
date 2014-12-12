@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CookieLocaleProvider extends AbstractLocaleProvider {
+	public static final String COOKIE_NAME = "lang";
+	public static final int COOKIE_VALUE_LEN = 2;
+	
 	private final int cookieTTL;
-
+	
 	public CookieLocaleProvider(int cookieTTL) {
 		if (cookieTTL <= 0) {
 			throw new IllegalArgumentException(
@@ -24,9 +27,9 @@ public class CookieLocaleProvider extends AbstractLocaleProvider {
 			return null;
 		}
 		for (Cookie cook : cookies) {
-			if (cook.getName().equals(PARAMETER_NAME)
+			if (cook.getName().equals(COOKIE_NAME)
 					&& cook.getValue() != null
-					&& cook.getValue().length() == PARAMETER_LEN) {
+					&& cook.getValue().length() == COOKIE_VALUE_LEN) {
 				return new Locale(cook.getValue());
 			}
 		}
@@ -36,14 +39,9 @@ public class CookieLocaleProvider extends AbstractLocaleProvider {
 	@Override
 	public void setCurrentLocale(HttpServletRequest request,
 			HttpServletResponse response, Locale locale) {
-		Cookie cook = new Cookie(PARAMETER_NAME, locale.getLanguage());
+		Cookie cook = new Cookie(COOKIE_NAME, locale.getLanguage());
 		cook.setMaxAge(cookieTTL);
 		response.addCookie(cook);
-	}
-
-	@Override
-	protected Locale getCurrentLocaleByImpl(HttpServletRequest request) {
-		return readLocale(request);
 	}
 
 }

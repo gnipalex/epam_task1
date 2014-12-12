@@ -11,18 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 
 public abstract class AbstractLocaleProvider {
 	
-	public static final String PARAMETER_NAME = "lang";
-	public static final int PARAMETER_LEN = 2;
+	public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 	
-	private List<Locale> supportedLocales;
-	private Locale defaultLocale;
+	private List<Locale> supportedLocales = new ArrayList<Locale>();
+	private Locale defaultLocale = DEFAULT_LOCALE;
 	
 	public void initialize(String locales, String def) {
-		this.supportedLocales = parseLocales(locales);
+		List<Locale> parsedLocales = parseLocales(locales);
 		Locale defLoc = new Locale(def);
-		if (!this.supportedLocales.contains(defLoc)) {
+		if (!parsedLocales.contains(defLoc)) {
 			throw new IllegalArgumentException("`locales` doesnt contain default locale 'def'");
 		}
+		this.supportedLocales = parsedLocales;
 		this.defaultLocale = defLoc;
 	}
 	
@@ -41,18 +41,25 @@ public abstract class AbstractLocaleProvider {
 	public abstract Locale readLocale(HttpServletRequest request);
 	
 	public abstract void setCurrentLocale(HttpServletRequest request, HttpServletResponse response, Locale locale);
-	
-	protected abstract Locale getCurrentLocaleByImpl(HttpServletRequest request); 
-	
+		
 	public Locale getCurrentLocale(HttpServletRequest request) {
-		Locale loc = getCurrentLocaleByImpl(request);
-		if (loc == null) {
-			
+		Locale loc = readLocale(request);
+		if (loc != null) {
+			if (supportedLocales.contains(loc)) {
+				return loc;
+			} else {
+				return getTheMostAppropriateLocale(request);
+			}
 		} else {
-			
+			return getTheMostAppropriateLocale(request);
 		}
 	}
 	
+	/**
+	 * Gets the most appropriate locale according to browser, if browser hasn't specified locale or locale not supported then returns default locale
+	 * @param request
+	 * @return
+	 */
 	public Locale getTheMostAppropriateLocale(HttpServletRequest request) {
 		Enumeration<Locale> clientLocales = request.getLocales();
 		while (clientLocales.hasMoreElements()) {
@@ -61,7 +68,7 @@ public abstract class AbstractLocaleProvider {
 				return loc;
 			}
 		}
-		return null;
+		return defaultLocale;
 	}
 	
 	public List<Locale> getSupportedLocales() {
