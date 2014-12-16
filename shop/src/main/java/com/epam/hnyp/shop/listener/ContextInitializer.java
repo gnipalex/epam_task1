@@ -29,6 +29,9 @@ import com.epam.hnyp.shop.dao.mysql.OrderDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.OrderItemDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.ProductDaoMySql;
 import com.epam.hnyp.shop.dao.mysql.UserDaoMySql;
+import com.epam.hnyp.shop.locale.provider.AbstractLocaleProvider;
+import com.epam.hnyp.shop.locale.provider.CookieLocaleProvider;
+import com.epam.hnyp.shop.locale.provider.SessionLocaleProvider;
 import com.epam.hnyp.shop.service.OrderService;
 import com.epam.hnyp.shop.service.ProductService;
 import com.epam.hnyp.shop.service.UserService;
@@ -50,6 +53,8 @@ public class ContextInitializer implements ServletContextListener {
 	
 	public static final String PARAM_CAPCHA_SERVER_MODE = "capchaServerMode";
 	public static final String PARAM_CAPCHA_TTL = "capchaTTL";
+	public static final String PARAM_LOCALE_MODE = "localeMode";
+	public static final String PARAM_LOCALE_COOKIE_TTL = "localeCookieTTL";
 	
 	public static final String INIT_CAPCHA_PROVIDER_KEY = "init:capchaProvider";
 	
@@ -60,6 +65,7 @@ public class ContextInitializer implements ServletContextListener {
 	public static final String INIT_CONVERSATION_SCOPE_FACTORY_KEY = "init:conversationScopeFactory";
 	public static final String INIT_AVATAR_PROVIDER_KEY = "init:avatarProvider";
 	public static final String INIT_PRODUCT_IMAGES_PROVIDER_KEY = "init:prodImagesProvider";
+	public static final String INIT_LOCALE_PROVIDER_KEY = "init:localeProvider";
 	
     public void contextInitialized(ServletContextEvent arg0) {
     	try {
@@ -67,6 +73,7 @@ public class ContextInitializer implements ServletContextListener {
         	initCapchaProvider(context);
         	initServices(context);
         	initConversationScope(context);
+        	initLocaleProvider(context);
         	
         	Properties config = readConfigProperties();
         	initImageProvider(context, config.getProperty(CONF_AVATAR_FOLDER), INIT_AVATAR_PROVIDER_KEY);
@@ -177,6 +184,38 @@ public class ContextInitializer implements ServletContextListener {
     	
     	if (LOG.isInfoEnabled()) {
     		LOG.info("image provider initialized = " + avatarProvider.getClass().getName() + ", images folder = " + folder);
+    	}
+    }
+    
+    private void initLocaleProvider(ServletContext context) {
+    	String localeMode = context.getInitParameter(PARAM_LOCALE_MODE);
+    	String localeCookieTTL = context.getInitParameter(PARAM_LOCALE_COOKIE_TTL);
+    	if (localeMode == null) {
+    		throw new IllegalArgumentException("localeMode not specified");
+    	}
+    	AbstractLocaleProvider localeProvider = null;
+    	switch (localeMode) {
+    	case "cookie" :
+    		int cookieTTL = 0;
+    		try {
+    			cookieTTL = Integer.parseInt(localeCookieTTL);
+    			if (cookieTTL < 0) {
+    				throw new NumberFormatException();
+    			}
+    		} catch (NumberFormatException e) {
+    			throw new IllegalArgumentException(PARAM_LOCALE_COOKIE_TTL + " wrong format", e);
+    		}
+    		localeProvider = new CookieLocaleProvider(cookieTTL);
+    		break;
+    	case "session":
+    		localeProvider = new SessionLocaleProvider();
+    		break;
+    		default:
+    			throw new IllegalArgumentException(PARAM_LOCALE_MODE + " mode not supported or not specified, use 'session' or 'cookie'");
+    	}
+    	context.setAttribute(INIT_LOCALE_PROVIDER_KEY, localeProvider);
+    	if (LOG.isInfoEnabled()) {
+    		LOG.info("locale provider created = " + localeProvider.getClass().getName());
     	}
     }
     

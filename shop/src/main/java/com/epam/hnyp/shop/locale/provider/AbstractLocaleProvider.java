@@ -16,6 +16,12 @@ public abstract class AbstractLocaleProvider {
 	private List<Locale> supportedLocales = new ArrayList<Locale>();
 	private Locale defaultLocale = DEFAULT_LOCALE;
 	
+	/**
+	 * Initializes this locale provider with supported locales and default locale
+	 * @param locales
+	 * @param def
+	 * @throws IllegalArgumentException if 'locales' doesnt contain default locale 'def' 
+	 */
 	public void initialize(String locales, String def) {
 		List<Locale> parsedLocales = parseLocales(locales);
 		Locale defLoc = new Locale(def);
