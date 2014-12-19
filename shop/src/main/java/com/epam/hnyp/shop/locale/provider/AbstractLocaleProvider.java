@@ -13,6 +13,8 @@ public abstract class AbstractLocaleProvider {
 	
 	public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 	
+	public static final String LOCALE_STRING_PATTERN = "^[a-zA-Z]{2,3}(;[a-zA-Z]{2,3})*$";
+	
 	private List<Locale> supportedLocales = new ArrayList<Locale>();
 	private Locale defaultLocale = DEFAULT_LOCALE;
 	
@@ -20,9 +22,13 @@ public abstract class AbstractLocaleProvider {
 	 * Initializes this locale provider with supported locales and default locale
 	 * @param locales
 	 * @param def
-	 * @throws IllegalArgumentException if 'locales' doesnt contain default locale 'def' 
+	 * @throws IllegalArgumentException if 'locales' 
+	 * doesnt match to required format or doesnt contain default locale 'def' 
 	 */
 	public void initialize(String locales, String def) {
+		if (!locales.matches(LOCALE_STRING_PATTERN)) {
+			throw new IllegalArgumentException("locales bad format");
+		}
 		List<Locale> parsedLocales = parseLocales(locales);
 		Locale defLoc = new Locale(def);
 		if (!parsedLocales.contains(defLoc)) {
