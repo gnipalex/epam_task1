@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CookieLocaleProvider extends AbstractLocaleProvider {
 	public static final String COOKIE_NAME = "lang";
-	public static final int COOKIE_VALUE_LEN = 2;
 	
 	private final int cookieTTL;
 	
@@ -29,7 +28,7 @@ public class CookieLocaleProvider extends AbstractLocaleProvider {
 		for (Cookie cook : cookies) {
 			if (cook.getName().equals(COOKIE_NAME)
 					&& cook.getValue() != null
-					&& cook.getValue().length() == COOKIE_VALUE_LEN) {
+					&& !cook.getValue().isEmpty()) {
 				return new Locale(cook.getValue());
 			}
 		}

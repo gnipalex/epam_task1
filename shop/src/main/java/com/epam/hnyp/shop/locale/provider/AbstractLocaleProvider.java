@@ -56,15 +56,19 @@ public abstract class AbstractLocaleProvider {
 		
 	public Locale getCurrentLocale(HttpServletRequest request) {
 		Locale loc = readLocale(request);
-		if (loc != null) {
-			if (supportedLocales.contains(loc)) {
-				return loc;
-			} else {
-				return getTheMostAppropriateLocale(request);
-			}
-		} else {
-			return getTheMostAppropriateLocale(request);
+//		if (loc != null) {
+//			if (supportedLocales.contains(loc)) {
+//				return loc;
+//			} else {
+//				return getTheMostAppropriateLocale(request);
+//			}
+//		} else {
+//			return getTheMostAppropriateLocale(request);
+//		}
+		if (loc != null && supportedLocales.contains(loc)) {
+			return loc;
 		}
+		return getTheMostAppropriateLocale(request);
 	}
 	
 	/**
@@ -83,6 +87,19 @@ public abstract class AbstractLocaleProvider {
 		return defaultLocale;
 	}
 	
+	/**
+	 * Checks whether this provider supports given locale
+	 * @param loc
+	 * @return
+	 */
+	public boolean supportsLocale(Locale loc) {
+		return supportedLocales.contains(loc);
+	}
+	
+	/**
+	 * Returns list of supported locales
+	 * @return
+	 */
 	public List<Locale> getSupportedLocales() {
 		return Collections.unmodifiableList(supportedLocales);
 	}

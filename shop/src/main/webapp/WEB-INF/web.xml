@@ -55,6 +55,14 @@
   <filter>
   	<filter-name>LocalizationFilter</filter-name>
   	<filter-class>com.epam.hnyp.shop.filter.LocalizationFilter</filter-class>
+  	<init-param>
+  		<param-name>locales</param-name>
+  		<param-value>en;ru</param-value>
+  	</init-param>
+  	<init-param>
+  		<param-name>defaultLocale</param-name>
+  		<param-value>en</param-value>
+  	</init-param>
   </filter>
   <filter-mapping>
   	<filter-name>LocalizationFilter</filter-name>

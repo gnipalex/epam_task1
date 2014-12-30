@@ -120,5 +120,14 @@ public class AbstractLocaleProviderTest {
 		assertTrue(supported.contains(new Locale("de")));
 	}
 	
+	@Test
+	public void testSupportsLocale() {
+		assertTrue(testProvider.supportsLocale(new Locale("en")));
+	}
+	
+	@Test
+	public void testSupportsLocaleNotSupported() {
+		assertFalse(testProvider.supportsLocale(new Locale("ua")));
+	}
 
 }
