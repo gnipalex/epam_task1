@@ -29,10 +29,6 @@ public class PrepareUrlTag extends SimpleTagSupport {
 				parts.add(ProductsServlet.FORM_MANUFACTURES_PARAM + "=" + i);
 			}
 		}
-//		if (filterBean.getItemsOnPage() != null) {
-//			parts.add(ProductsServlet.FORM_ELEMENTS_ON_PAGE_PARAM + "=" + 
-//					filterBean.getItemsOnPage());
-//		}
 		if (filterBean.getElementsOnPage() != null) {
 			parts.add(ProductsServlet.FORM_ELEMENTS_ON_PAGE_PARAM + "=" + filterBean.getElementsOnPage());
 		}
@@ -87,6 +83,4 @@ public class PrepareUrlTag extends SimpleTagSupport {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
-	
 }

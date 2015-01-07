@@ -88,16 +88,33 @@ public class LocalizationFilterTest {
 	}
 	
 	@Test
-	public void testDoFilterWithParam() throws ServletException, IOException {
+	public void testDoFilterWithParamSupports() throws ServletException, IOException {
 		testFilter.init(mockFilterConfig);
 		final String lang = "en";
 		Mockito.when(mockRequest.getParameter(LocalizationFilter.REQUEST_PARAM_LANG))
 			.thenReturn(lang);
+		Mockito.when(mockLocaleProvider.supportsLocale(new Locale(lang))).thenReturn(true);
 		testFilter.doFilter(mockRequest, mockResponse, mockChain);
 		ArgumentCaptor<Locale> argCaptor = ArgumentCaptor.forClass(Locale.class);
 		Mockito.verify(mockLocaleProvider)
 			.setCurrentLocale(Mockito.eq(mockRequest), Mockito.eq(mockResponse), argCaptor.capture());
 		assertEquals(lang, argCaptor.getValue().getLanguage());
+	}
+	
+	@Test
+	public void testDoFilterWithParamNotSupports() throws ServletException, IOException {
+		testFilter.init(mockFilterConfig);
+		final String lang = "ua";
+		final Locale fakeDefaultLocale = new Locale("en");
+		Mockito.when(mockRequest.getParameter(LocalizationFilter.REQUEST_PARAM_LANG))
+			.thenReturn(lang);
+		Mockito.when(mockLocaleProvider.getDefaultLocale()).thenReturn(fakeDefaultLocale);
+		Mockito.when(mockLocaleProvider.supportsLocale(new Locale(lang))).thenReturn(false);
+		testFilter.doFilter(mockRequest, mockResponse, mockChain);
+		ArgumentCaptor<Locale> argCaptor = ArgumentCaptor.forClass(Locale.class);
+		Mockito.verify(mockLocaleProvider)
+			.setCurrentLocale(Mockito.eq(mockRequest), Mockito.eq(mockResponse), argCaptor.capture());
+		assertEquals(fakeDefaultLocale, argCaptor.getValue());
 	}
 
 }

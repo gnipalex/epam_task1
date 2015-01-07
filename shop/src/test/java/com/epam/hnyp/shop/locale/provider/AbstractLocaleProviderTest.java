@@ -5,11 +5,10 @@ import static org.junit.Assert.*;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +21,13 @@ public class AbstractLocaleProviderTest {
 	public static final int LOCALE_ALL_COUNT = 3;
 	
 	private HttpServletRequest mockRequest;
-	private HttpServletResponse mockResponse;
+	//private HttpServletResponse mockResponse;
 	private AbstractLocaleProvider testProvider;
 	
 	@Before
 	public void before() {
 		mockRequest = Mockito.mock(HttpServletRequest.class);
-		mockResponse = Mockito.mock(HttpServletResponse.class);
+		//mockResponse = Mockito.mock(HttpServletResponse.class);
 		testProvider = new SessionLocaleProvider();
 		testProvider.initialize(LOCALE_ALL_STRING, LOCALE_DEFAULT_STRING);
 	}

@@ -30,6 +30,22 @@ public class LocalizationFilter implements Filter {
 	
 	private AbstractLocaleProvider localeProvider;
 	
+//	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+//		HttpServletRequest httpRequest = (HttpServletRequest)request;
+//		HttpServletResponse httpResponse = (HttpServletResponse) response;
+//		
+//		LocalizationRequestWraper requestWraper = new LocalizationRequestWraper(httpRequest, localeProvider);
+//		
+//		String requestParamLang = httpRequest.getParameter(REQUEST_PARAM_LANG);
+//		if (requestParamLang != null) {
+//			Locale locale = new Locale(requestParamLang);
+//			localeProvider.setCurrentLocale(httpRequest, httpResponse, locale);
+//			requestWraper.setAppliedLocale(locale);
+//		}
+//		
+//		chain.doFilter(requestWraper, response);
+//	}
+	
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -39,6 +55,11 @@ public class LocalizationFilter implements Filter {
 		String requestParamLang = httpRequest.getParameter(REQUEST_PARAM_LANG);
 		if (requestParamLang != null) {
 			Locale locale = new Locale(requestParamLang);
+			
+			if (!localeProvider.supportsLocale(locale)) {
+				locale = localeProvider.getDefaultLocale();
+			}
+				
 			localeProvider.setCurrentLocale(httpRequest, httpResponse, locale);
 			requestWraper.setAppliedLocale(locale);
 		}

@@ -56,15 +56,6 @@ public abstract class AbstractLocaleProvider {
 		
 	public Locale getCurrentLocale(HttpServletRequest request) {
 		Locale loc = readLocale(request);
-//		if (loc != null) {
-//			if (supportedLocales.contains(loc)) {
-//				return loc;
-//			} else {
-//				return getTheMostAppropriateLocale(request);
-//			}
-//		} else {
-//			return getTheMostAppropriateLocale(request);
-//		}
 		if (loc != null && supportedLocales.contains(loc)) {
 			return loc;
 		}
