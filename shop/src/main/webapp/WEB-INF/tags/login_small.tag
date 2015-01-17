@@ -2,6 +2,9 @@
  	description="Shows small login block on the page. Uses SESSION_AUT_USER scope var to access authorizes user"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="locale" />
 
 <c:url value="/register" var="link_register" />
 <c:url value="/login" var="link_login" />
@@ -15,8 +18,9 @@
 		<div class="pad">
 		<img src="images/account.gif" alt="Account" />
 		<h4>
-			<a href="${link_account}" title="View my personal account">MY
-				ACCOUNT</a>
+			<a href="${link_account}" title="View my personal account">
+				<fmt:message key="page.header.login.myaccount"/>
+			</a>
 		</h4>
 		<br />
 		<span class="txt">${SESSION_AUT_USER.name}&nbsp;${SESSION_AUT_USER.lastName},&nbsp;
@@ -28,11 +32,14 @@
 		<div class="pad">
 		<img src="images/account.gif" alt="Account" />
 		<h4>
-			<a href="${link_login}" title="View login page">LOGIN</a>
+			<a href="${link_login}" title="View login page">
+				<fmt:message key="page.header.login"/>
+			</a>
 		</h4>
 		<br />
-		<span class="txt">You're unauthorized,&nbsp;<a
-			href="${link_login}">login</a></span>
+		<span class="txt">
+			<fmt:message key="page.header.login.unathorized"/>,&nbsp;
+			<a href="${link_login}">login</a></span>
 		</div>
 	</c:otherwise>
 </c:choose>
